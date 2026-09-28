@@ -1,0 +1,16 @@
+{
+  "id": "B10",
+  "title": "Bridge",
+  "frame": "card",
+  "strip": {
+    "label": "Cloudinary inside every tool you already work in"
+  },
+  "steps": [
+    {
+      "at": 0.1,
+      "do": "show",
+      "target": "#line",
+      "anim": "rise"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "id": "B6",
+  "title": "Landing page in our CMS, extension beside it",
+  "frame": "app",
+  "lower": "Write the page. Cloudinary finds the media",
+  "strip": {
+    "label": "CMS · works with",
+    "names": [
+      "Contentful",
+      "WordPress",
+      "SFCC Page Designer"
+    ]
+  },
+  "steps": [
+    {
+      "at": 0.2,
+      "do": "type",
+      "target": "#title",
+      "text": "{headline}",
+      "cps": 26
+    },
+    {
+      "at": 1.8,
+      "do": "show",
+      "target": "#scan",
+      "anim": "fade"
+    },
+    {
+      "at": 3,
+      "do": "set",
+      "target": "#scan",
+      "add": "is-done"
+    },
+    {
+      "at": 3,
+      "do": "set",
+      "target": "#scan-t",
+      "text": "3 matches, ranked"
+    },
+    {
+      "at": 3.2,
+      "do": "show",
+      "target": "#r1",
+      "anim": "grow"
+    },
+    {
+      "at": 3.6,
+      "do": "show",
+      "target": "#r2",
+      "anim": "grow"
+    },
+    {
+      "at": 4,
+      "do": "show",
+      "target": "#r3",
+      "anim": "grow"
+    },
+    {
+      "at": 4.5,
+      "do": "highlight",
+      "target": "#r1",
+      "group": ".ext-res",
+      "zoom": 1.04
+    }
+  ]
+}

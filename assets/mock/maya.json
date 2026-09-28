@@ -1,0 +1,17 @@
+{
+  "id": "maya-sol-sample",
+  "created_at": "2026-10-12T10:20:00Z",
+  "first_name": "Maya",
+  "email": "maya.sol@cloudinary.com",
+  "product_type": "pizza",
+  "variant": "artichoke",
+  "favorite": "Artichoke",
+  "urls": {
+    "selfie": "assets/mock/maya-sol-sample/selfie.jpg",
+    "label": "assets/mock/maya-sol-sample/label.png",
+    "hero": "assets/mock/maya-sol-sample/hero.png",
+    "pdp": "assets/mock/maya-sol-sample/pdp.png",
+    "email": "assets/mock/maya-sol-sample/email.png",
+    "magnet": "assets/mock/maya-sol-sample/magnet.png"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "id": "B5",
+  "title": "The bake",
+  "frame": "app",
+  "enter": "cut",
+  "lower": "Her face, baked into the product",
+  "strip": {
+    "label": "Design · works with",
+    "names": [
+      "Figma",
+      "Canva",
+      "Adobe Express"
+    ]
+  },
+  "steps": [
+    {
+      "at": 0.3,
+      "do": "fly",
+      "target": "#src",
+      "to": "#slot",
+      "reveal": "#face",
+      "dur": 1
+    },
+    {
+      "at": 1.5,
+      "do": "type",
+      "target": "#nm",
+      "text": "{NAME}",
+      "cps": 10,
+      "zoom": 1.05
+    },
+    {
+      "at": 2.2,
+      "do": "type",
+      "target": "#fv",
+      "text": "{favorite}",
+      "cps": 20,
+      "zoom": false
+    },
+    {
+      "at": 3.1,
+      "do": "set",
+      "target": "#drop",
+      "zoom": 1.03
+    },
+    {
+      "at": 3.2,
+      "do": "fly",
+      "target": "#tpl",
+      "to": "#baked",
+      "dur": 0.9
+    },
+    {
+      "at": 4.2,
+      "do": "show",
+      "target": "#derived",
+      "anim": "pop"
+    }
+  ]
+}

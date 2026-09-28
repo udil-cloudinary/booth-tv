@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>10 · Figma + Cloudinary plugin</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,500;1,700&amp;display=swap">
+  <style>
+    body { margin: 0; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif; background: #ffffff; }
+    a { color: #3448C5; } a:hover { color: #2534a0; }
+  </style>
+</head>
+<body>
+<div style="width: 1440px; height: 900px; background: #ffffff; color: #1e1e1e; display: flex; flex-direction: column; position: relative; font-size: 13px">
+  <div style="flex: 1; display: flex; min-height: 0">
+    <div style="width: 78px; background: #ffffff; border-right: 1px solid #ececec; display: flex; flex-direction: column; align-items: center; padding: 16px 0; box-sizing: border-box; gap: 8px">
+      <svg viewBox="0 0 24 24" width="22" height="22" style="margin-bottom: 14px"><circle cx="9.5" cy="5.5" r="3" fill="#1e1e1e"></circle><circle cx="15" cy="5.5" r="3" fill="#1e1e1e"></circle><circle cx="9.5" cy="12" r="3" fill="#1e1e1e"></circle><circle cx="15" cy="12" r="3" fill="#1e1e1e"></circle><circle cx="9.5" cy="18.5" r="3" fill="#1e1e1e"></circle></svg>
+      <div style="width: 56px; padding: 8px 0; border-radius: 11px; background: #e6f0ff; display: flex; flex-direction: column; align-items: center; gap: 4px">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M6 4 h8 l4 4 v12 h-12 z" fill="none" stroke="#2f6fe4" stroke-width="1.7" stroke-linejoin="round"></path><path d="M14 4 v4 h4" fill="none" stroke="#2f6fe4" stroke-width="1.7" stroke-linejoin="round"></path></svg>
+        <div style="font-size: 10px; color: #1e1e1e; font-weight: 600">File</div>
+      </div>
+      <div style="width: 56px; padding: 8px 0; display: flex; flex-direction: column; align-items: center; gap: 4px">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 4 c1 3.5 2.5 5 6 6 c-3.5 1 -5 2.5 -6 6 c-1 -3.5 -2.5 -5 -6 -6 c3.5 -1 5 -2.5 6 -6 z" fill="none" stroke="#5f5f5f" stroke-width="1.6" stroke-linejoin="round"></path></svg>
+        <div style="font-size: 10px; color: #5f5f5f">Agents</div>
+      </div>
+      <div style="width: 56px; padding: 8px 0; display: flex; flex-direction: column; align-items: center; gap: 4px">
+        <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="7.5" fill="none" stroke="#5f5f5f" stroke-width="1.6"></circle><path d="M12 8.5 v7 M8.5 12 h7" stroke="#5f5f5f" stroke-width="1.6" stroke-linecap="round"></path></svg>
+        <div style="font-size: 10px; color: #5f5f5f">Assets</div>
+      </div>
+      <div style="width: 56px; padding: 8px 0; display: flex; flex-direction: column; align-items: center; gap: 4px">
+        <svg viewBox="0 0 24 24" width="18" height="18"><rect x="4" y="8" width="16" height="11" rx="2" fill="none" stroke="#5f5f5f" stroke-width="1.6"></rect><path d="M9 8 V6.5 a3 3 0 0 1 6 0 V8" fill="none" stroke="#5f5f5f" stroke-width="1.6"></path></svg>
+        <div style="font-size: 10px; color: #5f5f5f">Tools</div>
+      </div>
+      <div style="width: 56px; padding: 8px 0; display: flex; flex-direction: column; align-items: center; gap: 4px">
+        <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="7.5" fill="none" stroke="#5f5f5f" stroke-width="1.6"></circle><circle cx="12" cy="12" r="2.6" fill="none" stroke="#5f5f5f" stroke-width="1.6"></circle></svg>
+        <div style="font-size: 10px; color: #5f5f5f">Variables</div>
+      </div>
+    </div>
+    <div style="width: 296px; background: #ffffff; border-right: 1px solid #ececec; display: flex; flex-direction: column; box-sizing: border-box">
+      <div style="padding: 16px 18px 12px; border-bottom: 1px solid #ececec">
+        <div style="display: flex; align-items: center; gap: 8px">
+          <div style="font-size: 15px; font-weight: 700">Agent Show Templates</div>
+          <svg viewBox="0 0 20 20" width="13" height="13"><path d="M6 8 l4 4 l4 -4" fill="none" stroke="#5f5f5f" stroke-width="1.7" stroke-linecap="round"></path></svg>
+          <svg viewBox="0 0 20 20" width="16" height="16" style="margin-left: auto"><rect x="3" y="4" width="14" height="12" rx="2.5" fill="none" stroke="#5f5f5f" stroke-width="1.5"></rect><path d="M8 4 v12" stroke="#5f5f5f" stroke-width="1.5"></path></svg>
+        </div>
+        <div style="font-size: 12.5px; color: #8c8c8c; margin-top: 4px">Gathering 2026</div>
+      </div>
+      <div style="padding: 14px 18px 10px; border-bottom: 1px solid #ececec">
+        <div style="display: flex; align-items: center">
+          <div style="font-size: 13.5px; font-weight: 700">Pages</div>
+          <div style="margin-left: auto; display: flex; gap: 14px">
+            <svg viewBox="0 0 20 20" width="14" height="14"><circle cx="9" cy="9" r="5" fill="none" stroke="#5f5f5f" stroke-width="1.6"></circle><path d="M13 13 L17 17" stroke="#5f5f5f" stroke-width="1.6" stroke-linecap="round"></path></svg>
+            <svg viewBox="0 0 20 20" width="14" height="14"><path d="M10 4 v12 M4 10 h12" stroke="#5f5f5f" stroke-width="1.7" stroke-linecap="round"></path></svg>
+          </div>
+        </div>
+        <div style="background: #f0f0f0; border-radius: 8px; padding: 8px 12px; font-size: 13px; font-weight: 600; margin-top: 10px">Template Families</div>
+      </div>
+      <div style="padding: 14px 18px; flex: 1; overflow: hidden">
+        <div style="display: flex; align-items: center">
+          <div style="font-size: 13.5px; font-weight: 700">Layers</div>
+          <svg viewBox="0 0 20 20" width="15" height="15" style="margin-left: auto"><path d="M4 6 h9 M4 10 h9 M4 14 h6 M15 12 l2 2 l-2 2" fill="none" stroke="#5f5f5f" stroke-width="1.5" stroke-linecap="round"></path></svg>
+        </div>
+        <div style="display: flex; flex-direction: column; margin-top: 10px">
+          <div style="display: flex; align-items: center; gap: 9px; padding: 6px 8px; background: #e6f0ff; border-radius: 7px">
+            <svg viewBox="0 0 20 20" width="12" height="12"><rect x="3.5" y="3.5" width="13" height="13" fill="none" stroke="#2f6fe4" stroke-width="1.5"></rect></svg>
+            <div style="width: 26px; height: 26px; border-radius: 5px; background: radial-gradient(20px 17px at 50% 42%, #fffdf6, #f0e5c9); display: flex; align-items: center; justify-content: center"><img src="../../assets/templates/base-pizza.png" alt="Pizza slice" style="height: 20px; width: auto; display: block"></div>
+            <div style="font-size: 13px; font-weight: 600; color: #1e40af">Pizza Slice</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 9px; padding: 6px 8px 6px 30px; font-size: 12.5px; color: #5f5f5f">slice-art &#183; 6 answer layers</div>
+          <div style="display: flex; align-items: center; gap: 9px; padding: 6px 8px 6px 30px; font-size: 12.5px; color: #5f5f5f">kraft-label</div>
+          <div style="display: flex; align-items: center; gap: 9px; padding: 6px 8px 6px 30px; font-size: 12.5px; color: #1e40af; background: #eef4ff; border-radius: 6px; font-weight: 600">face-slot &#9678;</div>
+          <div style="display: flex; align-items: center; gap: 9px; padding: 6px 8px 6px 30px; font-size: 12.5px; color: #5f5f5f">NAME + FAVOURITE</div>
+          <div style="display: flex; align-items: center; gap: 9px; padding: 7px 8px; margin-top: 4px">
+            <svg viewBox="0 0 20 20" width="12" height="12"><rect x="3.5" y="3.5" width="13" height="13" fill="none" stroke="#8c8c8c" stroke-width="1.5"></rect></svg>
+            <div style="width: 26px; height: 26px; border-radius: 5px; background: radial-gradient(20px 17px at 50% 42%, #fffdf6, #f0e5c9); display: flex; align-items: center; justify-content: center"><img src="../../assets/templates/base-gelato.png" alt="Gelato coppetta" style="height: 18px; width: auto; display: block"></div>
+            <div style="font-size: 13px; color: #333333">Gelato Coppetta</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 9px; padding: 7px 8px">
+            <svg viewBox="0 0 20 20" width="12" height="12"><rect x="3.5" y="3.5" width="13" height="13" fill="none" stroke="#8c8c8c" stroke-width="1.5"></rect></svg>
+            <div style="width: 26px; height: 26px; border-radius: 5px; background: radial-gradient(20px 17px at 50% 42%, #fffdf6, #f0e5c9); display: flex; align-items: center; justify-content: center"><img src="../../assets/templates/base-caffe.png" alt="Caffè cup" style="height: 18px; width: auto; display: block"></div>
+            <div style="font-size: 13px; color: #333333">Caff&#232; Cup</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 9px; padding: 7px 8px">
+            <svg viewBox="0 0 20 20" width="12" height="12"><rect x="3.5" y="3.5" width="13" height="13" fill="none" stroke="#8c8c8c" stroke-width="1.5"></rect></svg>
+            <div style="width: 26px; height: 26px; border-radius: 5px; background: #f6e7c6; border: 1px solid #b98c2e; box-sizing: border-box"></div>
+            <div style="font-size: 13px; color: #333333">Magnet Frame</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 9px; padding: 7px 8px; margin-top: 4px">
+            <svg viewBox="0 0 20 20" width="13" height="13"><circle cx="10" cy="10" r="6.5" fill="none" stroke="#8a38f5" stroke-width="1.5"></circle><circle cx="10" cy="10" r="2" fill="#8a38f5"></circle></svg>
+            <div style="font-size: 13px; color: #8a38f5; font-weight: 500">Cloudinary Link (beta)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="flex: 1; background: #ececec; position: relative; min-width: 0">
+      <div style="position: absolute; left: 70px; top: 90px">
+        <div style="font-size: 12.5px; color: #2f6fe4; font-weight: 600; margin-bottom: 6px">Pizza Slice</div>
+        <div style="width: 350px; height: 470px; background: #ffffff; outline: 2px solid #2f6fe4; position: relative; display: flex; align-items: center; justify-content: center">
+          <div style="position: absolute; left: -5px; top: -5px; width: 9px; height: 9px; background: #ffffff; border: 1.5px solid #2f6fe4"></div>
+          <div style="position: absolute; right: -5px; top: -5px; width: 9px; height: 9px; background: #ffffff; border: 1.5px solid #2f6fe4"></div>
+          <div style="position: absolute; left: -5px; bottom: -5px; width: 9px; height: 9px; background: #ffffff; border: 1.5px solid #2f6fe4"></div>
+          <div style="position: absolute; right: -5px; bottom: -5px; width: 9px; height: 9px; background: #ffffff; border: 1.5px solid #2f6fe4"></div>
+          <img src="../../assets/templates/tpl-pizza.png" alt="Pizza slice template with face slot, NAME and Favourite" style="height: 440px; width: auto; display: block">
+          <div style="position: absolute; left: 129px; top: 273px; width: 92px; height: 92px; border: 1.5px solid #2f6fe4; border-radius: 50%; box-sizing: border-box">
+            <div style="position: absolute; top: -24px; left: 0; font-size: 11px; color: #ffffff; background: #2f6fe4; border-radius: 4px; padding: 2px 7px">face-slot</div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: center; margin-top: 8px"><div style="font-size: 12px; color: #ffffff; background: #2f6fe4; border-radius: 5px; padding: 3px 10px; font-weight: 600">28.7 &#215; 46.4 mm</div></div>
+      </div>
+      <div style="position: absolute; left: 490px; top: 120px; opacity: 0.85">
+        <div style="font-size: 12px; color: #8c8c8c; margin-bottom: 6px">Gelato Coppetta</div>
+        <div style="width: 150px; height: 200px; background: #ffffff; display: flex; align-items: center; justify-content: center"><img src="../../assets/templates/tpl-gelato.png" alt="Gelato coppetta template with face slot, NAME and Favourite" style="height: 186px; width: auto; display: block"></div>
+      </div>
+      <div style="position: absolute; left: 490px; top: 380px; opacity: 0.85">
+        <div style="font-size: 12px; color: #8c8c8c; margin-bottom: 6px">Caff&#232; Cup</div>
+        <div style="width: 150px; height: 150px; background: #ffffff; display: flex; align-items: center; justify-content: center"><img src="../../assets/templates/tpl-caffe.png" alt="Caffè cup template with face slot, NAME and Favourite" style="height: 138px; width: auto; display: block"></div>
+      </div>
+      <div style="position: absolute; left: 490px; top: 590px; opacity: 0.85">
+        <div style="font-size: 12px; color: #8c8c8c; margin-bottom: 6px">Magnet Frame</div>
+        <div style="width: 130px; height: 165px; background: #f6e7c6; border: 3px solid #b98c2e; box-sizing: border-box"></div>
+      </div>
+      <div style="position: absolute; right: 26px; top: 64px; width: 296px; background: #ffffff; border-radius: 13px; box-shadow: 0 16px 44px rgba(30,30,30,0.24); overflow: hidden">
+        <div style="display: flex; align-items: center; gap: 9px; padding: 12px 14px; border-bottom: 1px solid #ececec">
+          <img src="../../assets/brand/cloudinary-logo.png" style="width: 24px; height: auto; display: block">
+          <div style="font-size: 13.5px; font-weight: 700; color: #1B295D">Cloudinary Link</div>
+          <div style="font-size: 9px; color: #8c8c8c; border: 1px solid #e0e0e0; border-radius: 5px; padding: 2px 6px">BETA</div>
+          <svg viewBox="0 0 20 20" width="14" height="14" style="margin-left: auto"><path d="M6 6 L14 14 M14 6 L6 14" stroke="#8c8c8c" stroke-width="1.7" stroke-linecap="round"></path></svg>
+        </div>
+        <div style="padding: 14px; display: flex; flex-direction: column; gap: 12px">
+          <div style="height: 36px; background: #f7f7f7; border: 1px solid #e6e6e6; border-radius: 8px; display: flex; align-items: center; padding: 0 12px; font-size: 12.5px; color: #333333; gap: 8px"><svg viewBox="0 0 20 20" width="13" height="13"><circle cx="9" cy="9" r="5" fill="none" stroke="#8c8c8c" stroke-width="1.6"></circle><path d="M13 13 L17 17" stroke="#8c8c8c" stroke-width="1.6" stroke-linecap="round"></path></svg>maya</div>
+          <div style="border: 1px solid #e6e6e6; border-radius: 10px; padding: 11px; display: flex; gap: 11px; align-items: center">
+            <div style="width: 50px; height: 50px; border-radius: 8px; background: radial-gradient(38px 32px at 50% 40%, #fffdf6, #f0e5c9); display: flex; align-items: flex-end; justify-content: center; overflow: hidden">
+              <svg viewBox="80 90 440 560" width="50" height="50" preserveAspectRatio="xMidYMin slice" aria-hidden="true" style="display: block"><rect x="0" y="0" width="600" height="750" fill="#F6EFDE"></rect><path d="M300 130 C194 130 152 214 156 330 C158 400 140 440 150 490 C140 530 160 570 150 610 C190 630 230 618 256 598 L344 598 C370 618 410 630 450 610 C440 570 460 530 450 490 C460 440 442 400 444 330 C448 214 406 130 300 130 Z" fill="#5B3A29"/><path d="M258 460 L342 460 L346 590 L254 590 Z" fill="#E4AF88"/><path d="M40 750 C52 628 168 580 300 580 C432 580 548 628 560 750 Z" fill="#2E8F86"/><path d="M252 584 C270 612 330 612 348 584" stroke="#267a72" stroke-width="6" fill="none" stroke-linecap="round"/><ellipse cx="300" cy="352" rx="118" ry="142" fill="#F3CBA6"/><path d="M330 150 C258 150 204 192 188 268 C182 300 182 340 188 380 C198 322 220 276 262 244 C300 216 350 206 400 222 C388 180 362 150 330 150 Z" fill="#5B3A29"/><path d="M398 222 C420 260 424 320 416 380 C432 340 438 290 426 250 Z" fill="#5B3A29"/><path d="M318 160 C290 180 272 206 262 236" stroke="#48301F" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.6"/><path d="M226 322 q26 -13 50 -2" stroke="#48301F" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M324 320 q24 -11 50 2" stroke="#48301F" stroke-width="7" fill="none" stroke-linecap="round"/><ellipse cx="252" cy="356" rx="13" ry="15" fill="#3A2A1E"/><ellipse cx="348" cy="356" rx="13" ry="15" fill="#3A2A1E"/><circle cx="256" cy="351" r="4.2" fill="#fff"/><circle cx="352" cy="351" r="4.2" fill="#fff"/><ellipse cx="228" cy="404" rx="21" ry="11" fill="#E89A86" opacity="0.45"/><ellipse cx="372" cy="404" rx="21" ry="11" fill="#E89A86" opacity="0.45"/><path d="M298 378 q-7 20 6 24" stroke="#E4AF88" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M264 432 q36 28 72 0" stroke="#B9543C" stroke-width="8" fill="none" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <div style="font-size: 12.5px; font-weight: 600; color: #1e1e1e">maya-sol.jpg</div>
+              <div style="font-size: 11px; color: #8c8c8c; margin-top: 2px">booth/visitors</div>
+              <div style="font-size: 10.5px; color: #2f7d4f; margin-top: 2px; font-weight: 600">pizza &#183; Artichoke &#183; approved</div>
+            </div>
+          </div>
+          <div style="height: 36px; background: #e9f5ee; border: 1px solid #bfe0cc; color: #2f7d4f; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12.5px; font-weight: 700">
+            <svg viewBox="0 0 20 20" width="14" height="14"><path d="M4 11 l4 4 l8 -9" fill="none" stroke="#2f7d4f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Placed in face-slot
+          </div>
+          <div style="height: 38px; background: #3448C5; color: #ffffff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">Export to Cloudinary DAM</div>
+          <div style="font-size: 11px; color: #8c8c8c; line-height: 1.5; text-align: center">pizza-di-maya.png &#8594; agent-show/baked</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="position: absolute; left: 400px; bottom: 58px; background: rgba(12,15,34,0.92); border: 1px solid rgba(255,210,63,0.6); border-radius: 999px; padding: 10px 18px; display: flex; align-items: center; gap: 10px">
+    <svg viewBox="0 0 32 32" width="20" height="20"><rect x="6" y="10" width="20" height="16" rx="5" fill="#FFD23F"></rect><circle cx="12.5" cy="18" r="2.6" fill="#1d2030"></circle><circle cx="19.5" cy="18" r="2.6" fill="#1d2030"></circle><line x1="16" y1="10" x2="16" y2="5" stroke="#FFD23F" stroke-width="2.5" stroke-linecap="round"></line></svg>
+    <div style="font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: #FFD23F">Agent: baking La Pizza di Maya&#8230; fresh from the oven.</div>
+  </div>
+  <div style="height: 40px; background: #0C0F22; border-top: 1px solid #2c3358; display: flex; align-items: center; justify-content: center; gap: 10px; flex-shrink: 0">
+    <div style="font-size: 10px; letter-spacing: 2px; color: #FFD23F; font-weight: 700">DESIGN &#183; WORKS WITH</div>
+    <div style="font-size: 10px; font-weight: 700; color: #ffffff; border: 1px solid #5a64a8; border-radius: 5px; padding: 3px 9px">FIGMA</div>
+    <div style="font-size: 10px; font-weight: 700; color: #8b93c9; border: 1px solid #2c3358; border-radius: 5px; padding: 3px 9px">CANVA</div>
+    <div style="font-size: 10px; font-weight: 700; color: #8b93c9; border: 1px solid #2c3358; border-radius: 5px; padding: 3px 9px">ADOBE EXPRESS</div>
+  </div>
+</div>
+</body>
+</html>

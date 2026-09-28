@@ -1,0 +1,56 @@
+{
+  "id": "L4",
+  "title": "Abandoned",
+  "frame": "card",
+  "strip": {
+    "label": "Marketing · works with",
+    "names": [
+      "Klaviyo",
+      "Braze",
+      "SFMC",
+      "HubSpot"
+    ]
+  },
+  "steps": [
+    {
+      "at": 0.1,
+      "do": "cursor",
+      "target": "#x",
+      "dur": 0.5
+    },
+    {
+      "at": 0.7,
+      "do": "click",
+      "target": "#x",
+      "zoom": false
+    },
+    {
+      "at": 0.8,
+      "do": "hide",
+      "target": "#tab",
+      "anim": "close"
+    },
+    {
+      "at": 0.9,
+      "do": "cursor"
+    },
+    {
+      "at": 1.1,
+      "do": "show",
+      "target": "#clock",
+      "anim": "pop"
+    },
+    {
+      "at": 1.1,
+      "do": "set",
+      "target": "#clock",
+      "add": "is-spinning"
+    },
+    {
+      "at": 1.4,
+      "do": "show",
+      "target": "#t",
+      "anim": "rise"
+    }
+  ]
+}

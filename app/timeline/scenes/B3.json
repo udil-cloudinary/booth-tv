@@ -1,0 +1,59 @@
+{
+  "id": "B3",
+  "title": "Agent calls Cloudinary",
+  "frame": "app",
+  "lower": "It finds her in Cloudinary",
+  "strip": {
+    "label": "AI agents · works with",
+    "names": [
+      "Claude",
+      "Gemini",
+      "ChatGPT"
+    ]
+  },
+  "steps": [
+    {
+      "at": 0.2,
+      "do": "show",
+      "target": "#call",
+      "anim": "pop"
+    },
+    {
+      "at": 1.5,
+      "do": "set",
+      "target": "#call",
+      "add": "is-done"
+    },
+    {
+      "at": 1.5,
+      "do": "set",
+      "target": "#state",
+      "text": "done"
+    },
+    {
+      "at": 1.7,
+      "do": "show",
+      "target": "#res",
+      "anim": "rise",
+      "zoom": 1.05
+    },
+    {
+      "at": 2.1,
+      "do": "show",
+      "target": "#k1",
+      "anim": "pop"
+    },
+    {
+      "at": 2.4,
+      "do": "show",
+      "target": "#k2",
+      "anim": "pop"
+    },
+    {
+      "at": 2.7,
+      "do": "show",
+      "target": "#k3",
+      "anim": "pop"
+    }
+  ]
+}

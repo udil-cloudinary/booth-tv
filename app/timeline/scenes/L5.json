@@ -1,0 +1,90 @@
+{
+  "id": "L5",
+  "title": "The flow fires",
+  "frame": "app",
+  "lower": "The cart email sends itself",
+  "strip": {
+    "label": "Marketing · works with",
+    "names": [
+      "Klaviyo",
+      "Braze",
+      "SFMC",
+      "HubSpot"
+    ]
+  },
+  "steps": [
+    {
+      "at": 0.3,
+      "do": "set",
+      "target": "#n1",
+      "add": "is-lit"
+    },
+    {
+      "at": 0.4,
+      "do": "fly",
+      "target": "#env",
+      "to": "#a1",
+      "move": true,
+      "dur": 0.01
+    },
+    {
+      "at": 0.5,
+      "do": "show",
+      "target": "#env",
+      "anim": "pop"
+    },
+    {
+      "at": 1,
+      "do": "fly",
+      "target": "#env",
+      "to": "#a2",
+      "move": true,
+      "dur": 0.9
+    },
+    {
+      "at": 1,
+      "do": "set",
+      "target": "#c1",
+      "add": "is-lit"
+    },
+    {
+      "at": 1.9,
+      "do": "set",
+      "target": "#n2",
+      "add": "is-lit"
+    },
+    {
+      "at": 2.3,
+      "do": "fly",
+      "target": "#env",
+      "to": "#a3",
+      "move": true,
+      "dur": 0.9
+    },
+    {
+      "at": 2.3,
+      "do": "set",
+      "target": "#c2",
+      "add": "is-lit"
+    },
+    {
+      "at": 3.2,
+      "do": "set",
+      "target": "#n3",
+      "add": "is-lit",
+      "zoom": 1.04
+    },
+    {
+      "at": 3.3,
+      "do": "hide",
+      "target": "#env"
+    },
+    {
+      "at": 3.5,
+      "do": "set",
+      "target": "#st",
+      "text": "sent",
+      "add": "is-sent"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "id": "B7",
+  "title": "Extension places the media",
+  "frame": "app",
+  "enter": "cut",
+  "lower": "The right image, in the right size",
+  "strip": {
+    "label": "CMS · works with",
+    "names": [
+      "Contentful",
+      "WordPress",
+      "SFCC Page Designer"
+    ]
+  },
+  "steps": [
+    {
+      "at": 0.1,
+      "do": "cursor",
+      "target": "#insert",
+      "dur": 0.6
+    },
+    {
+      "at": 0.8,
+      "do": "click",
+      "target": "#insert",
+      "zoom": false
+    },
+    {
+      "at": 1,
+      "do": "hide",
+      "target": "#empty"
+    },
+    {
+      "at": 1,
+      "do": "fly",
+      "target": "#r1img",
+      "to": "#hero",
+      "dur": 0.9,
+      "withCursor": true
+    },
+    {
+      "at": 2.1,
+      "do": "show",
+      "target": "#tchip",
+      "anim": "pop",
+      "zoom": 1.04
+    },
+    {
+      "at": 2.5,
+      "do": "set",
+      "target": "#hero",
+      "add": "is-cropped"
+    }
+  ]
+}

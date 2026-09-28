@@ -1,0 +1,73 @@
+{
+  "now": "2026-10-12T10:31:05Z",
+  "visitors": [
+    {
+      "id": "luca-rossi-m1",
+      "created_at": "2026-10-12T10:22:10Z",
+      "first_name": "Luca",
+      "email": "luca.rossi@cloudinary.com",
+      "product_type": "gelato",
+      "variant": "pistachio",
+      "favorite": "Pistachio",
+      "urls": {
+        "selfie": "assets/mock/luca-rossi-m1/selfie.jpg",
+        "label": "assets/mock/luca-rossi-m1/label.png",
+        "hero": "assets/mock/luca-rossi-m1/hero.png",
+        "pdp": "assets/mock/luca-rossi-m1/pdp.png",
+        "email": "assets/mock/luca-rossi-m1/email.png",
+        "magnet": "assets/mock/luca-rossi-m1/magnet.png"
+      }
+    },
+    {
+      "id": "giulia-bianchi-m2",
+      "created_at": "2026-10-12T10:24:35Z",
+      "first_name": "Giulia",
+      "email": "giulia.bianchi@cloudinary.com",
+      "product_type": "caffe",
+      "variant": "espresso",
+      "favorite": "Espresso",
+      "urls": {
+        "selfie": "assets/mock/giulia-bianchi-m2/selfie.jpg",
+        "label": "assets/mock/giulia-bianchi-m2/label.png",
+        "hero": "assets/mock/giulia-bianchi-m2/hero.png",
+        "pdp": "assets/mock/giulia-bianchi-m2/pdp.png",
+        "email": "assets/mock/giulia-bianchi-m2/email.png",
+        "magnet": "assets/mock/giulia-bianchi-m2/magnet.png"
+      }
+    },
+    {
+      "id": "noa-levi-m3",
+      "created_at": "2026-10-12T10:27:05Z",
+      "first_name": "Noa",
+      "email": "noa.levi@cloudinary.com",
+      "product_type": "pizza",
+      "variant": "burrata",
+      "favorite": "Burrata",
+      "urls": {
+        "selfie": "assets/mock/noa-levi-m3/selfie.jpg",
+        "label": "assets/mock/noa-levi-m3/label.png",
+        "hero": "assets/mock/noa-levi-m3/hero.png",
+        "pdp": "assets/mock/noa-levi-m3/pdp.png",
+        "email": "assets/mock/noa-levi-m3/email.png",
+        "magnet": "assets/mock/noa-levi-m3/magnet.png"
+      }
+    },
+    {
+      "id": "maximiliano-ortega-m4",
+      "created_at": "2026-10-12T10:29:40Z",
+      "first_name": "Maximiliano",
+      "email": "maximiliano.ortega@cloudinary.com",
+      "product_type": "gelato",
+      "variant": "own-answer",
+      "favorite": "Nonna's Secret Fig",
+      "urls": {
+        "selfie": "assets/mock/maximiliano-ortega-m4/selfie.jpg",
+        "label": "assets/mock/maximiliano-ortega-m4/label.png",
+        "hero": "assets/mock/maximiliano-ortega-m4/hero.png",
+        "pdp": "assets/mock/maximiliano-ortega-m4/pdp.png",
+        "email": "assets/mock/maximiliano-ortega-m4/email.png",
+        "magnet": "assets/mock/maximiliano-ortega-m4/magnet.png"
+      }
+    }
+  ]
+}

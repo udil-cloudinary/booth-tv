@@ -1,0 +1,58 @@
+{
+  "id": "B1",
+  "title": "DAM, Maya's upload arrives",
+  "frame": "app",
+  "lower": "Her selfie lands in Cloudinary",
+  "strip": {
+    "label": "Media · one library, every surface",
+    "names": [
+      "DAM",
+      "Structured metadata"
+    ]
+  },
+  "steps": [
+    {
+      "at": 0.3,
+      "do": "show",
+      "target": "#new",
+      "anim": "drop"
+    },
+    {
+      "at": 1.1,
+      "do": "cursor",
+      "target": "#new",
+      "dur": 0.7
+    },
+    {
+      "at": 1.9,
+      "do": "click",
+      "target": "#new",
+      "zoom": false
+    },
+    {
+      "at": 2.1,
+      "do": "show",
+      "target": "#win",
+      "anim": "zoom",
+      "zoom": 1.04
+    },
+    {
+      "at": 2.7,
+      "do": "show",
+      "target": "#m1",
+      "anim": "rise"
+    },
+    {
+      "at": 3.3,
+      "do": "show",
+      "target": "#m2",
+      "anim": "rise"
+    },
+    {
+      "at": 3.9,
+      "do": "show",
+      "target": "#m3",
+      "anim": "rise"
+    }
+  ]
+}

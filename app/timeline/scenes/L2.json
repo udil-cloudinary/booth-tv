@@ -1,0 +1,33 @@
+{
+  "id": "L2",
+  "title": "Landing page, live",
+  "frame": "app",
+  "lower": "{name}'s page is live",
+  "strip": {
+    "label": "CMS · works with",
+    "names": [
+      "Contentful",
+      "WordPress",
+      "SFCC Page Designer"
+    ]
+  },
+  "steps": [
+    {
+      "at": 0.3,
+      "do": "show",
+      "target": "#hero",
+      "anim": "pop"
+    },
+    {
+      "at": 1.4,
+      "do": "cursor",
+      "target": "#cta",
+      "dur": 0.9
+    },
+    {
+      "at": 2.6,
+      "do": "click",
+      "target": "#cta"
+    }
+  ]
+}

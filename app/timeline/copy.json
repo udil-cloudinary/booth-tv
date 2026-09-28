@@ -1,0 +1,44 @@
+{
+  "_note": "Per-product copy for the scenes that show the visitor's product (B6-B9, L2-L7). DRAFT for Udi to edit. Placeholders: {name} {NAME} {favorite} {product} {slug} {email} {price}. No em or en dashes.",
+  "common": {
+    "cta": "Get yours",
+    "emailSubject": "Hi {name}, you forgot something",
+    "emailBody": "Your {productName} is still in the cart. One of one, made for you.",
+    "emailCta": "Complete your order",
+    "endLine": "Your magnet is waiting at the counter",
+    "landingHost": "agentshow.demo",
+    "storeHost": "labottega.demo"
+  },
+  "products": {
+    "pizza": {
+      "product": "Pizza",
+      "productName": "La Pizza di {name}",
+      "productSlug": "pizza-di-{slug}",
+      "kicker": "La cucina di {name}",
+      "headline": "From Lago Maggiore, by the slice.",
+      "landing": "Somewhere between the lake and nonna's wood oven, a legend is rising: {favorite} on top, {name} on the label.",
+      "pdp": "Wood-fired by the lake, with {name}'s own pick: {favorite}. Baked once, never repeated.",
+      "price": "8.70"
+    },
+    "gelato": {
+      "product": "Gelato",
+      "productName": "Il Gelato di {name}",
+      "productSlug": "gelato-di-{slug}",
+      "kicker": "La gelateria di {name}",
+      "headline": "From Lago Maggiore, one scoop at a time.",
+      "landing": "Churned this morning by the lake, a new classic is born: {favorite} in the cup, {name} on the label.",
+      "pdp": "Churned by the lake, with {name}'s own pick: {favorite}. One cup, never repeated.",
+      "price": "5.40"
+    },
+    "caffe": {
+      "product": "Caffè",
+      "productName": "Il Caffè di {name}",
+      "productSlug": "caffe-di-{slug}",
+      "kicker": "Il bar di {name}",
+      "headline": "From Lago Maggiore, one cup at a time.",
+      "landing": "Pulled by the lake at sunrise, a new ritual is brewing: {favorite} in the cup, {name} on the label.",
+      "pdp": "Pulled by the lake, with {name}'s own pick: {favorite}. One cup, never repeated.",
+      "price": "3.20"
+    }
+  }
+}

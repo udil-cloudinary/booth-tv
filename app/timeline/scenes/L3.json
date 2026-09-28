@@ -1,0 +1,45 @@
+{
+  "id": "L3",
+  "title": "Product page",
+  "frame": "app",
+  "lower": "One of one, into the cart",
+  "strip": {
+    "label": "Ecomm · works with",
+    "names": [
+      "Shopify",
+      "SFCC",
+      "Adobe Commerce"
+    ]
+  },
+  "steps": [
+    {
+      "at": 0.9,
+      "do": "cursor",
+      "target": "#add",
+      "dur": 0.8
+    },
+    {
+      "at": 2,
+      "do": "click",
+      "target": "#add"
+    },
+    {
+      "at": 2.2,
+      "do": "show",
+      "target": "#cartn",
+      "anim": "pop"
+    },
+    {
+      "at": 2.2,
+      "do": "set",
+      "target": "#cart",
+      "add": "is-bump"
+    },
+    {
+      "at": 2.4,
+      "do": "show",
+      "target": "#toast",
+      "anim": "slide-left"
+    }
+  ]
+}

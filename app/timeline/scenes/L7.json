@@ -1,0 +1,28 @@
+{
+  "id": "L7",
+  "title": "End card",
+  "frame": "card",
+  "strip": {
+    "label": "Cloudinary inside every tool you already work in"
+  },
+  "steps": [
+    {
+      "at": 0.1,
+      "do": "show",
+      "target": "#mag",
+      "anim": "drop"
+    },
+    {
+      "at": 0.9,
+      "do": "show",
+      "target": "#nm",
+      "anim": "rise"
+    },
+    {
+      "at": 1.3,
+      "do": "show",
+      "target": "#ln",
+      "anim": "rise"
+    }
+  ]
+}

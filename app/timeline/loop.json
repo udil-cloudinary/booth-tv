@@ -1,0 +1,32 @@
+{
+  "_note": "Loop order and scene durations in seconds (spec sections 2 to 4). Steps and captions live in scenes/<ID>.json.",
+  "part1": [
+    { "scene": "B1", "dur": 6 },
+    { "scene": "B2", "dur": 6 },
+    { "scene": "B3", "dur": 4 },
+    { "scene": "B4", "dur": 5 },
+    { "scene": "B5", "dur": 5 },
+    { "scene": "B6", "dur": 6 },
+    { "scene": "B7", "dur": 4 },
+    { "scene": "B8", "dur": 6 },
+    { "scene": "B9", "dur": 4 },
+    { "scene": "B10", "dur": 2 }
+  ],
+  "part2": [
+    { "scene": "L1", "dur": 3 },
+    { "scene": "L2", "dur": 5 },
+    { "scene": "L3", "dur": 5 },
+    { "scene": "L4", "dur": 3 },
+    { "scene": "L5", "dur": 5 },
+    { "scene": "L6", "dur": 5 },
+    { "scene": "L7", "dur": 4 }
+  ],
+  "part2Short": ["L1", "L6", "L7"],
+  "fetchAt": "B9",
+  "batch": 2,
+  "catchUp": { "enterAbove": 6, "exitBelow": 3, "batch": 5 },
+  "cursorLookbackMin": 30,
+  "preloadTimeoutSec": 4,
+  "fetchTimeoutSec": 5,
+  "reloadEveryMin": 120
+}
