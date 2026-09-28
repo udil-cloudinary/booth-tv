@@ -1,45 +1,56 @@
 {
   "id": "L3",
-  "title": "Product page",
-  "frame": "app",
-  "lower": "One of one, into the cart",
+  "title": "Abandoned",
+  "frame": "card",
   "strip": {
-    "label": "Ecomm · works with",
+    "label": "Marketing · works with",
     "names": [
-      "Shopify",
-      "SFCC",
-      "Adobe Commerce"
+      "Klaviyo",
+      "Braze",
+      "SFMC",
+      "HubSpot"
     ]
   },
   "steps": [
     {
-      "at": 0.9,
+      "at": 0.1,
       "do": "cursor",
-      "target": "#add",
-      "dur": 0.8
+      "target": "#x",
+      "dur": 0.5
     },
     {
-      "at": 2,
+      "at": 0.7,
       "do": "click",
-      "target": "#add"
+      "target": "#x",
+      "zoom": false
     },
     {
-      "at": 2.2,
+      "at": 0.8,
+      "do": "hide",
+      "target": "#tab",
+      "anim": "close"
+    },
+    {
+      "at": 0.9,
+      "do": "cursor"
+    },
+    {
+      "at": 1.1,
       "do": "show",
-      "target": "#cartn",
+      "target": "#clock",
       "anim": "pop"
     },
     {
-      "at": 2.2,
+      "at": 1.1,
       "do": "set",
-      "target": "#cart",
-      "add": "is-bump"
+      "target": "#clock",
+      "add": "is-spinning"
     },
     {
-      "at": 2.4,
+      "at": 1.4,
       "do": "show",
-      "target": "#toast",
-      "anim": "slide-left"
+      "target": "#t",
+      "anim": "rise"
     }
   ]
 }

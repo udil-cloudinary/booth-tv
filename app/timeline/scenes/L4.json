@@ -1,7 +1,8 @@
 {
   "id": "L4",
-  "title": "Abandoned",
-  "frame": "card",
+  "title": "Sending the email",
+  "frame": "app",
+  "lower": "The cart email sends itself",
   "strip": {
     "label": "Marketing · works with",
     "names": [
@@ -14,43 +15,80 @@
   "steps": [
     {
       "at": 0.1,
-      "do": "cursor",
-      "target": "#x",
-      "dur": 0.5
+      "do": "fly",
+      "target": "#env",
+      "to": "#a3",
+      "move": true,
+      "dur": 0.01
     },
     {
-      "at": 0.7,
-      "do": "click",
-      "target": "#x",
-      "zoom": false
+      "at": 0.2,
+      "do": "set",
+      "target": "#n1",
+      "add": "is-lit"
     },
     {
-      "at": 0.8,
-      "do": "hide",
-      "target": "#tab",
-      "anim": "close"
-    },
-    {
-      "at": 0.9,
-      "do": "cursor"
-    },
-    {
-      "at": 1.1,
-      "do": "show",
-      "target": "#clock",
-      "anim": "pop"
+      "at": 0.6,
+      "do": "set",
+      "target": "#c1",
+      "add": "is-lit"
     },
     {
       "at": 1.1,
       "do": "set",
-      "target": "#clock",
-      "add": "is-spinning"
+      "target": "#n3",
+      "add": "is-lit"
     },
     {
-      "at": 1.4,
+      "at": 1.3,
+      "do": "type",
+      "target": "#subj",
+      "text": "{emailSubject}",
+      "cps": 30
+    },
+    {
+      "at": 2.5,
       "do": "show",
-      "target": "#t",
+      "target": "#eimg",
+      "anim": "pop"
+    },
+    {
+      "at": 2.8,
+      "do": "show",
+      "target": "#etext",
       "anim": "rise"
+    },
+    {
+      "at": 3.1,
+      "do": "show",
+      "target": "#ecta",
+      "anim": "pop"
+    },
+    {
+      "at": 3.4,
+      "do": "show",
+      "target": "#env",
+      "anim": "pop"
+    },
+    {
+      "at": 3.5,
+      "do": "set",
+      "target": "#st",
+      "text": "sent",
+      "add": "is-sent"
+    },
+    {
+      "at": 3.7,
+      "do": "fly",
+      "target": "#env",
+      "to": "#aout",
+      "move": true,
+      "dur": 0.8
+    },
+    {
+      "at": 4.4,
+      "do": "hide",
+      "target": "#env"
     }
   ]
 }

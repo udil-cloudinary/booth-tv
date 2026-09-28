@@ -1,4 +1,5 @@
-// Part 2 · LIVE (spec section 4). The visitor's own images and copy; Maya when nobody is new.
+// Part 2 · LIVE (spec section 4, v0.4: 5 screens, 20 s max per visitor). The visitor's own images and copy;
+// Maya when nobody is new.
 
 const CHECK = '<svg class="ico-check" viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" /></svg>';
 const LOCK = '<svg class="ico-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 018 0v2.5" fill="none"/></svg>';
@@ -9,19 +10,8 @@ const browserBar = (url: string) => `
   <div class="br-bar"><span class="br-lights"><i></i><i></i><i></i></span><div class="br-url">${LOCK}${url}</div></div>`;
 
 export const PART2: Record<string, string> = {
-  // L1 · Intro card: "Fresh from the booth: MAYA".
+  // L1 · Landing page, live. Opens with the "Fresh from the booth" banner, then the cursor clicks the CTA. (5 s)
   L1: `
-  <div class="card intro">
-    <div class="intro-face is-hidden" id="face"><img class="cover" src="{img.selfie}" alt=""></div>
-    <div class="intro-text">
-      <div class="kicker is-hidden" id="k">Fresh from the booth</div>
-      <div class="intro-name fit is-hidden" data-min="96" id="nm">{NAME}</div>
-      <div class="intro-prod fit is-hidden" data-min="40" id="pr">{product} · <em>{favorite}</em></div>
-    </div>
-  </div>`,
-
-  // L2 · The landing page is live; the cursor clicks "Get yours".
-  L2: `
   <div class="app browser">
     ${browserBar('{landingHost}/{slug}')}
     <div class="lp">
@@ -34,10 +24,18 @@ export const PART2: Record<string, string> = {
       </div>
       <div class="lp-hero"><div class="lp-disc"></div><img class="is-hidden" id="hero" src="{img.hero}" alt=""></div>
     </div>
+    <div class="fresh" id="banner">
+      <img class="fresh-face cover" src="{img.selfie}" alt="">
+      <div class="fresh-text">
+        <div class="fresh-k">Fresh from the booth</div>
+        <div class="fresh-name fit" data-min="96">{NAME}</div>
+        <div class="fresh-prod fit" data-min="36">{product} · <em>{favorite}</em></div>
+      </div>
+    </div>
   </div>`,
 
-  // L3 · Product page: "Add to cart", the cart bumps to 1.
-  L3: `
+  // L2 · Product page: "Add to cart", the cart bumps to 1. (4 s)
+  L2: `
   <div class="app browser">
     ${browserBar('{storeHost}/products/{productSlug}')}
     <div class="shop-nav"><b class="shop-logo">La Bottega del Lago</b><span>Pantry</span><span>Gathering exclusives</span><span class="grow"></span><span class="cart" id="cart">${CART}<span class="cart-n is-hidden" id="cartn">1</span></span></div>
@@ -54,8 +52,8 @@ export const PART2: Record<string, string> = {
     <div class="cart-toast is-hidden" id="toast">${CHECK}<div><b>Added to cart</b><span>{productName}</span></div></div>
   </div>`,
 
-  // L4 · Abandoned: the tab closes, the clock fast-forwards.
-  L4: `
+  // L3 · Abandoned: the tab closes, the clock fast-forwards. (3 s)
+  L3: `
   <div class="card abandon">
     <div class="tab-mini" id="tab">
       <div class="tab-bar"><span class="br-lights"><i></i><i></i><i></i></span><span class="tab-title">{productName}</span><span class="tab-x" id="x">✕</span></div>
@@ -67,51 +65,34 @@ export const PART2: Record<string, string> = {
     <div class="ab-text is-hidden" id="t"><div class="ab-big">2 hours later</div><div class="ab-sub">{name}'s cart is still waiting.</div></div>
   </div>`,
 
-  // L5 · Marketing automation: cart abandoned, wait, send email; an envelope travels the line.
-  L5: `
+  // L4 · Sending the email: the flow fires and the email preview beside it fills in; an envelope flies off. (5 s)
+  L4: `
   <div class="app flow">
     <header class="fl-top"><span class="logo-sq logo-sq--lime">M</span><b>Marketing automation · Flows</b><span class="fl-crumb">Abandoned cart</span><span class="fl-live">Live</span></header>
-    <div class="fl-canvas">
-      <div class="fl-row">
-        <div class="node" id="n1"><div class="nk">Trigger</div><div class="nt">Cart abandoned</div><div class="ns">{productName}</div><i class="na" id="a1"></i></div>
-        <div class="conn" id="c1"><i></i></div>
-        <div class="node" id="n2"><div class="nk">Wait</div><div class="nt">2 hours</div><div class="ns">then check the cart</div><i class="na" id="a2"></i></div>
-        <div class="conn" id="c2"><i></i></div>
-        <div class="node node--email" id="n3"><div class="nk">Email <span class="nstate" id="st">queued</span></div><div class="nt">Send email</div><div class="ns fit" data-min="28">to {email}</div><i class="na" id="a3"></i></div>
+    <div class="fl-body">
+      <div class="fl-canvas">
+        <div class="node" id="n1"><div class="nk">Trigger</div><div class="nt">Cart abandoned</div><div class="ns">{productName} · 2 hours in the cart</div></div>
+        <div class="conn-v" id="c1"><i></i></div>
+        <div class="node node--email" id="n3"><div class="nk">Email <span class="nstate" id="st">queued</span></div><div class="nt">Send email</div><div class="ns fit" data-min="28">to: {email}</div><i class="na" id="a3"></i></div>
       </div>
-      <div class="fl-vars"><span>$photo = {slug}</span><span>$product = {productSlug}</span><span>$name = {name}</span></div>
+      <aside class="em-preview">
+        <div class="lbl">Email preview · per recipient</div>
+        <div class="em-card">
+          <div class="em-head">La Bottega del Lago</div>
+          <div class="em-subj" id="subj"></div>
+          <div class="em-body">
+            <div class="em-img"><img class="is-hidden" id="eimg" src="{img.email}" alt=""></div>
+            <div class="em-text"><div class="is-hidden" id="etext"><div class="em-t">{productName}</div><p>Still in your cart. One of one.</p></div><button class="em-cta is-hidden" id="ecta">{emailCta}</button></div>
+          </div>
+        </div>
+      </aside>
+      <i class="na na--out" id="aout"></i>
       <div class="env is-hidden" id="env">${MAIL}</div>
     </div>
   </div>`,
 
-  // L6 · The email lands and opens: their product, "Complete your order".
-  L6: `
-  <div class="app inbox">
-    <header class="ib-top">${MAIL}<b>Inbox</b><div class="ib-search">Search mail</div><span class="grow"></span><img class="ib-me cover" src="{img.selfie}" alt=""></header>
-    <div class="ib-body">
-      <aside class="ib-list">
-        <div class="mail mail--new is-gone" id="m-new"><div class="mf"><b>La Bottega del Lago</b><span class="now">now</span></div><div class="ms">{emailSubject}</div></div>
-        <div class="mail"><div class="mf"><b>Lago Maggiore 2026</b><span>09:12</span></div><div class="ms">Day 2 agenda</div></div>
-        <div class="mail"><div class="mf"><b>Venue WiFi</b><span>08:40</span></div><div class="ms">Your access details</div></div>
-      </aside>
-      <main class="ib-read">
-        <div class="ib-open is-hidden" id="open">
-          <div class="ib-subj fit" data-min="40">{emailSubject}</div>
-          <div class="ib-from fit" data-min="28"><b>La Bottega del Lago</b> · to {email}</div>
-          <div class="em-card">
-            <div class="em-head">La Bottega del Lago</div>
-            <div class="em-body">
-              <div class="em-img"><img src="{img.email}" alt=""></div>
-              <div class="em-text"><div class="em-t">{productName}</div><p>Still in your cart. One of one.</p><button class="em-cta">{emailCta}</button></div>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-  </div>`,
-
-  // L7 · End card: their magnet, full height.
-  L7: `
+  // L5 · End card: their magnet, full height. (3 s)
+  L5: `
   <div class="card end">
     <div class="end-mag is-hidden" id="mag"><img src="{img.magnet}" alt=""></div>
     <div class="end-text">

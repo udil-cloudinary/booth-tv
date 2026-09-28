@@ -28,6 +28,7 @@ const SHOW: Record<string, { k: Keyframes; d: number; e: string }> = {
 const HIDE: Record<string, { k: Keyframes; d: number }> = {
   fade: { k: [{ opacity: 1 }, { opacity: 0 }], d: 0.35 },
   close: { k: [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(.9)' }], d: 0.4 },
+  lift: { k: [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-120px)' }], d: 0.5 },
 };
 
 function reveal(el: HTMLElement) {

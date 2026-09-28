@@ -1,5 +1,5 @@
 {
-  "_note": "Per-product copy for the scenes that show the visitor's product (B6-B9, L2-L7). DRAFT for Udi to edit. Placeholders: {name} {NAME} {favorite} {product} {slug} {email} {price}. No em or en dashes.",
+  "_note": "Per-product copy for the scenes that show the visitor's product (B3-B7, L1-L5). DRAFT for Udi to edit. Placeholders: {name} {NAME} {favorite} {product} {slug} {email} {price}. No em or en dashes.",
   "common": {
     "cta": "Get yours",
     "emailSubject": "Hi {name}, you forgot something",

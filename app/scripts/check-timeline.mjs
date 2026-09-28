@@ -1,4 +1,4 @@
-// Fails the build if the timeline breaks the spec: Part 1 over 30 s, a scene without a script,
+// Fails the build if the timeline breaks the spec: Part 1 over 30 s, Part 2 over 20 s, a scene without a script,
 // or a step that starts after its scene has ended. Run by `npm run build` and `npm run check`.
 import { readFileSync, readdirSync } from 'node:fs';
 
@@ -14,6 +14,9 @@ const sum = (entries) => entries.reduce((t, e) => t + e.dur, 0);
 const max = loop.part1MaxSec ?? 30;
 const part1 = sum(loop.part1);
 if (part1 > max) errors.push(`Part 1 is ${part1} s, the spec allows ${max} s max`);
+const max2 = loop.part2MaxSec ?? 20;
+const part2 = sum(loop.part2);
+if (part2 > max2) errors.push(`Part 2 is ${part2} s per visitor, the spec allows ${max2} s max`);
 if (!loop.part1.some((e) => e.scene === loop.fetchAt)) errors.push(`fetchAt ${loop.fetchAt} is not a Part 1 scene`);
 for (const s of loop.part2Short) if (!loop.part2.some((e) => e.scene === s)) errors.push(`short form scene ${s} is not in Part 2`);
 
@@ -28,4 +31,4 @@ if (errors.length) {
   console.error('Timeline check failed:\n  ' + errors.join('\n  '));
   process.exit(1);
 }
-console.log(`Timeline OK: Part 1 ${part1} s (max ${max}), Part 2 ${sum(loop.part2)} s, short form ${loop.part2Short.join(' ')}`);
+console.log(`Timeline OK: Part 1 ${part1} s (max ${max}), Part 2 ${part2} s (max ${max2}), short form ${loop.part2Short.join(' ')}`);

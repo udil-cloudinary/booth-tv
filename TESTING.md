@@ -4,21 +4,21 @@ Run on the real TV machine in Chrome kiosk (see README), unless noted. Press `H`
 
 ## Every scene
 
-For each of B1 to B8 and L1 to L7, open `?scene=<ID>` (Part 2 also with `&v=3`, Maximiliano, the longest name) and check:
+For each of B1 to B8 and L1 to L5, open `?scene=<ID>` (Part 2 also with `&v=3`, Maximiliano, the long-name test) and check:
 
 - [ ] Everything moves as in spec sections 3 and 4, and nothing is left half drawn when the scene ends.
 - [ ] Copy matches the spec. Lower thirds read from 3 to 5 m. Nothing under 28 px.
-- [ ] First names only, no surname anywhere. The email appears only in L5 and L6 ("to:").
+- [ ] First names only, no surname anywhere. The email appears only in L4 ("to:").
 - [ ] Long names and favourites fit (MAXIMILIANO, "Nonna's Secret Fig") and nothing clips.
 - [ ] Lockup top-left, no QR on screen.
 
 ## Loop rules
 
-- [ ] Full loop, `?mock=1`: Part 1 (30 s) then Luca and Giulia, next cycle Noa and Maximiliano, then Maya only.
-- [ ] `npm run build` fails if Part 1 in `timeline/loop.json` sums to more than 30 s (try 31, then undo).
+- [ ] Full loop, `?mock=1`: Part 1 (30 s) then Luca and Giulia (20 s each), next cycle Noa and Maximiliano, then Maya only.
+- [ ] `npm run build` fails if Part 1 in `timeline/loop.json` sums to more than 30 s, or Part 2 to more than 20 s (try it, then undo).
 - [ ] The fetch happens at B7: the HUD "fetch" time updates at the Publish card.
 - [ ] Nobody new (`?novisitors`): Part 2 always runs with Maya.
-- [ ] Rush (`?rush=10`): the cycle after the rush runs catch-up (HUD: "catch-up ON"), 5 visitors in the short form L1, L6, L7, oldest first. It stays on until fewer than 3 are waiting.
+- [ ] Rush (`?rush=10`): the cycle after the rush runs catch-up (HUD: "catch-up ON"), 5 visitors in the short form L4, L5, oldest first. It stays on until fewer than 3 are waiting.
 - [ ] Broken image (`?broken`): "Broken" is skipped within 4 s (HUD: skipped 1), retried the next cycle, then dropped (skipped 2). The loop never waits on screen.
 - [ ] Latest per email wins: two uploads with the same email show once, the newer one.
 - [ ] Reload safety: after a reload, visitors from more than 30 minutes ago are not shown again.

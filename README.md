@@ -1,6 +1,6 @@
 # Booth TV (Gathering 2026)
 
-The silent, animated loop on the 55" 4K TV behind the counter: Part 1 BUILD (Maya, 8 screens, 30 s max), then Part 2 LIVE for up to 2 new visitors (about 30 s each), or Maya when nobody is new. Spec: `../../specs/spec-tv-orchestrator.md` (v0.4).
+The silent, animated loop on the 55" 4K TV behind the counter: Part 1 BUILD (Maya, 8 screens, 30 s max), then Part 2 LIVE for up to 2 new visitors (5 screens, 20 s max each), or Maya when nobody is new. Spec: `../../specs/spec-tv-orchestrator.md` (v0.4).
 
 Status: Phase 1 done (the TV with mock data). The backend (`api/`) is next.
 
@@ -18,8 +18,8 @@ Open it in Chrome at any window size; the 1920 x 1080 stage letterboxes to fit.
 
 | Param | What it does |
 |---|---|
-| `?scene=B3` | Plays one scene on repeat (B1 to B8, L1 to L7), with Maya |
-| `?scene=L6&v=3` | A Part 2 scene with mock visitor 3 (index or id from `assets/mock/visitors.json`) |
+| `?scene=B3` | Plays one scene on repeat (B1 to B8, L1 to L5), with Maya |
+| `?scene=L4&v=3` | A Part 2 scene with mock visitor 3 (index or id from `assets/mock/visitors.json`; 3 is Maximiliano, the long-name test) |
 | `&hold` | With `?scene`: play once and freeze on the last frame (for review) |
 | `?speed=0.5` | Slows the whole show down (or `4` to speed it up) |
 | `?mock=1` / `?mock=0` | Mock data / the real backend (overrides `VITE_PROVIDER`) |
@@ -33,7 +33,7 @@ Open it in Chrome at any window size; the 1920 x 1080 stage letterboxes to fit.
 
 ```
 cd app
-npm run build        # checks the timeline (fails if Part 1 is over 30 s), type-checks, builds dist/
+npm run build        # checks the timeline (fails if Part 1 is over 30 s or Part 2 over 20 s), type-checks, builds dist/
 npm run preview      # serves dist/ on http://localhost:4173
 ```
 
@@ -64,7 +64,7 @@ The TV holds no secret. All values are public and are baked in at build time.
 ## Switch from mock to the real backend
 
 1. Set `VITE_PROVIDER=http` and `VITE_API_BASE=https://<backend>` in `app/.env`, then `npm run build`. Or keep the build and add `?mock=0`, if the API is on the same origin.
-2. The TV calls `GET /api/tv/visitors?since=<ISO>&limit=10` at B7 (Publish) each cycle and expects the spec section 6 JSON, including `email`. If the call fails or times out (5 s), that cycle's Part 2 runs with Maya and the next cycle tries again.
+2. The TV calls `GET /api/tv/visitors?since=<ISO>&limit=10` at B7 (Publish) each cycle and expects the spec section 6 JSON, including `email` (shown only in L4's "to:" line). If the call fails or times out (5 s), that cycle's Part 2 runs with Maya and the next cycle tries again.
 
 ## Where things are
 
@@ -73,7 +73,7 @@ app/
   timeline/loop.json        order, durations, loop rules (batch, catch-up, preload timeout, reload)
   timeline/scenes/*.json    one step script + lower third + "Works with" strip per scene
   timeline/copy.json        per-product copy for pizza / gelato / caffè (draft, edit freely)
-  scripts/check-timeline.mjs  the build check (30 s cap, every scene has a script, no step after its end)
+  scripts/check-timeline.mjs  the build check (Part 1 30 s cap, Part 2 20 s cap, every scene has a script, no step after its end)
   src/scenes/part1.ts, part2.ts   the HTML of each scene (the recreated tools)
   src/styles/                     base (stage, chrome, shared tools) and per-scene CSS
   src/engine/               player steps, virtual cursor, camera zoom, placeholder filling, text fit

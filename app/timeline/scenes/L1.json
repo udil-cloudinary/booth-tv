@@ -1,35 +1,40 @@
 {
   "id": "L1",
-  "title": "Intro card",
-  "frame": "card",
+  "title": "Landing page, live (with the Fresh from the booth banner)",
+  "frame": "app",
   "enter": "swipe",
+  "lower": "{name}'s page is live",
   "strip": {
-    "label": "Cloudinary inside every tool you already work in"
+    "label": "CMS · works with",
+    "names": [
+      "Contentful",
+      "WordPress",
+      "SFCC Page Designer"
+    ]
   },
   "steps": [
     {
-      "at": 0.2,
+      "at": 1.3,
+      "do": "hide",
+      "target": "#banner",
+      "anim": "lift"
+    },
+    {
+      "at": 1.5,
       "do": "show",
-      "target": "#face",
+      "target": "#hero",
       "anim": "pop"
     },
     {
-      "at": 0.5,
-      "do": "show",
-      "target": "#k",
-      "anim": "rise"
+      "at": 2.3,
+      "do": "cursor",
+      "target": "#cta",
+      "dur": 0.8
     },
     {
-      "at": 0.8,
-      "do": "show",
-      "target": "#nm",
-      "anim": "rise"
-    },
-    {
-      "at": 1.3,
-      "do": "show",
-      "target": "#pr",
-      "anim": "rise"
+      "at": 3.4,
+      "do": "click",
+      "target": "#cta"
     }
   ]
 }
