@@ -1,66 +1,56 @@
 {
   "id": "B6",
-  "title": "Landing page in our CMS, extension beside it",
+  "title": "Product page in our store admin",
   "frame": "app",
-  "lower": "Write the page. Cloudinary finds the media",
+  "lower": "Same trick in the store",
   "strip": {
-    "label": "CMS · works with",
+    "label": "Ecomm · works with",
     "names": [
-      "Contentful",
-      "WordPress",
-      "SFCC Page Designer"
+      "Shopify",
+      "SFCC",
+      "Adobe Commerce"
     ]
   },
   "steps": [
     {
-      "at": 0.2,
+      "at": 0.1,
       "do": "type",
       "target": "#title",
-      "text": "{headline}",
+      "text": "{productName}",
       "cps": 26
     },
     {
-      "at": 1.8,
+      "at": 0.8,
+      "do": "type",
+      "target": "#price",
+      "text": "{price}",
+      "cps": 12
+    },
+    {
+      "at": 1.2,
       "do": "show",
-      "target": "#scan",
+      "target": "#sug-h",
       "anim": "fade"
     },
     {
-      "at": 3,
-      "do": "set",
-      "target": "#scan",
-      "add": "is-done"
-    },
-    {
-      "at": 3,
-      "do": "set",
-      "target": "#scan-t",
-      "text": "3 matches, ranked"
-    },
-    {
-      "at": 3.2,
+      "at": 1.3,
       "do": "show",
-      "target": "#r1",
-      "anim": "grow"
+      "target": "#sug",
+      "anim": "rise"
     },
     {
-      "at": 3.6,
+      "at": 1.9,
+      "do": "fly",
+      "target": "#simg",
+      "to": "#pimg",
+      "dur": 0.8
+    },
+    {
+      "at": 2.8,
       "do": "show",
-      "target": "#r2",
-      "anim": "grow"
-    },
-    {
-      "at": 4,
-      "do": "show",
-      "target": "#r3",
-      "anim": "grow"
-    },
-    {
-      "at": 4.5,
-      "do": "highlight",
-      "target": "#r1",
-      "group": ".ext-res",
-      "zoom": 1.04
+      "target": "#note",
+      "anim": "rise",
+      "zoom": 1.03
     }
   ]
 }

@@ -84,6 +84,7 @@ export interface LoopConfig {
   preloadTimeoutSec: number;
   fetchTimeoutSec: number;
   reloadEveryMin: number;
+  part1MaxSec?: number;
 }
 
 export type Part = 'part1' | 'part2';

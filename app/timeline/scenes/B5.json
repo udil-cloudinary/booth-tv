@@ -1,60 +1,91 @@
 {
   "id": "B5",
-  "title": "The bake",
+  "title": "Landing page in our CMS, extension beside it",
   "frame": "app",
-  "enter": "cut",
-  "lower": "Her face, baked into the product",
+  "lower": "Write the page. Cloudinary brings the media",
   "strip": {
-    "label": "Design · works with",
+    "label": "CMS · works with",
     "names": [
-      "Figma",
-      "Canva",
-      "Adobe Express"
+      "Contentful",
+      "WordPress",
+      "SFCC Page Designer"
     ]
   },
   "steps": [
     {
-      "at": 0.3,
-      "do": "fly",
-      "target": "#src",
-      "to": "#slot",
-      "reveal": "#face",
-      "dur": 1
+      "at": 0.1,
+      "do": "type",
+      "target": "#title",
+      "text": "{headline}",
+      "cps": 32
     },
     {
-      "at": 1.5,
-      "do": "type",
-      "target": "#nm",
-      "text": "{NAME}",
-      "cps": 10,
-      "zoom": 1.05
+      "at": 1.2,
+      "do": "show",
+      "target": "#scan",
+      "anim": "fade"
+    },
+    {
+      "at": 1.8,
+      "do": "set",
+      "target": "#scan",
+      "add": "is-done"
+    },
+    {
+      "at": 1.8,
+      "do": "set",
+      "target": "#scan-t",
+      "text": "2 matches, ranked"
+    },
+    {
+      "at": 1.9,
+      "do": "show",
+      "target": "#r1",
+      "anim": "grow"
+    },
+    {
+      "at": 2.1,
+      "do": "show",
+      "target": "#r2",
+      "anim": "grow"
     },
     {
       "at": 2.2,
-      "do": "type",
-      "target": "#fv",
-      "text": "{favorite}",
-      "cps": 20,
+      "do": "cursor",
+      "target": "#insert",
+      "dur": 0.5
+    },
+    {
+      "at": 2.8,
+      "do": "click",
+      "target": "#insert",
       "zoom": false
     },
     {
-      "at": 3.1,
-      "do": "set",
-      "target": "#drop",
-      "zoom": 1.03
+      "at": 2.9,
+      "do": "hide",
+      "target": "#empty"
     },
     {
-      "at": 3.2,
+      "at": 2.9,
       "do": "fly",
-      "target": "#tpl",
-      "to": "#baked",
-      "dur": 0.9
+      "target": "#r1img",
+      "to": "#hero",
+      "dur": 0.8,
+      "withCursor": true
     },
     {
-      "at": 4.2,
+      "at": 3.8,
       "do": "show",
-      "target": "#derived",
-      "anim": "pop"
+      "target": "#tchip",
+      "anim": "pop",
+      "zoom": 1.04
+    },
+    {
+      "at": 4,
+      "do": "set",
+      "target": "#hero",
+      "add": "is-cropped"
     }
   ]
 }

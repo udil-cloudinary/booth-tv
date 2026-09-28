@@ -9,7 +9,7 @@ Build the booth TV orchestrator for our Cloudinary booth (Gathering 2026, Lago M
 ## Read first, in this order
 
 1. `products/booth-tv/CLAUDE.md`: context, settled decisions, what not to touch.
-2. `specs/spec-tv-orchestrator.md`: the spec (v0.4). It is the source of truth for the loop rules, every scene (B1 to B8, L1 to L7) with timing, what moves and the lower third, the data contract, the operator page, printing and the screen rules.
+2. `specs/spec-tv-orchestrator.md`: the spec (v0.4). It is the source of truth for the loop rules, every scene (B1 to B8, L1 to L5) with timing, what moves and the lower third, the data contract, the operator page, printing and the screen rules.
 3. `products/booth-tv/reference/README.md` and the boards in `reference/storyboard/` (HTML + PNG): the look of each scene. Copy and data come from the spec, not from the boards.
 4. `products/booth-tv/assets/README.md`: the offline assets and the mock data (`assets/mock/maya.json`, `assets/mock/visitors.json`).
 5. `templates/cloudinary-setup/README.md` and `recipes.mjs`: the Cloudinary recipes and `visitorUrls()`.
@@ -28,8 +28,8 @@ Do not change `products/booth-wizard/` or anything in `templates/` except by ask
 
 1. **Canvas:** a 1920 x 1080 stage, scaled to fit the window (letterboxed), rendered sharp on the 4K TV (Chrome kiosk `--force-device-scale-factor=2`). Always on screen: the booth lockup top-left. No QR on screen (it is printed on the backdrop next to the TV).
 2. **Scene engine** (spec section 5): scenes are HTML components; each has a JSON step script with the step types type, cursor, click, show, hide, highlight, fly, scroll, swap image, wait. One virtual cursor on easing curves with a click ripple. A gentle zoom towards the active element. Lower thirds per scene. `{name}`, `{email}`, `{product}`, `{favorite}` and `{img.*}` placeholders filled from the visitor record.
-3. **Timeline as data:** `loop.json` (order, durations) and `scenes/*.json` (step scripts, captions). Write the beat sheets for all 15 scenes from spec sections 3 and 4. Part 1 is 8 screens and 30 s MAX in total (5 action screens of 4 to 5 s, 3 narration cards of 2 s), B1 opens on the DAM, B2 is the agent. Add a check that fails the build if Part 1 sums to more than 30 s. Copy exactly as in the spec.
-4. **Scenes:** build B1 to B8 and L1 to L7 to match the storyboard look, laid out for 1920 x 1080 with the spec's type minimums. Generic CMS and store only. First names on screen; the visitor's email only in the L5 and L6 "to:" lines.
+3. **Timeline as data:** `loop.json` (order, durations) and `scenes/*.json` (step scripts, captions). Write the beat sheets for all 13 scenes from spec sections 3 and 4. Part 1 is 8 screens and 30 s MAX (5 action screens of 4 to 5 s, 3 narration cards of 2 s), B1 opens on the DAM, B2 is the agent. Part 2 is 5 screens and 20 s MAX per visitor (landing, product page and sending the email are the highlights; abandoned and the end card 3 s each). Add a check that fails the build if Part 1 sums to more than 30 s or Part 2 to more than 20 s. Copy exactly as in the spec.
+4. **Scenes:** build B1 to B8 and L1 to L5 to match the storyboard look, laid out for 1920 x 1080 with the spec's type minimums. Generic CMS and store only. First names on screen; the visitor's email only in L4's "to:" line.
 5. **Data provider interface** with two implementations: `MockProvider` (reads `assets/mock/*.json`) and `HttpProvider` (`GET /api/tv/visitors?since=&limit=`, `GET /api/tv/control`). Pick with config or `?mock=1`.
 6. **Loop rules** (spec section 2): fetch at the Publish moment (B7); up to 2 visitors per cycle, oldest first; Maya when nobody is new; catch-up short form when more than 6 are waiting; cursor on `created_at`, starting 30 minutes back on load; preload the next visitor's images during Part 1 and skip anyone whose images fail within 4 s; poll control every 5 s (Hide cuts the current visitor within 5 s, Pause freezes on the hook card); reload itself every 2 hours, only at the end of a Part 2; the whole loop keeps running offline with Maya.
 7. **Dev tools:** `?scene=B3` plays one scene on repeat, `?speed=0.5`, `?mock=1`, a hidden debug HUD (current scene, queue, cursor, last fetch) toggled with a key.
@@ -57,7 +57,7 @@ Node script for the Mac wired to the CZ-01 (spec section 8): polls the queue, do
 - The TV runs the full loop for 2 hours in Chrome kiosk without a stall, with the mock data, a rush of 10 mock visitors, and the network cut mid-loop (it falls back to Maya and recovers).
 - `products/booth-tv/README.md`: run, build, kiosk launch flags for the 4K TV, env vars, and how to switch from mock to the real backend.
 - `products/booth-tv/TESTING.md`: the manual checklist (every scene, Hide within 5 s, Pause, catch-up mode, broken image skip, offline, 2-hour reload, operator on iPad, a test print).
-- No surname anywhere on screen; the email address appears only in the L5 and L6 "to:" lines.
+- No surname anywhere on screen; the email address appears only in L4's "to:" line.
 - If the spec is unclear or contradicts this prompt, follow the spec and list the question at the end of your summary.
 
 Start by reading the files above, then give me a short plan for Phase 1 (files, modules, order) before writing code.

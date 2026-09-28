@@ -1,8 +1,7 @@
 {
   "id": "B4",
-  "title": "Agent picks the template",
-  "frame": "app",
-  "lower": "The right Figma template",
+  "title": "Narration: the bake",
+  "frame": "card",
   "strip": {
     "label": "Design · works with",
     "names": [
@@ -13,42 +12,10 @@
   },
   "steps": [
     {
-      "at": 0.2,
-      "do": "show",
-      "target": "#call",
-      "anim": "pop"
-    },
-    {
-      "at": 1.1,
+      "at": 0.1,
       "do": "set",
-      "target": "#call",
-      "add": "is-done"
-    },
-    {
-      "at": 1.4,
-      "do": "highlight",
-      "target": "#f-pizza",
-      "group": ".fg-frame",
-      "zoom": 1.03
-    },
-    {
-      "at": 1.4,
-      "do": "highlight",
-      "target": "#ly-pizza",
-      "group": ".layer"
-    },
-    {
-      "at": 2.8,
-      "do": "highlight",
-      "target": "#ly-art",
-      "group": ".layer",
-      "zoom": 1.05
-    },
-    {
-      "at": 2.9,
-      "do": "show",
-      "target": "#tag",
-      "anim": "pop"
+      "target": "#bar",
+      "add": "is-full"
     }
   ]
 }

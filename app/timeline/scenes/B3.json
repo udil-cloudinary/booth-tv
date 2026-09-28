@@ -1,59 +1,110 @@
 {
   "id": "B3",
-  "title": "Agent calls Cloudinary",
+  "title": "Figma: template pick + bake",
   "frame": "app",
-  "lower": "It finds her in Cloudinary",
+  "lower": "The right template, her face baked in",
   "strip": {
-    "label": "AI agents · works with",
+    "label": "Design · works with",
     "names": [
-      "Claude",
-      "Gemini",
-      "ChatGPT"
+      "Figma",
+      "Canva",
+      "Adobe Express"
     ]
   },
   "steps": [
     {
-      "at": 0.2,
+      "at": 0.1,
       "do": "show",
       "target": "#call",
       "anim": "pop"
     },
     {
-      "at": 1.5,
+      "at": 0.6,
       "do": "set",
       "target": "#call",
       "add": "is-done"
     },
     {
+      "at": 0.7,
+      "do": "highlight",
+      "target": "#f-pizza",
+      "group": ".fg-frame"
+    },
+    {
+      "at": 0.7,
+      "do": "highlight",
+      "target": "#ly-pizza",
+      "group": ".layer"
+    },
+    {
+      "at": 1.2,
+      "do": "highlight",
+      "target": "#ly-art",
+      "group": ".layer"
+    },
+    {
+      "at": 1.2,
+      "do": "show",
+      "target": "#tag",
+      "anim": "pop"
+    },
+    {
+      "at": 1.4,
+      "do": "hide",
+      "target": "#f-gel"
+    },
+    {
+      "at": 1.4,
+      "do": "hide",
+      "target": "#f-caf"
+    },
+    {
       "at": 1.5,
       "do": "set",
-      "target": "#state",
-      "text": "done"
+      "target": "#frames",
+      "add": "is-picked"
     },
     {
-      "at": 1.7,
+      "at": 1.8,
       "do": "show",
-      "target": "#res",
-      "anim": "rise",
-      "zoom": 1.05
-    },
-    {
-      "at": 2.1,
-      "do": "show",
-      "target": "#k1",
-      "anim": "pop"
+      "target": "#plug",
+      "anim": "slide-left"
     },
     {
       "at": 2.4,
-      "do": "show",
-      "target": "#k2",
-      "anim": "pop"
+      "do": "fly",
+      "target": "#src",
+      "to": "#slot",
+      "reveal": "#face",
+      "dur": 0.8
     },
     {
-      "at": 2.7,
-      "do": "show",
-      "target": "#k3",
-      "anim": "pop"
+      "at": 2.4,
+      "do": "highlight",
+      "target": "#ly-face",
+      "group": ".layer"
+    },
+    {
+      "at": 3.3,
+      "do": "type",
+      "target": "#nm",
+      "text": "{NAME}",
+      "cps": 12,
+      "zoom": 1.06
+    },
+    {
+      "at": 3.3,
+      "do": "highlight",
+      "target": "#ly-name",
+      "group": ".layer"
+    },
+    {
+      "at": 3.8,
+      "do": "type",
+      "target": "#fv",
+      "text": "{favorite}",
+      "cps": 22,
+      "zoom": false
     }
   ]
 }

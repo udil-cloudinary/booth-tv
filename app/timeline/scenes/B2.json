@@ -1,8 +1,8 @@
 {
   "id": "B2",
-  "title": "Agent prompt",
+  "title": "Agent prompt + Cloudinary call",
   "frame": "app",
-  "lower": "An AI agent takes it from here",
+  "lower": "An AI agent finds her in Cloudinary",
   "strip": {
     "label": "AI agents · works with",
     "names": [
@@ -13,29 +13,63 @@
   },
   "steps": [
     {
-      "at": 0.2,
+      "at": 0.1,
       "do": "type",
       "target": "#prompt",
       "text": "New guest from the booth app: maya-sol.\n\n1. Take her image and metadata from the DAM and match it into the right Figma template. Bake it, export it back to the DAM.\n2. Create her landing page from the CMS template: title, author, a short funny bio. Let the extension insert her image.\n3. Create the PDP on La Bottega del Lago: one of one, priced in euro. Extension inserts the product shot.\n4. Publish both.",
-      "cps": 150,
+      "cps": 230,
       "zoom": 1.025
     },
     {
-      "at": 3.4,
+      "at": 2.1,
       "do": "cursor",
       "target": "#send",
-      "dur": 0.6
+      "dur": 0.4
     },
     {
-      "at": 4.1,
+      "at": 2.6,
       "do": "click",
-      "target": "#send"
+      "target": "#send",
+      "zoom": false
     },
     {
-      "at": 4.3,
-      "do": "set",
+      "at": 2.8,
+      "do": "hide",
       "target": "#compose",
-      "add": "is-sent"
+      "anim": "fade",
+      "dur": 0.25
+    },
+    {
+      "at": 2.9,
+      "do": "show",
+      "target": "#chat",
+      "anim": "fade",
+      "dur": 0.3
+    },
+    {
+      "at": 3.1,
+      "do": "show",
+      "target": "#call",
+      "anim": "pop"
+    },
+    {
+      "at": 3.8,
+      "do": "set",
+      "target": "#call",
+      "add": "is-done"
+    },
+    {
+      "at": 3.8,
+      "do": "set",
+      "target": "#state",
+      "text": "done"
+    },
+    {
+      "at": 3.9,
+      "do": "show",
+      "target": "#res",
+      "anim": "rise",
+      "zoom": 1.04
     }
   ]
 }

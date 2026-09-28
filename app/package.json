@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview --host --port 4173"
+    "build": "node scripts/check-timeline.mjs && tsc --noEmit && vite build",
+    "preview": "vite preview --host --port 4173",
+    "check": "node scripts/check-timeline.mjs"
   },
   "devDependencies": {
     "typescript": "^7.0.2",
