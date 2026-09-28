@@ -23,6 +23,15 @@ For each of B1 to B8 and L1 to L5, open `?scene=<ID>` (Part 2 also with `&v=3`, 
 - [ ] Latest per email wins: two uploads with the same email show once, the newer one.
 - [ ] Reload safety: after a reload, visitors from more than 30 minutes ago are not shown again.
 
+## Backend
+
+- [ ] `cd api && npm test` passes.
+- [ ] `npm run mock` in `api/`, then the TV with `?mock=0`: same loop as `?mock=1`, over HTTP (HUD: provider=http).
+- [ ] `MOCK_RUSH=10 npm run mock`: catch-up mode over HTTP.
+- [ ] First run on the booth cloud: the checklist in `api/README.md`.
+- [ ] A test upload from the wizard shows on the TV within one cycle (about 70 s), and a retake with the same email replaces it.
+- [ ] `tv_status=hidden` set in the Cloudinary console keeps that visitor off the next cycle.
+
 ## Offline and recovery
 
 - [ ] With the real backend (`?mock=0`), pull the network cable mid-Part 1: that cycle's Part 2 runs with Maya (HUD: fetch errors +1), the show never stalls or goes blank.

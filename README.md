@@ -2,7 +2,7 @@
 
 The silent, animated loop on the 55" 4K TV behind the counter: Part 1 BUILD (Maya, 8 screens, 30 s max), then Part 2 LIVE for up to 2 new visitors (5 screens, 20 s max each), or Maya when nobody is new. Spec: `../../specs/spec-tv-orchestrator.md` (v0.4).
 
-Status: Phase 1 done (the TV with mock data). The backend (`api/`) is next.
+Status: Phase 1 (the TV) and Phase 2 (the backend, `api/`, see `api/README.md`) built and tested with mock data. Not yet run against the booth cloud.
 
 ## Run it
 
@@ -63,8 +63,13 @@ The TV holds no secret. All values are public and are baked in at build time.
 
 ## Switch from mock to the real backend
 
+Local, with the whole HTTP path but no cloud: `cd api && npm run mock`, then open the TV with `?mock=0` (the Vite dev server proxies `/api` to `localhost:8787`). With the booth cloud: put `CLOUDINARY_URL` in `api/.env` and run `npm run dev` instead.
+
+For a build:
+
 1. Set `VITE_PROVIDER=http` and `VITE_API_BASE=https://<backend>` in `app/.env`, then `npm run build`. Or keep the build and add `?mock=0`, if the API is on the same origin.
 2. The TV calls `GET /api/tv/visitors?since=<ISO>&limit=10` at B7 (Publish) each cycle and expects the spec section 6 JSON, including `email` (shown only in L4's "to:" line). If the call fails or times out (5 s), that cycle's Part 2 runs with Maya and the next cycle tries again.
+3. If the backend sets `TV_READ_TOKEN`, set the same value as `VITE_API_TOKEN` in `app/.env`.
 
 ## Where things are
 

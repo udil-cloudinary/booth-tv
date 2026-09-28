@@ -13,6 +13,7 @@ const mockParam = q.get('mock');
 export const config = {
   provider: (mockParam === null ? (env.VITE_PROVIDER || 'mock') : mockParam === '0' ? 'http' : 'mock') as 'mock' | 'http',
   apiBase: (env.VITE_API_BASE || '').replace(/\/$/, ''),
+  apiToken: env.VITE_API_TOKEN || '',
   logUrl: env.VITE_LOG_URL || '',
 
   // Dev switches

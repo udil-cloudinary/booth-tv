@@ -13,7 +13,8 @@ export class HttpProvider implements DataProvider {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), this.timeoutSec * 1000);
     try {
-      const res = await fetch(url, { signal: ctrl.signal, cache: 'no-store' });
+      const headers: Record<string, string> = config.apiToken ? { Authorization: `Bearer ${config.apiToken}` } : {};
+      const res = await fetch(url, { signal: ctrl.signal, cache: 'no-store', headers });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const body = (await res.json()) as Partial<VisitorsResponse>;
       const visitors = Array.isArray(body.visitors) ? body.visitors.filter(isUsable) : [];
