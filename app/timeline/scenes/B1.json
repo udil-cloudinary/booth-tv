@@ -18,38 +18,38 @@
       "anim": "drop"
     },
     {
-      "at": 0.8,
+      "at": 0.7,
       "do": "cursor",
       "target": "#new",
-      "dur": 0.6
+      "dur": 0.5
     },
     {
-      "at": 1.5,
+      "at": 1.3,
       "do": "click",
       "target": "#new",
       "zoom": false
     },
     {
-      "at": 1.6,
+      "at": 1.4,
       "do": "show",
       "target": "#win",
       "anim": "zoom",
       "zoom": 1.03
     },
     {
-      "at": 2.1,
+      "at": 1.9,
       "do": "show",
       "target": "#m1",
       "anim": "rise"
     },
     {
-      "at": 2.6,
+      "at": 2.3,
       "do": "show",
       "target": "#m2",
       "anim": "rise"
     },
     {
-      "at": 3.1,
+      "at": 2.7,
       "do": "show",
       "target": "#m3",
       "anim": "rise"
