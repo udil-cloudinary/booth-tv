@@ -61,7 +61,7 @@ export interface Strip {
 export interface SceneScript {
   id: string;
   title: string;
-  frame: 'app' | 'card';
+  frame: 'app' | 'card' | 'full'; // full: the scene fills the whole stage, no lockup, lower third or strip
   enter?: 'fade' | 'cut' | 'swipe';
   lower?: string;
   strip?: Strip;
@@ -85,6 +85,8 @@ export interface LoopConfig {
   fetchTimeoutSec: number;
   reloadEveryMin: number;
   part1MaxSec?: number;
+  /** The Cloudinary Everywhere opener, played full screen before Part 1 every `every` cycles (1 = every cycle). */
+  opener?: { scene: string; dur: number; every: number };
   part2MaxSec?: number;
 }
 

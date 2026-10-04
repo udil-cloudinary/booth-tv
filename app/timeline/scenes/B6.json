@@ -29,13 +29,6 @@
       "zoom": false
     },
     {
-      "at": 1.6,
-      "do": "set",
-      "target": "#ftext",
-      "text": "{productName}",
-      "zoom": false
-    },
-    {
       "at": 1.7,
       "do": "set",
       "target": "#counts",

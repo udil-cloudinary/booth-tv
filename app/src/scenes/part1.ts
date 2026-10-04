@@ -20,6 +20,7 @@ const CHEVRON = '<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" str
 function extPanel(field: string, subjectId: string, base: string) {
   return `
       <aside class="xp">
+        <header class="xp-head"><img src="assets/brand/cloudinary-logo.png" alt=""><b>Cloudinary Media Assistant</b><span class="xp-env">booth</span></header>
         <section class="xp-zone">
           <div class="xp-label">Media fields on this page</div>
           <div class="xp-target">
@@ -43,7 +44,6 @@ function extPanel(field: string, subjectId: string, base: string) {
         </section>
         <div class="xp-search">
           <div class="xp-follow"><span class="xp-box">${CHECK}</span><b>Follow the page</b><span class="xp-muted">from the title</span></div>
-          <div class="xp-ftext" id="ftext">&nbsp;</div>
           <div class="xp-input"><span class="xp-cam">${CAMERA}</span><span class="xp-ph">Search</span><span class="xp-send">${SEND}</span></div>
         </div>
         <div class="xp-sheet is-hidden" id="sheet">

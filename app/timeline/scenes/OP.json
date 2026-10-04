@@ -1,0 +1,7 @@
+{
+  "id": "OP",
+  "title": "Cloudinary Everywhere opener (assets/opening/opener.html)",
+  "frame": "full",
+  "enter": "fade",
+  "steps": []
+}

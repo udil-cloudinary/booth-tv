@@ -21,13 +21,6 @@
       "zoom": false
     },
     {
-      "at": 1.9,
-      "do": "set",
-      "target": "#ftext",
-      "text": "{headline}",
-      "zoom": false
-    },
-    {
       "at": 2.1,
       "do": "set",
       "target": "#counts",

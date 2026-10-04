@@ -5,7 +5,7 @@
     "emailSubject": "Hi {name}, you forgot something",
     "emailBody": "Your {productName} is still in the cart. One of one, made for you.",
     "emailCta": "Complete your order",
-    "endLine": "{productName} is waiting in your cart",
+    "endLine": "Come get your swag",
     "altText": "{productName}: {favorite}, with {name}'s photo on the kraft label",
     "landingHost": "agentshow.demo",
     "storeHost": "labottega.demo"

@@ -69,8 +69,10 @@ export class Stage {
   }
 
   private setChrome(script: SceneScript, vars: Vars, info: PlayInfo) {
+    this.el.classList.toggle('is-full', script.frame === 'full');
     this.frame.classList.toggle('frame--card', script.frame === 'card');
-    this.frame.classList.toggle('frame--app', script.frame !== 'card');
+    this.frame.classList.toggle('frame--app', script.frame === 'app');
+    this.frame.classList.toggle('frame--full', script.frame === 'full');
 
     const text = script.lower ? fill(script.lower, vars) : '';
     const span = this.lower.querySelector<HTMLElement>('.lower-text')!;
@@ -103,7 +105,14 @@ export class Stage {
     this.cam.insertBefore(root, this.cursor.el);
     // Wait for this scene's images (already preloaded) so nothing pops in half drawn.
     const imgs = Array.from(root.querySelectorAll('img'));
-    await Promise.race([Promise.all(imgs.map((i) => i.decode().catch(() => {}))), sleep(1.5)]);
+    const frames = Array.from(root.querySelectorAll('iframe'));
+    await Promise.race([
+      Promise.all([
+        ...imgs.map((i) => i.decode().catch(() => {})),
+        ...frames.map((f) => new Promise<void>((r) => f.addEventListener('load', () => r(), { once: true }))),
+      ]),
+      sleep(1.5),
+    ]);
     fitAll(root);
     return root;
   }

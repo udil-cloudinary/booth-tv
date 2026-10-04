@@ -1,6 +1,6 @@
 # Claude Code context: Booth TV orchestrator (Gathering 2026, Lago Maggiore)
 
-You are building the web app that runs the booth's 55" 4K TV, plus the small pieces around it (operator page, backend endpoints, print agent). The TV plays a silent, animated two-part story on a loop: Part 1 BUILD (fixed, with Maya, 8 screens, 40 s max), Part 2 LIVE (a real visitor who just did the wizard, 5 screens, 26 s max each, Maya when nobody is new).
+You are building the web app that runs the booth's 55" 4K TV, plus the small pieces around it (operator page, backend endpoints, print agent). The TV plays a silent, animated two-part story on a loop: opener (assets/opening/opener.html), then Part 1 BUILD (fixed, with Maya, 8 screens, 41 s max), Part 2 LIVE (a real visitor who just did the wizard, 5 screens, 26 s max each, Maya when nobody is new).
 
 ## Read first
 
@@ -13,7 +13,7 @@ You are building the web app that runs the booth's 55" 4K TV, plus the small pie
 
 ## Decisions that are settled (do not reopen)
 
-- Every scene: settle, one action, hold the result (at least 1.2 s, checked by the build). Part 1 is 8 screens, 40 s max: B1 DAM, B2 agent, B3 Figma, B4 narration, B5 CMS, B6 store, B7 narration, B8 bridge. Part 2 is 5 screens, 26 s max: L1 landing, L2 product page, L3 abandoned, L4 sending the email, L5 end card.
+- Every scene: settle, one action, hold the result (at least 1.2 s, checked by the build). Each cycle opens with the opener (OP, full screen). Part 1 is 8 screens, 41 s max: B1 DAM, B2 agent, B3 Figma, B4 narration, B5 CMS, B6 store, B7 narration, B8 bridge. Part 2 is 5 screens, 26 s max: L1 landing, L2 product page, L3 abandoned, L4 sending the email, L5 end card.
 - No sound. 55" 4K TV: lay out on 1920 x 1080 and render at 2x.
 - Generic CMS ("Pagine CMS") and generic store ("La Bottega del Lago"); real product names only on the "Works with" strip.
 - Maya Sol is the fixed persona. On screen: first names only (never a surname), except the email scene L4, which shows the visitor's real email address from the wizard in the "to:" line.

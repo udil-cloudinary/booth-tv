@@ -13,147 +13,147 @@
   },
   "steps": [
     {
-      "at": 0.4,
+      "at": 0.5,
       "do": "type",
       "target": "#p0",
       "text": "New guest from the booth app: maya-sol.",
-      "cps": 45,
+      "cps": 40,
       "zoom": false
     },
     {
-      "at": 1.5,
+      "at": 1.55,
       "do": "show",
       "target": "#pt1",
       "anim": "rise",
       "zoom": false
     },
     {
-      "at": 1.5,
+      "at": 1.55,
       "do": "highlight",
       "target": "#pt1",
       "group": ".ag-pt",
       "zoom": false
     },
     {
-      "at": 1.6,
+      "at": 1.65,
       "do": "type",
       "target": "#p1",
       "text": "Design a personalized product",
-      "cps": 40,
+      "cps": 34,
       "zoom": false
     },
     {
-      "at": 2.53,
+      "at": 2.78,
       "do": "show",
       "target": "#pt2",
       "anim": "rise",
       "zoom": false
     },
     {
-      "at": 2.53,
+      "at": 2.78,
       "do": "highlight",
       "target": "#pt2",
       "group": ".ag-pt",
       "zoom": false
     },
     {
-      "at": 2.63,
+      "at": 2.88,
       "do": "type",
       "target": "#p2",
       "text": "Prepare a landing page",
-      "cps": 40,
+      "cps": 34,
       "zoom": false
     },
     {
-      "at": 3.38,
+      "at": 3.81,
       "do": "show",
       "target": "#pt3",
       "anim": "rise",
       "zoom": false
     },
     {
-      "at": 3.38,
+      "at": 3.81,
       "do": "highlight",
       "target": "#pt3",
       "group": ".ag-pt",
       "zoom": false
     },
     {
-      "at": 3.48,
+      "at": 3.91,
       "do": "type",
       "target": "#p3",
       "text": "Prepare a product page",
-      "cps": 40,
+      "cps": 34,
       "zoom": false
     },
     {
-      "at": 4.23,
+      "at": 4.84,
       "do": "show",
       "target": "#pt4",
       "anim": "rise",
       "zoom": false
     },
     {
-      "at": 4.23,
+      "at": 4.84,
       "do": "highlight",
       "target": "#pt4",
       "group": ".ag-pt",
       "zoom": false
     },
     {
-      "at": 4.33,
+      "at": 4.94,
       "do": "type",
       "target": "#p4",
       "text": "Publish both",
-      "cps": 40,
+      "cps": 34,
       "zoom": false
     },
     {
-      "at": 4.75,
+      "at": 5.67,
       "do": "cursor",
       "target": "#send",
       "dur": 0.45
     },
     {
-      "at": 5.25,
+      "at": 6.22,
       "do": "click",
       "target": "#send",
       "zoom": false
     },
     {
-      "at": 5.4,
+      "at": 6.37,
       "do": "hide",
       "target": "#compose",
       "anim": "fade",
       "dur": 0.25
     },
     {
-      "at": 5.5,
+      "at": 6.47,
       "do": "show",
       "target": "#chat",
       "anim": "fade",
       "dur": 0.3
     },
     {
-      "at": 5.6,
+      "at": 6.62,
       "do": "show",
       "target": "#call",
       "anim": "pop"
     },
     {
-      "at": 6.05,
+      "at": 7.12,
       "do": "set",
       "target": "#call",
       "add": "is-done"
     },
     {
-      "at": 6.05,
+      "at": 7.12,
       "do": "set",
       "target": "#state",
       "text": "done"
     },
     {
-      "at": 6.15,
+      "at": 7.22,
       "do": "show",
       "target": "#res",
       "anim": "rise",

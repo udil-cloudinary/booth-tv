@@ -7,7 +7,7 @@
     },
     {
       "scene": "B2",
-      "dur": 7.5
+      "dur": 8.5
     },
     {
       "scene": "B3",
@@ -71,6 +71,11 @@
   "preloadTimeoutSec": 4,
   "fetchTimeoutSec": 5,
   "reloadEveryMin": 120,
-  "part1MaxSec": 40,
-  "part2MaxSec": 26
+  "part1MaxSec": 41,
+  "part2MaxSec": 26,
+  "opener": {
+    "scene": "OP",
+    "dur": 19.2,
+    "every": 1
+  }
 }

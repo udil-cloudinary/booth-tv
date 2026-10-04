@@ -17,7 +17,7 @@ body:hover #hint{opacity:.55}
 .t1{font-weight:800;font-size:132px;letter-spacing:-4.2px;fill:var(--ink)}
 .t2{font-weight:800;font-size:132px;letter-spacing:-4.2px;fill:var(--sky)}
 .sub{font-weight:500;font-size:36px;letter-spacing:-.3px;fill:var(--mist)}
-.tag{font-weight:500;font-size:24px;letter-spacing:.2px;fill:var(--mist);opacity:.72}
+.tag{font-weight:500;font-size:24px;letter-spacing:.2px;fill:var(--mist);fill-opacity:.72}
 </style>
 
 <svg id="stage" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Cloudinary Everywhere: the colored dots and the spark leave the Cloudinary logo, turn into the logos of the tools it works with, and orbit the logo.">
@@ -193,7 +193,7 @@ function frame(t){
   const out=seg(t,1.0,2.9), home=seg(t,15.3,16.7), s=out*(1-home);
   const grow=seg(t,2.3,3.5)*(1-seg(t,14.9,15.9));
   const tiltK=seg(t,4.0,6.0)*(1-seg(t,10.6,12.6));
-  const planetK=seg(t,3.4,4.8)*(1-seg(t,12.4,13.8));
+  const planetK=seg(t,3.4,4.8)*(1-seg(t,15.3,16.4));   // back to a flat disc as everything flies home
   const tau=tiltK*64*Math.PI/180, rho=tiltK*-16*Math.PI/180;
   const wob=tiltK*Math.sin(t*0.9)*0.06;
   const sp=spin(t);
@@ -279,7 +279,13 @@ function frame(t){
 
 // title comes in once on first load
 const title=document.getElementById('title');
-function titleIn(t){const k=seg(t,0.15,1.1);title.setAttribute('opacity',k.toFixed(3));title.setAttribute('transform',`translate(${130-24*(1-k)} 0)`);}
+// the four lines come in one after another: the two title lines slide in, the two taglines only fade in
+const titleLines=[...title.querySelectorAll(':scope > text')];
+const LINE_IN=[[0.15,0.85],[0.45,1.15],[0.95,1.6],[1.3,1.95]];
+function titleIn(t){
+  titleLines.forEach((n,i)=>{const k=seg(t,LINE_IN[i][0],LINE_IN[i][1]);
+    n.style.opacity=k.toFixed(3); n.setAttribute('transform',i<2?`translate(${(-34*(1-k)).toFixed(1)} 0)`:'');});
+}
 
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const params=new URLSearchParams(location.search);

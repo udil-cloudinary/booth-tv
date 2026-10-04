@@ -19,6 +19,7 @@ const max2 = loop.part2MaxSec ?? 26;
 const part2 = sum(loop.part2);
 if (part2 > max2) errors.push(`Part 2 is ${part2} s per visitor, the spec allows ${max2} s max`);
 if (!loop.part1.some((e) => e.scene === loop.fetchAt)) errors.push(`fetchAt ${loop.fetchAt} is not a Part 1 scene`);
+if (loop.opener && !scripts[loop.opener.scene]) errors.push(`opener ${loop.opener.scene}: no timeline/scenes/${loop.opener.scene}.json`);
 for (const s of loop.part2Short) if (!loop.part2.some((e) => e.scene === s)) errors.push(`short form scene ${s} is not in Part 2`);
 
 for (const { scene, dur } of [...loop.part1, ...loop.part2]) {
@@ -26,7 +27,7 @@ for (const { scene, dur } of [...loop.part1, ...loop.part2]) {
   if (!s) { errors.push(`${scene}: no timeline/scenes/${scene}.json`); continue; }
   for (const st of s.steps) if (st.at >= dur) errors.push(`${scene}: step "${st.do} ${st.target ?? ''}" at ${st.at} s starts after the scene ends (${dur} s)`);
   // Settle, act, hold: the last step starts at least HOLD_SEC before the scene ends, so the result stays on screen.
-  const last = Math.max(...s.steps.map((st) => st.at));
+  const last = s.steps.length ? Math.max(...s.steps.map((st) => st.at)) : 0;
   if (dur - last < HOLD_SEC) errors.push(`${scene}: last step at ${last} s leaves ${(dur - last).toFixed(1)} s to read the result (min ${HOLD_SEC} s)`);
   if (/[\u2013\u2014]/.test(JSON.stringify(s))) errors.push(`${scene}: contains an en or em dash`);
 }

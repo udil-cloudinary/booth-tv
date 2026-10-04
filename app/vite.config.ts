@@ -7,7 +7,7 @@ import { extname, join, normalize, resolve } from 'node:path';
 const ASSETS = resolve(__dirname, '../assets');
 const TYPES: Record<string, string> = {
   '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.json': 'application/json',
-  '.svg': 'image/svg+xml', '.webp': 'image/webp',
+  '.svg': 'image/svg+xml', '.webp': 'image/webp', '.html': 'text/html; charset=utf-8',
 };
 
 function boothAssets(): Plugin {

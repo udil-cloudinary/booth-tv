@@ -64,6 +64,12 @@ export class Loop {
     // Warm up whoever is already known while Part 1 plays (about 50 s).
     this.pending.slice(0, 2).forEach((v) => void preload(v, LOOP.preloadTimeoutSec));
 
+    const op = LOOP.opener;
+    if (op && SCRIPTS[op.scene] && (counters.cycles - 1) % Math.max(1, op.every) === 0) {
+      status.part = 'part1';
+      status.scene = op.scene;
+      await this.stage.play(SCRIPTS[op.scene], op.dur, visitorVars(MAYA), { part: 'part1', index: 0, count: LOOP.part1.length, who: MAYA.first_name });
+    }
     await this.playPart('part1', LOOP.part1, MAYA);
     if (this.fetching) await this.fetching;
 
@@ -209,9 +215,10 @@ export class Loop {
 /** ?scene=B4: one scene on repeat (Maya, or ?v=<mock id or index> for Part 2 scenes). */
 export async function repeatScene(stage: Stage, id: string, who: Visitor) {
   const script = SCRIPTS[id];
-  const entry = [...LOOP.part1, ...LOOP.part2].find((e) => e.scene === id);
+  const opener = LOOP.opener ? [{ scene: LOOP.opener.scene, dur: LOOP.opener.dur }] : [];
+  const entry = [...opener, ...LOOP.part1, ...LOOP.part2].find((e) => e.scene === id);
   if (!script || !entry) throw new Error(`Unknown scene ${id}`);
-  const part: Part = id.startsWith('B') ? 'part1' : 'part2';
+  const part: Part = id.startsWith('L') ? 'part2' : 'part1';
   const list = part === 'part1' ? LOOP.part1 : LOOP.part2;
   const vars = visitorVars(who);
   status.part = part;
