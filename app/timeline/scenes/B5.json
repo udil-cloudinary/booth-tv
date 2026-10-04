@@ -17,75 +17,147 @@
       "do": "type",
       "target": "#title",
       "text": "{headline}",
-      "cps": 32
+      "cps": 34,
+      "zoom": false
+    },
+    {
+      "at": 1.1,
+      "do": "set",
+      "target": "#ftext",
+      "text": "{headline}",
+      "zoom": false
     },
     {
       "at": 1.2,
       "do": "show",
-      "target": "#scan",
-      "anim": "fade"
+      "target": "#row",
+      "anim": "grow",
+      "dur": 0.3,
+      "zoom": false
+    },
+    {
+      "at": 1.7,
+      "do": "set",
+      "target": "#counts",
+      "text": "3 found",
+      "add": "is-done",
+      "zoom": false
+    },
+    {
+      "at": 1.7,
+      "do": "show",
+      "target": "#c1",
+      "anim": "pop",
+      "zoom": false
     },
     {
       "at": 1.8,
-      "do": "set",
-      "target": "#scan",
-      "add": "is-done"
-    },
-    {
-      "at": 1.8,
-      "do": "set",
-      "target": "#scan-t",
-      "text": "2 matches, ranked"
+      "do": "show",
+      "target": "#c2",
+      "anim": "pop",
+      "zoom": false
     },
     {
       "at": 1.9,
       "do": "show",
-      "target": "#r1",
-      "anim": "grow"
-    },
-    {
-      "at": 2.1,
-      "do": "show",
-      "target": "#r2",
-      "anim": "grow"
-    },
-    {
-      "at": 2.2,
-      "do": "cursor",
-      "target": "#insert",
-      "dur": 0.5
-    },
-    {
-      "at": 2.8,
-      "do": "click",
-      "target": "#insert",
+      "target": "#c3",
+      "anim": "pop",
       "zoom": false
     },
     {
-      "at": 2.9,
+      "at": 2.0,
+      "do": "show",
+      "target": "#c4",
+      "anim": "fade",
+      "zoom": false
+    },
+    {
+      "at": 2.0,
+      "do": "cursor",
+      "target": "#c1img",
+      "dur": 0.45,
+      "zoom": false
+    },
+    {
+      "at": 2.4,
+      "do": "set",
+      "target": "#c1",
+      "add": "is-hover",
+      "zoom": false
+    },
+    {
+      "at": 2.6,
+      "do": "click",
+      "target": "#place",
+      "zoom": false
+    },
+    {
+      "at": 2.75,
+      "do": "show",
+      "target": "#sheet",
+      "anim": "rise",
+      "zoom": false
+    },
+    {
+      "at": 3.3,
+      "do": "cursor",
+      "target": "#apply",
+      "dur": 0.35,
+      "zoom": false
+    },
+    {
+      "at": 3.7,
+      "do": "click",
+      "target": "#apply",
+      "zoom": false
+    },
+    {
+      "at": 3.85,
       "do": "hide",
       "target": "#empty"
     },
     {
-      "at": 2.9,
+      "at": 3.85,
       "do": "fly",
-      "target": "#r1img",
+      "target": "#shimg",
       "to": "#hero",
-      "dur": 0.8,
-      "withCursor": true
+      "dur": 0.7
     },
     {
-      "at": 3.8,
+      "at": 3.9,
+      "do": "hide",
+      "target": "#sheet",
+      "anim": "fade",
+      "dur": 0.3
+    },
+    {
+      "at": 4.2,
+      "do": "show",
+      "target": "#tthumb",
+      "anim": "pop",
+      "zoom": false
+    },
+    {
+      "at": 4.2,
+      "do": "set",
+      "target": "#tstate",
+      "text": "{productSlug} · from Cloudinary",
+      "add": "is-cld",
+      "zoom": false
+    },
+    {
+      "at": 4.5,
+      "do": "set",
+      "target": "#hero",
+      "add": "is-cropped",
+      "zoom": false
+    },
+    {
+      "at": 4.6,
       "do": "show",
       "target": "#tchip",
       "anim": "pop",
-      "zoom": 1.04
-    },
-    {
-      "at": 4,
-      "do": "set",
-      "target": "#hero",
-      "add": "is-cropped"
+      "zoom": false
     }
   ]
 }

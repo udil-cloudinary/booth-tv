@@ -9,7 +9,60 @@ const CLOUD = `<svg class="ico-cloud" viewBox="0 0 64 44"><path d="M50 18.5C48.6
 const BOT = '<svg viewBox="0 0 32 32" width="40" height="40"><rect x="6" y="10" width="20" height="16" rx="5" fill="#1d2030"/><circle cx="12.5" cy="18" r="2.6" fill="#FFD23F"/><circle cx="19.5" cy="18" r="2.6" fill="#FFD23F"/><line x1="16" y1="10" x2="16" y2="5" stroke="#1d2030" stroke-width="2.5" stroke-linecap="round"/><circle cx="16" cy="4" r="2" fill="#1d2030"/></svg>';
 const SPARK = '<svg class="ico-spark" viewBox="0 0 24 24"><path d="M12 1.5l2.3 7.2 7.2 2.3-7.2 2.3L12 20.5l-2.3-7.2L2.5 11l7.2-2.3z"/></svg>';
 
-const extHead = `<div class="ext-head">${CLOUD}<b>Cloudinary</b><span class="ext-tag">Extension</span></div>`;
+// The Cloudinary extension's side panel, as built on codex/v4-bug-fixes-features (the rows layout,
+// 2026-10-04): the page zone ("Media fields on this page"), the results as one row per search, the
+// bar with "Follow the page" and the search box, and the Place sheet ("Placing" ... "Apply to <field>").
+// Copy is the extension's own (src/shared/i18n/locales/en.ts).
+const CAMERA = '<svg viewBox="0 0 24 24"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
+const SEND = '<svg viewBox="0 0 24 24"><path d="M4 12l16-7-6 16-2.5-6.5z" fill="currentColor"/></svg>';
+const CHEVRON = '<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function extPanel(field: string, subjectId: string, base: string) {
+  return `
+      <aside class="xp">
+        <section class="xp-zone">
+          <div class="xp-label">Media fields on this page</div>
+          <div class="xp-target">
+            <span class="xp-chev">${CHEVRON}</span>
+            <span class="xp-thumb"><img class="is-hidden" id="tthumb" src="{img.label}" alt=""></span>
+            <span class="xp-ttext"><b>${field}</b><span class="xp-tstate" id="tstate">Empty</span></span>
+          </div>
+        </section>
+        <section class="xp-results">
+          <div class="xp-label">Results</div>
+          <div class="xp-row is-gone" id="row">
+            <div class="xp-terms"><span class="xp-text">{${subjectId}}</span><i></i>${CHEVRON}</div>
+            <div class="xp-counts" id="counts"><span class="xp-spin"></span>looking in booth…</div>
+            <ul class="xp-slider">
+              <li class="xp-card is-hidden" id="c1"><div class="xp-media"><img id="c1img" src="{img.label}" alt=""><span class="xp-place" id="place"><b>Place</b></span></div><div class="xp-name">{productSlug}.png</div></li>
+              <li class="xp-card is-hidden" id="c2"><div class="xp-media"><img class="cover" src="{img.selfie}" alt=""></div><div class="xp-name">{slug}.jpg</div></li>
+              <li class="xp-card is-hidden" id="c3"><div class="xp-media"><img src="${base}" alt=""></div><div class="xp-name">{product_type}-base.png</div></li>
+              <li class="xp-more is-hidden" id="c4"><span>+</span>more</li>
+            </ul>
+          </div>
+        </section>
+        <div class="xp-search">
+          <div class="xp-follow"><span class="xp-box">${CHECK}</span><b>Follow the page</b><span class="xp-muted">from the title</span></div>
+          <div class="xp-ftext" id="ftext">&nbsp;</div>
+          <div class="xp-input"><span class="xp-cam">${CAMERA}</span><span class="xp-ph">Search</span><span class="xp-send">${SEND}</span></div>
+        </div>
+        <div class="xp-sheet is-hidden" id="sheet">
+          <div class="xp-sh-head"><span class="xp-kicker">Placing</span><span class="xp-x">×</span></div>
+          <div class="xp-sh-title">{productSlug}.png<span class="xp-muted"> · for “${field}”</span></div>
+          <div class="xp-sh-body">
+            <img class="xp-sh-img" id="shimg" src="{img.label}" alt="">
+            <div class="xp-sh-main">
+              <div class="xp-sec">Transformations</div>
+              <p class="xp-muted">For transformations - describe one below.</p>
+              <div class="xp-chips"><span>Square</span><span>AI upscale</span></div>
+            </div>
+          </div>
+          <div class="xp-sec xp-sec--alt">Alt text</div>
+          <p class="xp-alt">{altText}</p>
+          <div class="xp-sh-foot"><button class="xp-apply" id="apply">Apply to ${field}</button><button class="xp-cancel">Cancel</button></div>
+        </div>
+      </aside>`;
+}
 
 // The agent brief, word for word from the Agent Show screen (Udi, 2026-09-28). Fixed: Part 1 is always Maya.
 export const BRIEF = `New guest from the booth app: maya-sol.
@@ -134,7 +187,8 @@ export const PART1: Record<string, string> = {
     <div class="narr-bar"><i id="bar"></i></div>
   </div>`,
 
-  // B5 · CMS + extension: the headline types, the extension finds the media and drops it into the hero, cropped. (5 s)
+  // B5 · CMS + extension: the headline types, the extension follows the page and finds the media; Place, then
+  // "Apply to Hero image" drops it into the hero, fitted. (5 s)
   B5: `
   <div class="app cms">
     <header class="cms-top"><span class="logo-sq">P</span><span class="cms-path">Pagine CMS · Campaigns / <b>{slug}</b></span><span class="draft">Draft</span><span class="grow"></span><button class="btn-ghost">Preview</button><button class="btn-dark">Publish</button></header>
@@ -149,16 +203,11 @@ export const PART1: Record<string, string> = {
           <span class="tchip is-hidden" id="tchip">c_fill, g_auto</span>
         </div>
       </section>
-      <aside class="ext">
-        ${extHead}
-        <div class="ext-status is-hidden" id="scan">${SPIN}${CHECK}<span id="scan-t">Scanning page</span></div>
-        <div class="ext-res is-gone" id="r1"><img class="ext-thumb" id="r1img" src="{img.label}" alt=""><div><b>{productSlug}.png</b><span class="pct">97% match</span><button class="btn-blue btn-sm" id="insert">Insert as hero</button></div></div>
-        <div class="ext-res is-gone" id="r2"><img class="ext-thumb cover" src="{img.selfie}" alt=""><div><b>{slug}.jpg</b><span class="pct pct--mid">71% match</span></div></div>
-      </aside>
+${extPanel('Hero image', 'headline', 'assets/templates/base-{product_type}.png')}
     </div>
   </div>`,
 
-  // B6 · Store admin: title and price type in, the extension's product shot drops into the slot. (4 s)
+  // B6 · Store admin: title and price type in, the extension follows the title; Place and Apply drop the product shot. (4 s)
   B6: `
   <div class="app store">
     <header class="st-top"><span class="logo-sq logo-sq--green">B</span><b>La Bottega del Lago · Store admin</b><span class="st-crumb">Products / New</span><span class="grow"></span><button class="btn-green">Save product</button></header>
@@ -176,11 +225,7 @@ export const PART1: Record<string, string> = {
           <div class="st-note is-hidden" id="note">${CHECK}<b>Inserted by the Cloudinary extension</b><code>f_auto, q_auto · alt text included</code></div>
         </div>
       </section>
-      <aside class="ext">
-        ${extHead}
-        <div class="ext-status is-done is-hidden" id="sug-h">${CHECK}<span>1 suggestion for this product</span></div>
-        <div class="ext-res is-hl is-hidden" id="sug"><img class="ext-thumb" id="simg" src="{img.label}" alt=""><div><b>{productSlug}.png</b><span class="ext-why">title + product_type = {product_type}</span></div></div>
-      </aside>
+${extPanel('Product media', 'productName', 'assets/templates/base-{product_type}.png')}
     </div>
   </div>`,
 

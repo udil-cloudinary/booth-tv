@@ -17,40 +17,143 @@
       "do": "type",
       "target": "#title",
       "text": "{productName}",
-      "cps": 26
+      "cps": 28,
+      "zoom": false
     },
     {
-      "at": 0.8,
+      "at": 0.7,
       "do": "type",
       "target": "#price",
       "text": "{price}",
-      "cps": 12
+      "cps": 14,
+      "zoom": false
+    },
+    {
+      "at": 0.8,
+      "do": "set",
+      "target": "#ftext",
+      "text": "{productName}",
+      "zoom": false
+    },
+    {
+      "at": 0.9,
+      "do": "set",
+      "target": "#counts",
+      "text": "3 found",
+      "add": "is-done",
+      "zoom": false
+    },
+    {
+      "at": 0.9,
+      "do": "show",
+      "target": "#row",
+      "anim": "grow",
+      "dur": 0.3,
+      "zoom": false
+    },
+    {
+      "at": 0.9,
+      "do": "show",
+      "target": "#c1",
+      "anim": "pop",
+      "zoom": false
+    },
+    {
+      "at": 1.0,
+      "do": "show",
+      "target": "#c2",
+      "anim": "pop",
+      "zoom": false
+    },
+    {
+      "at": 1.1,
+      "do": "show",
+      "target": "#c3",
+      "anim": "pop",
+      "zoom": false
+    },
+    {
+      "at": 1.1,
+      "do": "show",
+      "target": "#c4",
+      "anim": "fade",
+      "zoom": false
     },
     {
       "at": 1.2,
-      "do": "show",
-      "target": "#sug-h",
-      "anim": "fade"
+      "do": "cursor",
+      "target": "#c1img",
+      "dur": 0.4,
+      "zoom": false
     },
     {
-      "at": 1.3,
-      "do": "show",
-      "target": "#sug",
-      "anim": "rise"
+      "at": 1.55,
+      "do": "set",
+      "target": "#c1",
+      "add": "is-hover",
+      "zoom": false
     },
     {
-      "at": 1.9,
+      "at": 1.7,
+      "do": "click",
+      "target": "#place",
+      "zoom": false
+    },
+    {
+      "at": 1.85,
+      "do": "show",
+      "target": "#sheet",
+      "anim": "rise",
+      "zoom": false
+    },
+    {
+      "at": 2.35,
+      "do": "cursor",
+      "target": "#apply",
+      "dur": 0.3,
+      "zoom": false
+    },
+    {
+      "at": 2.7,
+      "do": "click",
+      "target": "#apply",
+      "zoom": false
+    },
+    {
+      "at": 2.85,
       "do": "fly",
-      "target": "#simg",
+      "target": "#shimg",
       "to": "#pimg",
-      "dur": 0.8
+      "dur": 0.6
     },
     {
-      "at": 2.8,
+      "at": 2.9,
+      "do": "hide",
+      "target": "#sheet",
+      "anim": "fade",
+      "dur": 0.3
+    },
+    {
+      "at": 3.2,
+      "do": "show",
+      "target": "#tthumb",
+      "anim": "pop",
+      "zoom": false
+    },
+    {
+      "at": 3.2,
+      "do": "set",
+      "target": "#tstate",
+      "text": "{productSlug} · from Cloudinary",
+      "add": "is-cld",
+      "zoom": false
+    },
+    {
+      "at": 3.4,
       "do": "show",
       "target": "#note",
       "anim": "rise",
-      "zoom": 1.03
+      "zoom": false
     }
   ]
 }

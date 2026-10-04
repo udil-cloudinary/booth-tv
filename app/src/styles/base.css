@@ -179,32 +179,3 @@ img.cover { object-fit: cover; }
 .tool.is-done .ico-check { display: block; }
 .tool-state { font-size: 28px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #e07c30; }
 .tool.is-done .tool-state { color: var(--green); }
-
-/* The Cloudinary extension panel (CMS and store) */
-.ext {
-  width: 520px; flex: none; background: #fff; border-left: 2px solid var(--line);
-  padding: 20px 26px; display: flex; flex-direction: column; gap: 12px;
-}
-.ext-head { display: flex; align-items: center; gap: 14px; }
-.ext-head b { font-size: 36px; color: #1d2a6b; }
-.ext-tag { font-size: 28px; font-weight: 600; color: var(--muted); border: 2px solid var(--line); border-radius: 8px; padding: 0 10px; }
-.ext-status {
-  display: flex; align-items: center; gap: 14px; padding: 10px 20px; border-radius: 14px;
-  background: var(--blue-soft); color: #1d2a6b; font-size: 30px; font-weight: 700;
-}
-.ext-status .ico-check { display: none; }
-.ext-status.is-done { background: var(--green-soft); color: var(--green); }
-.ext-status.is-done .spin { display: none; }
-.ext-status.is-done .ico-check { display: block; }
-.ext-res {
-  display: flex; gap: 18px; align-items: center; padding: 10px 14px; border-radius: 18px;
-  border: 2px solid var(--line); background: #fff; transition: border-color .3s, box-shadow .3s;
-}
-.ext-res.is-hl { border: 4px solid var(--blue); box-shadow: 0 10px 30px rgba(52, 72, 197, .18); }
-.ext-res b { display: block; font-size: 30px; }
-.ext-thumb { width: 96px; height: 110px; border-radius: 12px; object-fit: contain; background: #f4ecd9; flex: none; }
-.pct { display: block; font-size: 30px; font-weight: 800; color: var(--blue); }
-.pct--mid { color: var(--muted); }
-.pct--low { color: #9aa1b0; }
-.ext-why { display: block; font-size: 28px; color: var(--muted); margin: 2px 0 10px; }
-.ext-res .btn-blue { margin-top: 8px; }
