@@ -7,22 +7,24 @@
 // The base image of each URL picks the product: magnet-frame.png for t_magnet,
 // product-base-{product_type}-{variant}.png for the TV recipes.
 
+// Rounding + border, and text + colour, each go in ONE component: split, Cloudinary draws a square ring
+// and ignores the colour (found on the first live render, 2026-10-04).
 export const RECIPES = {
   // 10 x 15 cm print, 1181 x 1772, base booth/templates/magnet-frame.png
   t_magnet: [
-    'l_$sid/c_thumb,g_face,w_669,h_850,z_0.6/r_87/bo_12px_solid_white/fl_layer_apply,g_north_west,x_126,y_276',
+    'l_$sid/c_thumb,g_face,w_669,h_850,z_0.6/r_87,bo_12px_solid_white/fl_layer_apply,g_north_west,x_126,y_276',
     'l_$pl/fl_layer_apply,g_north_west,x_0,y_0',
-    'l_$sid/c_thumb,g_face,w_113,h_113,z_0.9/r_max/bo_5px_solid_white/a_4/fl_layer_apply,g_center,x_321,y_331',
-    'l_text:booth:fonts:PlayfairDisplay-ExtraBold.ttf_43_letter_spacing_2:$(nm)/co_rgb:3B1F12/c_limit,w_264/a_4/fl_layer_apply,g_center,x_314,y_430',
-    'l_text:booth:fonts:PlayfairDisplay-MediumItalic.ttf_30:$(fv)/co_rgb:9A3A22/c_limit,w_247/a_4/fl_layer_apply,g_center,x_311,y_474',
+    'l_$sid/c_thumb,g_face,w_113,h_113,z_0.9/r_max,bo_5px_solid_white/a_4/fl_layer_apply,g_center,x_321,y_331',
+    'l_text:booth:fonts:PlayfairDisplay-ExtraBold.ttf_43_letter_spacing_2:$(nm),co_rgb:3B1F12/c_limit,w_264/a_4/fl_layer_apply,g_center,x_314,y_430',
+    'l_text:booth:fonts:PlayfairDisplay-MediumItalic.ttf_30:$(fv),co_rgb:9A3A22/c_limit,w_247/a_4/fl_layer_apply,g_center,x_311,y_474',
   ].join('/'),
 
   // The labelled product: face sticker + NAME + favourite on product-base (756 x 1257, transparent).
   // Shared by the three TV sizes below, the Everywhere station and any web page.
   t_tv_label: [
-    'l_$sid/c_thumb,g_face,w_227,h_227,z_0.9/r_max/bo_9px_solid_white/fl_layer_apply,g_center,x_0,y_250',
-    'l_text:booth:fonts:PlayfairDisplay-ExtraBold.ttf_85_letter_spacing_4:$(nm)/co_rgb:3B1F12/c_limit,w_510/fl_layer_apply,g_center,x_0,y_449',
-    'l_text:booth:fonts:PlayfairDisplay-MediumItalic.ttf_59:$(fv)/co_rgb:9A3A22/c_limit,w_493/fl_layer_apply,g_center,x_0,y_536',
+    'l_$sid/c_thumb,g_face,w_227,h_227,z_0.9/r_max,bo_9px_solid_white/fl_layer_apply,g_center,x_0,y_250',
+    'l_text:booth:fonts:PlayfairDisplay-ExtraBold.ttf_85_letter_spacing_4:$(nm),co_rgb:3B1F12/c_limit,w_510/fl_layer_apply,g_center,x_0,y_449',
+    'l_text:booth:fonts:PlayfairDisplay-MediumItalic.ttf_59:$(fv),co_rgb:9A3A22/c_limit,w_493/fl_layer_apply,g_center,x_0,y_536',
   ].join('/'),
 
   // Sizes for the TV scenes (2x the storyboard slot, the TV renders at 2x on a 4K screen).
