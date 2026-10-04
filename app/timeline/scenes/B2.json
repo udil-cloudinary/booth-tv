@@ -13,59 +13,147 @@
   },
   "steps": [
     {
-      "at": 0.5,
+      "at": 0.4,
       "do": "type",
-      "target": "#prompt",
-      "text": "New guest from the booth app: maya-sol.\n\n1. Take her image and metadata from the DAM and match it into the right Figma template. Bake it, export it back to the DAM.\n2. Create her landing page from the CMS template: title, author, a short funny bio. Let the extension insert her image.\n3. Create the PDP on La Bottega del Lago: one of one, priced in euro. Extension inserts the product shot.\n4. Publish both.",
-      "cps": 230,
-      "zoom": 1.025
+      "target": "#p0",
+      "text": "New guest from the booth app: maya-sol.",
+      "cps": 45,
+      "zoom": false
     },
     {
-      "at": 2.7,
+      "at": 1.5,
+      "do": "show",
+      "target": "#pt1",
+      "anim": "rise",
+      "zoom": false
+    },
+    {
+      "at": 1.5,
+      "do": "highlight",
+      "target": "#pt1",
+      "group": ".ag-pt",
+      "zoom": false
+    },
+    {
+      "at": 1.6,
+      "do": "type",
+      "target": "#p1",
+      "text": "Design a personalized product",
+      "cps": 40,
+      "zoom": false
+    },
+    {
+      "at": 2.53,
+      "do": "show",
+      "target": "#pt2",
+      "anim": "rise",
+      "zoom": false
+    },
+    {
+      "at": 2.53,
+      "do": "highlight",
+      "target": "#pt2",
+      "group": ".ag-pt",
+      "zoom": false
+    },
+    {
+      "at": 2.63,
+      "do": "type",
+      "target": "#p2",
+      "text": "Prepare a landing page",
+      "cps": 40,
+      "zoom": false
+    },
+    {
+      "at": 3.38,
+      "do": "show",
+      "target": "#pt3",
+      "anim": "rise",
+      "zoom": false
+    },
+    {
+      "at": 3.38,
+      "do": "highlight",
+      "target": "#pt3",
+      "group": ".ag-pt",
+      "zoom": false
+    },
+    {
+      "at": 3.48,
+      "do": "type",
+      "target": "#p3",
+      "text": "Prepare a product page",
+      "cps": 40,
+      "zoom": false
+    },
+    {
+      "at": 4.23,
+      "do": "show",
+      "target": "#pt4",
+      "anim": "rise",
+      "zoom": false
+    },
+    {
+      "at": 4.23,
+      "do": "highlight",
+      "target": "#pt4",
+      "group": ".ag-pt",
+      "zoom": false
+    },
+    {
+      "at": 4.33,
+      "do": "type",
+      "target": "#p4",
+      "text": "Publish both",
+      "cps": 40,
+      "zoom": false
+    },
+    {
+      "at": 4.75,
       "do": "cursor",
       "target": "#send",
-      "dur": 0.5
+      "dur": 0.45
     },
     {
-      "at": 3.3,
+      "at": 5.25,
       "do": "click",
       "target": "#send",
       "zoom": false
     },
     {
-      "at": 3.5,
+      "at": 5.4,
       "do": "hide",
       "target": "#compose",
       "anim": "fade",
       "dur": 0.25
     },
     {
-      "at": 3.6,
+      "at": 5.5,
       "do": "show",
       "target": "#chat",
       "anim": "fade",
       "dur": 0.3
     },
     {
-      "at": 3.8,
+      "at": 5.6,
       "do": "show",
       "target": "#call",
       "anim": "pop"
     },
     {
-      "at": 4.4,
+      "at": 6.05,
       "do": "set",
       "target": "#call",
       "add": "is-done"
     },
     {
-      "at": 4.4,
+      "at": 6.05,
       "do": "set",
       "target": "#state",
       "text": "done"
     },
     {
-      "at": 4.5,
+      "at": 6.15,
       "do": "show",
       "target": "#res",
       "anim": "rise",

@@ -64,13 +64,13 @@ function extPanel(field: string, subjectId: string, base: string) {
       </aside>`;
 }
 
-// The agent brief, word for word from the Agent Show screen (Udi, 2026-09-28). Fixed: Part 1 is always Maya.
-export const BRIEF = `New guest from the booth app: maya-sol.
-
-1. Take her image and metadata from the DAM and match it into the right Figma template. Bake it, export it back to the DAM.
-2. Create her landing page from the CMS template: title, author, a short funny bio. Let the extension insert her image.
-3. Create the PDP on La Bottega del Lago: one of one, priced in euro. Extension inserts the product shot.
-4. Publish both.`;
+// The agent brief (Udi, 2026-10-04): short and punchy, typed point by point, each point lit while it is written.
+// Fixed: Part 1 is always Maya.
+export const BRIEF_INTRO = 'New guest from the booth app: maya-sol.';
+export const BRIEF_POINTS = ['Design a personalized product', 'Prepare a landing page', 'Prepare a product page', 'Publish both'];
+const briefPoints = BRIEF_POINTS.map(
+  (_, i) => `<li class="ag-pt is-hidden" id="pt${i + 1}"><span class="ag-num">${i + 1}</span><span class="ag-pt-t" id="p${i + 1}"></span></li>`,
+).join('');
 
 const agentSide = `
   <aside class="ag-side">
@@ -138,10 +138,10 @@ export const PART1: Record<string, string> = {
     <main class="ag-main">
       <div class="ag-compose" id="compose">
         <div class="ag-compose-head"><span>Booth app · automated kickoff</span><button class="ag-send" id="send">Send</button></div>
-        <div class="ag-prompt" id="prompt"></div>
+        <div class="ag-prompt"><div class="ag-intro" id="p0"></div><ol class="ag-points">${briefPoints}</ol></div>
       </div>
       <div class="ag-chat is-hidden" id="chat">
-        <div class="ag-bubble">New guest from the booth app: <b>maya-sol</b>. Bake it, build the pages, publish both.</div>
+        <div class="ag-bubble">New guest from the booth app: <b>maya-sol</b>. Product, landing page, product page, publish.</div>
         <div class="ag-reply">${SPARK}<span>Un attimo, chef. Starting {name}'s show.</span></div>
         <div class="tool is-hidden" id="call">${SPIN}${CHECK}<code>cloudinary.search(Maya Sol)</code><span class="tool-state" id="state">running</span></div>
         <div class="result is-hidden" id="res">
