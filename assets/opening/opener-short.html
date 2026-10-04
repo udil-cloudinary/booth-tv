@@ -1,4 +1,4 @@
-<title>Cloudinary Everywhere Opener</title>
+<title>Cloudinary Everywhere Opener Short</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;800&display=swap">
@@ -94,7 +94,11 @@ body:hover #hint{opacity:.55}
 const NS='http://www.w3.org/2000/svg';
 const C={x:1430,y:540};
 const S=1.357;                       // logo box (300) to stage scale
-const LOOP=19.6;                      // seconds per cycle
+const LOOP=6.8;                       // seconds per cycle (short cut)
+// The short cut plays the same choreography on a compressed clock: the orbit runs about 3.8x faster.
+// Pairs are [short time, original time]; between them time is linear.
+const TMAP=[[0,0],[0.5,1.0],[1.7,3.5],[4.1,12.6],[4.5,15.3],[5.2,16.7],[6.8,19.6]];
+function mapT(s){for(let i=1;i<TMAP.length;i++){const [a,A]=TMAP[i-1],[b,B]=TMAP[i];if(s<=b)return A+(B-A)*(s-a)/(b-a);}return TMAP[TMAP.length-1][1];}
 const R_DOT=106*S, DOT_R=11*S, ICON_R=40, R_FLAT=318;
 const COL={lav:'#7C8BDD',blue:'#4BA3E8',teal:'#2EC4B6',green:'#63C63F',orange:'#F0A020',pink:'#E24AA1'};
 // the six dots of the mark, in logo-box coords
@@ -105,7 +109,7 @@ const RING=[
  ['green','green'],['pink','pink'],['claude','spark'],['orange','orange'],['teal','teal'],['wordpress','orange'],['webflow','blue'],['openai','spark'],
  ['contentful','teal'],['shopify','green'],['figma','pink'],['magento','green'],['gemini','spark'],['salesforce','teal'],['contentstack','lav']];
 const N=RING.length;
-const BEATS={wordpress:4.8,claude:5.6,webflow:6.4,contentful:7.2,openai:8.0,shopify:8.8,figma:9.6,gemini:10.4,green:11.2};
+const BEATS={claude:5.4,shopify:7.6,gemini:9.8};   // fewer, longer highlights so they still read at the faster pace
 const SPARK_START=[67.12-150,83.91-150];   // the mark's spark, logo-box offset from centre
 const SPARK_R=60;                          // agent sparks are bigger than the surface balls (ICON_R 40)
 
@@ -225,7 +229,7 @@ function frame(t){
   items.forEach(o=>{
     const a=lerp(o.parent,o.target+sp,s);
     const p=project(lerp(R_DOT,Rorb,s),a);
-    const h=o.beat?bell(t,o.beat,o.isSpark?0.8:0.7):0;
+    const h=o.beat?bell(t,o.beat,1.5):0;
     const depth=1+0.26*p.z;
     if(o.isSpark){
       const tw=0.5+0.5*Math.sin(t*3.4+o.i);
@@ -292,18 +296,12 @@ const params=new URLSearchParams(location.search);
 let t0=performance.now(), paused=false, pausedAt=0, first=true;
 const urlT=parseFloat(params.get('t'));
 if(!isNaN(urlT)) t0-=urlT*1000;
-// ?fit=7 plays the whole story in 7 s for the TV loop (Udi, 2026-10-04): the intro and the ending keep most of
-// their pace, the orbit in the middle runs fastest. Piecewise map from played time to the 19.6 s timeline.
-const FIT=parseFloat(params.get('fit'));
-const WARP=[[0,0],[1.8,3.2],[4.4,12.6],[5.0,15.2],[7.0,19.0]];
-const warp=T=>{const k=T/7*WARP[4][0];for(let i=1;i<WARP.length;i++){const[a0,b0]=WARP[i-1],[a1,b1]=WARP[i];if(k<=a1)return b0+(b1-b0)*(k-a0)/(a1-a0);}return WARP[4][1];};
-const fitted=!isNaN(FIT)&&FIT>0;
 function tick(now){
   if(!paused){
     const el_=(now-t0)/1000;
-    if(el_>(fitted?FIT:LOOP)) first=false;
+    if(el_>LOOP) first=false;
     titleIn(first?el_:5);
-    frame(fitted?warp(Math.min(el_,FIT)*7/FIT):el_%LOOP);
+    frame(mapT(el_%LOOP));
   }
   requestAnimationFrame(tick);
 }

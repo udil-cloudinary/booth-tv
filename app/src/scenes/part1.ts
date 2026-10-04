@@ -69,7 +69,7 @@ function extPanel(field: string, subjectId: string, base: string) {
 export const BRIEF_INTRO = 'New guest from the booth app: maya-sol.';
 export const BRIEF_POINTS = ['Design a personalized product', 'Prepare a landing page', 'Prepare a product page', 'Publish both'];
 const briefPoints = BRIEF_POINTS.map(
-  (_, i) => `<li class="ag-pt is-hidden" id="pt${i + 1}"><span class="ag-num">${i + 1}</span><span class="ag-pt-t" id="p${i + 1}"></span></li>`,
+  (_, i) => `<li class="ag-pt is-hidden" id="pt${i + 1}"><span class="ag-num">${i + 1}.</span><span class="ag-pt-t" id="p${i + 1}"></span></li>`,
 ).join('');
 
 const agentSide = `
