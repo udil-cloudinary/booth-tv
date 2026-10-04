@@ -178,8 +178,8 @@ const sparkItems=items.filter(o=>o.isSpark);
 const planetBody=document.getElementById('planetBody'), planetRim=document.getElementById('planetRimC');
 const orbitBack=document.getElementById('orbitBack'), orbitFront=document.getElementById('orbitFront');
 
-// steady drift plus one smooth extra sweep: 1.5 turns while the ring is out, easing in and out, never surging
-function spin(t){ return 0.12*t + 8.0*(0.5-0.5*Math.cos(Math.PI*clamp((t-3.2)/10.5))); }
+// steady drift plus one smooth extra sweep: 1.15 turns while the ring is out, easing in and out, never surging
+function spin(t){ return 0.12*t + 5.82*(0.5-0.5*Math.cos(Math.PI*clamp((t-3.2)/10.5))); }
 
 const FLASH=t=>bell(t,17.4,0.85);
 // a band of light that crosses the title, left to right, after the spark flashes
