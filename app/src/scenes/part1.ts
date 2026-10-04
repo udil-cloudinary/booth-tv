@@ -100,10 +100,19 @@ export const PART1: Record<string, string> = {
   // B1 · DAM: Maya's upload arrives, the asset window opens with her metadata. (5 s)
   B1: `
   <div class="app dam">
-    <aside class="rail">${CLOUD}<i></i><i class="on"></i><i></i><i></i></aside>
+    <nav class="rail"><img class="rail-logo" src="assets/brand/cloudinary-logo-white.png" alt=""><i><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i><i class="on"><svg viewBox="0 0 24 24"><path d="M4 5h7v7H4zM13 5h7v7h-7zM4 14h7v6H4zM13 14h7v6h-7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i><i><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM4 16l5-5 4 4 3-3 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i><i><svg viewBox="0 0 24 24"><path d="M4 6h12v12H4zM16 10l4-2v8l-4-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i><i class="rail-end"><svg viewBox="0 0 24 24"><path d="M12 9a3 3 0 100 6 3 3 0 000-6zM12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></nav>
+    <aside class="dam-nav">
+      <div class="dn-title">Media Library</div>
+      <div class="dn-item is-on"><svg viewBox="0 0 24 24"><path d="M4 5h7v7H4zM13 5h7v7h-7zM4 14h7v6H4zM13 14h7v6h-7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Assets</div>
+      <div class="dn-sec">Folders</div>
+      <div class="dn-item dn-sub"><svg viewBox="0 0 24 24"><path d="M3 7h7l2 2h9v10H3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>booth</div>
+      <div class="dn-item dn-sub2 is-sel"><svg viewBox="0 0 24 24"><path d="M3 7h7l2 2h9v10H3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>visitors</div>
+      <div class="dn-item dn-sub2"><svg viewBox="0 0 24 24"><path d="M3 7h7l2 2h9v10H3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>templates</div>
+      <div class="dn-sec">Collections</div>
+      <div class="dn-item"><svg viewBox="0 0 24 24"><path d="M3 7h7l2 2h9v10H3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Gathering 2026</div>
+    </aside>
     <main class="dam-main">
       <header class="dam-top">
-        <span class="crumb">Media Library</span><span class="crumb-sep">›</span><b>Assets</b>
         <div class="dam-search">booth-visitor</div>
         <button class="btn-blue">Upload</button>
       </header>
