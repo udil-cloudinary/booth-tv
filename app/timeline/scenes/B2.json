@@ -13,59 +13,59 @@
   },
   "steps": [
     {
-      "at": 0.1,
+      "at": 0.5,
       "do": "type",
       "target": "#prompt",
       "text": "New guest from the booth app: maya-sol.\n\n1. Take her image and metadata from the DAM and match it into the right Figma template. Bake it, export it back to the DAM.\n2. Create her landing page from the CMS template: title, author, a short funny bio. Let the extension insert her image.\n3. Create the PDP on La Bottega del Lago: one of one, priced in euro. Extension inserts the product shot.\n4. Publish both.",
-      "cps": 150,
+      "cps": 230,
       "zoom": 1.025
     },
     {
-      "at": 3.1,
+      "at": 2.7,
       "do": "cursor",
       "target": "#send",
-      "dur": 0.4
+      "dur": 0.5
     },
     {
-      "at": 3.6,
+      "at": 3.3,
       "do": "click",
       "target": "#send",
       "zoom": false
     },
     {
-      "at": 3.8,
+      "at": 3.5,
       "do": "hide",
       "target": "#compose",
       "anim": "fade",
       "dur": 0.25
     },
     {
-      "at": 3.9,
+      "at": 3.6,
       "do": "show",
       "target": "#chat",
       "anim": "fade",
       "dur": 0.3
     },
     {
-      "at": 4.1,
+      "at": 3.8,
       "do": "show",
       "target": "#call",
       "anim": "pop"
     },
     {
-      "at": 4.7,
+      "at": 4.4,
       "do": "set",
       "target": "#call",
       "add": "is-done"
     },
     {
-      "at": 4.7,
+      "at": 4.4,
       "do": "set",
       "target": "#state",
       "text": "done"
     },
     {
-      "at": 4.8,
+      "at": 4.5,
       "do": "show",
       "target": "#res",
       "anim": "rise",

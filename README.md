@@ -1,6 +1,6 @@
 # Booth TV (Gathering 2026)
 
-The silent, animated loop on the 55" 4K TV behind the counter: Part 1 BUILD (Maya, 8 screens, 30 s max), then Part 2 LIVE for up to 2 new visitors (5 screens, 20 s max each), or Maya when nobody is new. Spec: `../../specs/spec-tv-orchestrator.md` (v0.4).
+The silent, animated loop on the 55" 4K TV behind the counter: Part 1 BUILD (Maya, 8 screens, 40 s max), then Part 2 LIVE for up to 2 new visitors (5 screens, 26 s max each), or Maya when nobody is new. Spec: `../../specs/spec-tv-orchestrator.md` (v0.4).
 
 Status: Phase 1 (the TV) and Phase 2 (the backend, `api/`, see `api/README.md`) built and tested with mock data. Not yet run against the booth cloud.
 
@@ -33,7 +33,7 @@ Open it in Chrome at any window size; the 1920 x 1080 stage letterboxes to fit.
 
 ```
 cd app
-npm run build        # checks the timeline (fails if Part 1 is over 30 s or Part 2 over 20 s), type-checks, builds dist/
+npm run build        # checks the timeline (fails if Part 1 is over 40 s, Part 2 over 26 s, or a scene holds its result under 1.2 s), type-checks, builds dist/
 npm run preview      # serves dist/ on http://localhost:4173
 ```
 
@@ -78,7 +78,7 @@ app/
   timeline/loop.json        order, durations, loop rules (batch, catch-up, preload timeout, reload)
   timeline/scenes/*.json    one step script + lower third + "Works with" strip per scene
   timeline/copy.json        per-product copy for pizza / gelato / caffè (draft, edit freely)
-  scripts/check-timeline.mjs  the build check (Part 1 30 s cap, Part 2 20 s cap, every scene has a script, no step after its end)
+  scripts/check-timeline.mjs  the build check (Part 1 40 s cap, Part 2 26 s cap, 1.2 s hold per scene, every scene has a script, no step after its end)
   src/scenes/part1.ts, part2.ts   the HTML of each scene (the recreated tools)
   src/styles/                     base (stage, chrome, shared tools) and per-scene CSS
   src/engine/               player steps, virtual cursor, camera zoom, placeholder filling, text fit

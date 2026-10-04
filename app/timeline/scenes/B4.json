@@ -12,7 +12,7 @@
   },
   "steps": [
     {
-      "at": 0.1,
+      "at": 0.4,
       "do": "set",
       "target": "#bar",
       "add": "is-full"

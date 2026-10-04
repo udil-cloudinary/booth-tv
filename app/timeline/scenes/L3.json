@@ -13,41 +13,41 @@
   },
   "steps": [
     {
-      "at": 0.1,
+      "at": 0.4,
       "do": "cursor",
       "target": "#x",
       "dur": 0.5
     },
     {
-      "at": 0.7,
+      "at": 1.0,
       "do": "click",
       "target": "#x",
       "zoom": false
     },
     {
-      "at": 0.8,
+      "at": 1.1,
       "do": "hide",
       "target": "#tab",
       "anim": "close"
     },
     {
-      "at": 0.9,
+      "at": 1.2,
       "do": "cursor"
     },
     {
-      "at": 1.1,
+      "at": 1.4,
       "do": "show",
       "target": "#clock",
       "anim": "pop"
     },
     {
-      "at": 1.1,
+      "at": 1.4,
       "do": "set",
       "target": "#clock",
       "add": "is-spinning"
     },
     {
-      "at": 1.4,
+      "at": 1.7,
       "do": "show",
       "target": "#t",
       "anim": "rise"

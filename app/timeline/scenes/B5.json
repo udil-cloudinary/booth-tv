@@ -13,30 +13,22 @@
   },
   "steps": [
     {
-      "at": 0.1,
+      "at": 0.6,
       "do": "type",
       "target": "#title",
       "text": "{headline}",
-      "cps": 34,
+      "cps": 30,
       "zoom": false
     },
     {
-      "at": 1.1,
+      "at": 1.9,
       "do": "set",
       "target": "#ftext",
       "text": "{headline}",
       "zoom": false
     },
     {
-      "at": 1.2,
-      "do": "show",
-      "target": "#row",
-      "anim": "grow",
-      "dur": 0.3,
-      "zoom": false
-    },
-    {
-      "at": 1.7,
+      "at": 2.1,
       "do": "set",
       "target": "#counts",
       "text": "3 found",
@@ -44,101 +36,102 @@
       "zoom": false
     },
     {
-      "at": 1.7,
+      "at": 2.1,
+      "do": "show",
+      "target": "#row",
+      "anim": "grow",
+      "dur": 0.3,
+      "zoom": false
+    },
+    {
+      "at": 2.2,
       "do": "show",
       "target": "#c1",
       "anim": "pop",
       "zoom": false
     },
     {
-      "at": 1.8,
+      "at": 2.3,
       "do": "show",
       "target": "#c2",
       "anim": "pop",
       "zoom": false
     },
     {
-      "at": 1.9,
+      "at": 2.4,
       "do": "show",
       "target": "#c3",
       "anim": "pop",
       "zoom": false
     },
     {
-      "at": 2.0,
-      "do": "show",
-      "target": "#c4",
-      "anim": "fade",
-      "zoom": false
-    },
-    {
-      "at": 2.0,
+      "at": 2.8,
       "do": "cursor",
       "target": "#c1img",
-      "dur": 0.45,
+      "dur": 0.7,
       "zoom": false
     },
     {
-      "at": 2.4,
+      "at": 3.5,
       "do": "set",
       "target": "#c1",
       "add": "is-hover",
       "zoom": false
     },
     {
-      "at": 2.6,
+      "at": 3.7,
       "do": "click",
       "target": "#place",
       "zoom": false
     },
     {
-      "at": 2.75,
+      "at": 3.9,
       "do": "show",
       "target": "#sheet",
       "anim": "rise",
       "zoom": false
     },
     {
-      "at": 3.3,
+      "at": 4.6,
       "do": "cursor",
       "target": "#apply",
-      "dur": 0.35,
+      "dur": 0.5,
       "zoom": false
     },
     {
-      "at": 3.7,
+      "at": 5.2,
       "do": "click",
       "target": "#apply",
       "zoom": false
     },
     {
-      "at": 3.85,
+      "at": 5.35,
       "do": "hide",
       "target": "#empty"
     },
     {
-      "at": 3.85,
+      "at": 5.35,
       "do": "fly",
       "target": "#shimg",
       "to": "#hero",
-      "dur": 0.7
+      "dur": 0.8
     },
     {
-      "at": 3.9,
+      "at": 5.4,
       "do": "hide",
       "target": "#sheet",
       "anim": "fade",
       "dur": 0.3
     },
     {
-      "at": 4.2,
+      "at": 5.8,
       "do": "show",
       "target": "#tthumb",
       "anim": "pop",
       "zoom": false
     },
     {
-      "at": 4.2,
+      "at": 5.8,
       "do": "set",
       "target": "#tstate",
       "text": "{productSlug} · from Cloudinary",
@@ -146,17 +139,10 @@
       "zoom": false
     },
     {
-      "at": 4.5,
+      "at": 5.9,
       "do": "set",
       "target": "#hero",
       "add": "is-cropped",
-      "zoom": false
-    },
-    {
-      "at": 4.6,
-      "do": "show",
-      "target": "#tchip",
-      "anim": "pop",
       "zoom": false
     }
   ]

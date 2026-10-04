@@ -14,8 +14,8 @@ For each of B1 to B8 and L1 to L5, open `?scene=<ID>` (Part 2 also with `&v=3`, 
 
 ## Loop rules
 
-- [ ] Full loop, `?mock=1`: Part 1 (30 s) then Luca and Giulia (20 s each), next cycle Noa and Maximiliano, then Maya only.
-- [ ] `npm run build` fails if Part 1 in `timeline/loop.json` sums to more than 30 s, or Part 2 to more than 20 s (try it, then undo).
+- [ ] Full loop, `?mock=1`: Part 1 (40 s) then Luca and Giulia (26 s each), next cycle Noa and Maximiliano, then Maya only.
+- [ ] `npm run build` fails if Part 1 in `timeline/loop.json` sums to more than 40 s, or Part 2 to more than 26 s (try it, then undo).
 - [ ] The fetch happens at B7: the HUD "fetch" time updates at the Publish card.
 - [ ] Nobody new (`?novisitors`): Part 2 always runs with Maya.
 - [ ] Rush (`?rush=10`): the cycle after the rush runs catch-up (HUD: "catch-up ON"), 5 visitors in the short form L4, L5, oldest first. It stays on until fewer than 3 are waiting.
@@ -29,7 +29,7 @@ For each of B1 to B8 and L1 to L5, open `?scene=<ID>` (Part 2 also with `&v=3`, 
 - [ ] `npm run mock` in `api/`, then the TV with `?mock=0`: same loop as `?mock=1`, over HTTP (HUD: provider=http).
 - [ ] `MOCK_RUSH=10 npm run mock`: catch-up mode over HTTP.
 - [ ] First run on the booth cloud: the checklist in `api/README.md`.
-- [ ] A test upload from the wizard shows on the TV within one cycle (about 70 s), and a retake with the same email replaces it.
+- [ ] A test upload from the wizard shows on the TV within one cycle (about 1.5 minutes), and a retake with the same email replaces it.
 - [ ] `tv_status=hidden` set in the Cloudinary console keeps that visitor off the next cycle.
 
 ## Offline and recovery

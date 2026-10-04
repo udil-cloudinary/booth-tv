@@ -7,13 +7,13 @@
   },
   "steps": [
     {
-      "at": 0.5,
+      "at": 0.7,
       "do": "set",
       "target": "#pg1",
       "add": "is-live"
     },
     {
-      "at": 0.8,
+      "at": 1.0,
       "do": "set",
       "target": "#pg2",
       "add": "is-live"

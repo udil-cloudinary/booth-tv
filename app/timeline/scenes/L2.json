@@ -13,30 +13,30 @@
   },
   "steps": [
     {
-      "at": 0.5,
+      "at": 0.7,
       "do": "cursor",
       "target": "#add",
-      "dur": 0.7
+      "dur": 0.8
     },
     {
-      "at": 1.4,
+      "at": 1.7,
       "do": "click",
       "target": "#add"
     },
     {
-      "at": 1.6,
+      "at": 1.9,
       "do": "show",
       "target": "#cartn",
       "anim": "pop"
     },
     {
-      "at": 1.6,
+      "at": 1.9,
       "do": "set",
       "target": "#cart",
       "add": "is-bump"
     },
     {
-      "at": 1.8,
+      "at": 2.1,
       "do": "show",
       "target": "#toast",
       "anim": "slide-left"

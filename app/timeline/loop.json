@@ -1,59 +1,59 @@
 {
-  "_note": "Loop order and scene durations in seconds (spec v0.4 sections 2 to 4). Part 1 is 30 s MAX, Part 2 20 s MAX per visitor (scripts/check-timeline.mjs fails the build otherwise). Steps and captions live in scenes/<ID>.json.",
+  "_note": "Loop order and scene durations in seconds (spec v0.5 sections 2 to 4). Every scene: settle about 0.6 s, one action, then hold the result at least 1.5 s. Part 1 is 40 s MAX, Part 2 26 s MAX per visitor (scripts/check-timeline.mjs fails the build otherwise). Steps and captions live in scenes/<ID>.json.",
   "part1": [
     {
       "scene": "B1",
-      "dur": 4
+      "dur": 5.5
     },
     {
       "scene": "B2",
-      "dur": 6
+      "dur": 6.5
     },
     {
       "scene": "B3",
-      "dur": 5
+      "dur": 6
     },
     {
       "scene": "B4",
-      "dur": 2
+      "dur": 3
     },
     {
       "scene": "B5",
-      "dur": 5
+      "dur": 7.5
     },
     {
       "scene": "B6",
-      "dur": 4
+      "dur": 5.5
     },
     {
       "scene": "B7",
-      "dur": 2
+      "dur": 3
     },
     {
       "scene": "B8",
-      "dur": 2
+      "dur": 2.5
     }
   ],
   "part2": [
     {
       "scene": "L1",
-      "dur": 5
+      "dur": 6
     },
     {
       "scene": "L2",
-      "dur": 4
-    },
-    {
-      "scene": "L3",
-      "dur": 3
-    },
-    {
-      "scene": "L4",
       "dur": 5
     },
     {
+      "scene": "L3",
+      "dur": 3.5
+    },
+    {
+      "scene": "L4",
+      "dur": 6.5
+    },
+    {
       "scene": "L5",
-      "dur": 3
+      "dur": 4.5
     }
   ],
   "part2Short": [
@@ -71,6 +71,6 @@
   "preloadTimeoutSec": 4,
   "fetchTimeoutSec": 5,
   "reloadEveryMin": 120,
-  "part1MaxSec": 30,
-  "part2MaxSec": 20
+  "part1MaxSec": 40,
+  "part2MaxSec": 26
 }

@@ -7,19 +7,19 @@
   },
   "steps": [
     {
-      "at": 0.1,
+      "at": 0.3,
       "do": "show",
       "target": "#mag",
       "anim": "drop"
     },
     {
-      "at": 0.6,
+      "at": 1.0,
       "do": "show",
       "target": "#nm",
       "anim": "rise"
     },
     {
-      "at": 0.9,
+      "at": 1.4,
       "do": "show",
       "target": "#ln",
       "anim": "rise"
