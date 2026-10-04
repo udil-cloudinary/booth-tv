@@ -102,7 +102,6 @@ img { display: block; }
   font-size: 28px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
   color: var(--lav); padding: 3px 16px; border: 2px solid rgba(170, 179, 232, .35); border-radius: 10px;
 }
-.strip-chip.is-first { color: #fff; border-color: #fff; }
 
 
 /* ---------- Virtual cursor ---------- */

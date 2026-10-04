@@ -85,7 +85,7 @@ export class Stage {
     const strip = script.strip;
     const html = strip
       ? `<span class="strip-label">${strip.label}</span>` +
-        (strip.names ?? []).map((n, i) => `<span class="strip-chip${i === 0 ? ' is-first' : ''}">${n}</span>`).join('')
+        (strip.names ?? []).map((n) => `<span class="strip-chip">${n}</span>`).join('')
       : '';
     if (this.strip.innerHTML !== html) this.strip.innerHTML = html;
 
