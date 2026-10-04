@@ -1,6 +1,6 @@
 {
   "id": "OP",
-  "title": "Cloudinary Everywhere opener (assets/opening/opener.html)",
+  "title": "Cloudinary Everywhere opener, short cut (assets/opening/opener-short.html)",
   "frame": "full",
   "enter": "fade",
   "steps": []
