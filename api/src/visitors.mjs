@@ -1,6 +1,7 @@
 // Turns Cloudinary Search API resources into the TV's visitor records (spec section 6).
 // Pure functions, no network: easy to test and the same on every provider.
-import { visitorUrls } from '../../../../templates/cloudinary-setup/recipes.mjs';
+// The repo's copy of the recipes (templates/, synced from the project's templates/ by scripts/sync-templates.sh).
+import { visitorUrls } from '../../templates/cloudinary-setup/recipes.mjs';
 
 const PRODUCT_TYPES = new Set(['pizza', 'gelato', 'caffe']);
 

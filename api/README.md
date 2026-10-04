@@ -56,7 +56,7 @@ import { MemorySeenStore } from '../src/warm.mjs';
 
 The adapter must pass `waitUntil` where the platform stops the function after the response; otherwise warm-ups may be cut short (harmless, the TV still preloads).
 
-The handler imports `templates/cloudinary-setup/recipes.mjs` by a relative path, so bundle from the project root (or copy the folder layout) when deploying.
+The handler imports `templates/cloudinary-setup/recipes.mjs` from this repo (`../../templates/...`), so deploy the repo as is, or bundle from its root.
 
 ## First run on the booth cloud
 

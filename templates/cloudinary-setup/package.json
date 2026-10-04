@@ -1,0 +1,11 @@
+{
+  "name": "booth-cloud-setup",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dry-run": "node setup-booth-cloud.mjs --dry-run",
+    "setup": "node setup-booth-cloud.mjs",
+    "sample": "node setup-booth-cloud.mjs --sample"
+  },
+  "dependencies": { "cloudinary": "^2.5.1" }
+}

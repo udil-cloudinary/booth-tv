@@ -8,7 +8,7 @@ You are building the web app that runs the booth's 55" 4K TV, plus the small pie
 1. `../../specs/spec-tv-orchestrator.md`: THE spec (v0.5). Loop rules, every scene with timing and copy, data contract, operator page, printing, screen rules, tech shape. The spec wins over anything else here.
 2. `reference/README.md` and `reference/storyboard/*.html|png`: the look of every scene (standalone HTML exported from the storyboard canvas, with a PNG of each). Use them for layout, colours and type, NOT for copy or data: where they differ from the spec (old folder names, older narration pills), follow the spec.
 3. `assets/`: everything the TV needs offline. `assets/mock/maya.json` is Maya's record for Part 1 and the no-visitor Part 2; `assets/mock/visitors.json` is 4 mock visitors in the exact `/api/tv/visitors` shape, with local images.
-4. `../../templates/cloudinary-setup/`: the Cloudinary recipes (`t_magnet`, `t_tv_label`, `t_tv_hero`, `t_tv_pdp`, `t_tv_email`), the setup script, and `recipes.mjs` (`visitorUrls()`), which the backend uses to build every visitor URL.
+4. `templates/cloudinary-setup/` (in this repo, a copy of the project's `../../templates/`, refreshed with `sh scripts/sync-templates.sh`; edit the source, then sync): the Cloudinary recipes (`t_magnet`, `t_tv_label`, `t_tv_hero`, `t_tv_pdp`, `t_tv_email`), the setup script, and `recipes.mjs` (`visitorUrls()`), which the backend uses to build every visitor URL.
 5. `../booth-wizard/WIZARD-CONTENT.md` ("Asset contract"): what the wizard writes to Cloudinary (folder, tags, structured metadata) and what the backend reads.
 
 ## Decisions that are settled (do not reopen)

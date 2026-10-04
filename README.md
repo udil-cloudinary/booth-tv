@@ -71,6 +71,17 @@ For a build:
 2. The TV calls `GET /api/tv/visitors?since=<ISO>&limit=10` at B7 (Publish) each cycle and expects the spec section 6 JSON, including `email` (shown only in L4's "to:" line). If the call fails or times out (5 s), that cycle's Part 2 runs with Maya and the next cycle tries again.
 3. If the backend sets `TV_READ_TOKEN`, set the same value as `VITE_API_TOKEN` in `app/.env`.
 
+## Cloudinary recipes and template graphics (`templates/`)
+
+`templates/` holds what the booth cloud needs, so this repo is self-contained:
+- `cloudinary-setup/`: `recipes.mjs` (the named transformations and `visitorUrls()`, imported by the API), `setup-booth-cloud.mjs` (uploads the graphics and fonts, creates the transformations) and its README.
+- `cloudinary/`: the 37 template PNGs (magnet frame, magnet layers, product bases) that the setup script uploads to `booth/templates/`.
+- `_source/sample-selfie-maya.jpg` for `npm run sample`, and `TEMPLATES.md` (geometry).
+
+Set up the booth cloud: `cd templates/cloudinary-setup && npm install && npm run dry-run`, then `npm run setup` with `CLOUDINARY_URL` set (see its README).
+
+The source of truth is the project's own `templates/` folder (outside this repo). After changing it, run `sh scripts/sync-templates.sh` and commit.
+
 ## Where things are
 
 ```
