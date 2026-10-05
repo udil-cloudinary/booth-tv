@@ -1,24 +1,39 @@
 import factoryJson from '../../timeline/factory.json';
 import { config } from '../config';
 import { EASE, ms, sleep } from '../engine/clock';
+import { Cursor } from '../engine/cursor';
 import { fill, visitorVars, type Vars } from '../engine/fill';
 import { fitAll } from '../engine/fit';
+import { localBox } from '../engine/geometry';
 import type { QueueItem } from '../loop/lineup';
 import { status } from '../loop/status';
 import { OPENER_SRC } from '../scenes';
 import { fitStage } from '../stage';
 import type { Visitor } from '../types';
-import { productOf, routeOf, templateUrl, trials } from './art';
+import { productOf, routeOf, templateUrl, trials, type Route } from './art';
 import { brandSvg } from './brands';
 
 type Beat = 'up' | 'figma' | 'plugin' | 'in' | 'person' | 'out' | 'page' | 'end';
 
+interface RouteConfig {
+  page: number; // the platform beat on this route
+  short: number; // the same in the short form
+  line: string; // its floor line
+  pill: string; // the end card's pill
+}
 interface FactoryConfig {
-  beats: Record<Beat, number>;
+  maxSec: number;
+  beats: Record<Exclude<Beat, 'page'>, number>;
   short: Partial<Record<Beat, number>>;
-  lines: Record<Beat, string>;
+  lines: Record<Exclude<Beat, 'page'>, string>;
+  routes: Record<Route, RouteConfig>;
 }
 export const FACTORY = factoryJson as unknown as FactoryConfig;
+
+/** How each route is named on the platform slot and in {platform}. */
+const PLATFORM: Record<Route, string> = { shopify: 'Shopify', wordpress: 'WordPress', agent: 'Cloudinary Agent', klaviyo: 'Klaviyo' };
+/** The per-visitor states of routes C and D, cleared for each visitor. */
+const ROUTE_MOVES = ['agent-open', 'agent-read', 'agent-sugg', 'agent-pick', 'agent-placed', 'agent-flying', 'mail-drop', 'mail-cta'];
 
 const FULL: Beat[] = ['up', 'figma', 'plugin', 'in', 'person', 'out', 'page', 'end'];
 const SHORT_WITH_FIGMA: Beat[] = ['up', 'figma', 'plugin', 'in', 'person', 'page'];
@@ -29,6 +44,13 @@ const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
 const LOGO = 'assets/brand/cloudinary-logo-white.png';
+const SPARK = `<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.5 6.5l2.5 2.5M15 15l2.5 2.5M17.5 6.5L15 9M9 15l-2.5 2.5"/></svg>`;
+const PUZZLE = `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h4v3a2 2 0 1 0 4 0V3h3v7h-3a2 2 0 1 0 0 4h3v7h-7v-3a2 2 0 1 0-4 0v3H3v-7h3a2 2 0 1 0 0-4H3V3z"/></svg>`;
+/** The Cloudinary mark on a blue tile: the Agent's extension icon, and its logo on the platform slot and end pill. */
+const cldTile = (cls: string) => `<span class="fx-cld-tile ${cls}"><img src="${LOGO}" alt=""></span>`;
+
+/** Waits for `p`, but never longer than `seconds`: animations stall while the page is hidden, the show must not. */
+const within = (p: Promise<unknown>, seconds: number) => Promise.race([p, sleep(seconds)]);
 
 /** Loads and decodes images so a beat never shows one half drawn; gives up after `timeoutSec`. */
 function warm(urls: string[], timeoutSec = 2): Promise<void> {
@@ -45,12 +67,15 @@ function warm(urls: string[], timeoutSec = 2): Promise<void> {
 /**
  * The factory flow (?new-flow): one fixed stage, the visitor's selfie queue on the left, the Cloudinary machine
  * in the middle, the platform on the right. Each visitor runs through the beats in timeline/factory.json:
- * Figma template, the Cloudinary plugin's dynamic export, the factory, personalizing, then Shopify or WordPress.
+ * Figma template, the Cloudinary plugin's dynamic export, the factory, personalizing, then one route: a Shopify
+ * product page, a WordPress post, the Cloudinary Agent filling a store page, or a Klaviyo abandoned-cart email.
  */
 export class FactoryStage {
   readonly el: HTMLElement;
   private q = <T extends HTMLElement = HTMLElement>(sel: string) => this.el.querySelector<T>(sel)!;
   private queueKey = '';
+  private route: Route = 'shopify';
+  private cursor: Cursor;
 
   constructor(host: HTMLElement) {
     host.innerHTML = `
@@ -125,6 +150,53 @@ export class FactoryStage {
             </div>
           </div>
         </div>
+        <div class="fx-browser">
+          <div class="fx-br-bar">
+            <div class="fx-br-dots"><i></i><i></i><i></i></div>
+            <div class="fx-br-url"></div>
+            <span class="fx-br-puzzle">${PUZZLE}</span>
+            ${cldTile('fx-br-ext')}
+          </div>
+          <div class="fx-br-body">
+            <div class="fx-site">
+              <div class="fx-site-bar">La Bottega del Lago</div>
+              <div class="fx-site-body">
+                <div class="fx-site-copy">
+                  <div class="fx-site-title fit" data-min="44" data-lines="3"></div>
+                  <div class="fx-site-price"></div>
+                  <div class="fx-site-cta">Add to cart</div>
+                </div>
+                <div class="fx-site-slot"><img alt=""></div>
+              </div>
+            </div>
+            <div class="fx-agent">
+              <div class="fx-agent-inner">
+                <div class="fx-agent-head">${cldTile('fx-agent-logo')}<span>Cloudinary Agent</span></div>
+                <div class="fx-agent-read">${SPARK}<span class="fit" data-min="24"></span></div>
+                <div class="fx-agent-best"><img alt=""></div>
+                <div class="fx-agent-more"><div><img alt=""></div><div><img alt=""></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <img class="fx-flyer" alt="">
+
+        <div class="fx-mail">
+          <div class="fx-mail-bar"><span class="fx-mail-logo">klaviyo</span>${brandSvg('klaviyo', 34)}</div>
+          <div class="fx-mail-card">
+            <div class="fx-mail-to"><div class="fx-chip fx-mail-chip"><img alt=""></div><span class="fx-mail-to-label">To</span><span class="fx-mail-addr fit" data-min="26"></span></div>
+            <div class="fx-mail-head fit" data-min="44"></div>
+            <div class="fx-mail-cart">
+              <div class="fx-mail-imgbox"><img class="fx-mail-img" alt=""></div>
+              <div class="fx-mail-copy">
+                <div class="fx-mail-name fit" data-min="32" data-lines="2"></div>
+                <div class="fx-mail-price"></div>
+                <div class="fx-mail-cta"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="fx-endpill"><span class="fx-endpill-logo"></span><span class="fx-endpill-text"></span></div>
 
         <div class="fx-floor"><div class="fx-line fit" data-min="48"></div></div>
@@ -132,6 +204,7 @@ export class FactoryStage {
       </div>`;
     this.el = host.querySelector('#stage')!;
     this.el.style.setProperty('--k', String(1 / config.speed)); // ?speed scales every CSS transition too
+    this.cursor = new Cursor(this.el);
     fitStage(this.el);
     addEventListener('resize', () => fitStage(this.el));
   }
@@ -170,13 +243,14 @@ export class FactoryStage {
   /** One visitor through the factory. `figma`: include the Figma and plugin beats (always in the full form). */
   async run(v: Visitor, o: { short: boolean; figma: boolean }) {
     const beats = !o.short ? FULL : o.figma ? SHORT_WITH_FIGMA : SHORT;
-    const times = o.short ? { ...FACTORY.beats, ...FACTORY.short } : FACTORY.beats;
     const nTrials = o.short ? 2 : 4;
     const vars = this.load(v, nTrials);
+    const r = FACTORY.routes[this.route];
+    const times: Record<Beat, number> = { ...FACTORY.beats, ...(o.short ? FACTORY.short : {}), page: o.short ? r.short : r.page };
     await warm([v.urls.selfie, v.urls.label, templateUrl(v), ...trials(v, nTrials).map((t) => t.src)]);
     status.part = 'part2';
     status.who = vars.name;
-    for (const beat of beats) await this.beat(beat, times[beat], vars, nTrials);
+    for (const beat of beats) await this.beat(beat, times[beat], vars, nTrials, o.short);
     this.el.dataset.beat = 'idle';
   }
 
@@ -184,21 +258,21 @@ export class FactoryStage {
   private load(v: Visitor, nTrials: number): Vars {
     const vars = visitorVars(v);
     const p = productOf(v);
-    const route = routeOf(v);
-    const platform = route === 'shopify' ? 'Shopify' : 'WordPress';
+    const route = (this.route = routeOf(v));
+    const platform = PLATFORM[route];
     vars.platform = platform;
     vars.product = p.label;
 
-    this.el.classList.remove('picks-on', 'dyn-on', 'export-on', 'final-on', 'cta-on', 'is-in');
+    this.el.classList.remove('picks-on', 'dyn-on', 'export-on', 'final-on', 'cta-on', 'is-in', ...ROUTE_MOVES);
     this.q('.fx-dyncard').getAnimations().forEach((a) => a.cancel());
-    this.el.classList.toggle('route-shopify', route === 'shopify');
-    this.el.classList.toggle('route-wordpress', route === 'wordpress');
+    for (const r of Object.keys(PLATFORM)) this.el.classList.toggle(`route-${r}`, r === route);
 
     const tpl = templateUrl(v);
     for (const sel of ['.fx-dock-tpl', '.fx-dyn-tpl', '.fx-frame-tpl']) this.q<HTMLImageElement>(sel).src = tpl;
     this.q<HTMLImageElement>('.fx-current-chip img').src = v.urls.selfie;
     this.q('.fx-current-name').textContent = vars.NAME;
-    for (const sel of ['.fx-product', '.fx-final-img', '.fx-page-img img']) this.q<HTMLImageElement>(sel).src = v.urls.label;
+    for (const sel of ['.fx-product', '.fx-final-img', '.fx-page-img img', '.fx-site-slot img', '.fx-agent-best img', '.fx-flyer', '.fx-mail-img'])
+      this.q<HTMLImageElement>(sel).src = v.urls.label;
 
     this.q('.fx-frame-name').textContent = `${p.label} label`;
     this.q('.fx-picks-title').textContent = `${vars.name} picked`;
@@ -217,30 +291,49 @@ export class FactoryStage {
       .map((t) => `<div class="fx-trial"><img src="${esc(t.src)}" alt=""><span>${esc(t.label)}</span></div>`).join('');
     this.q('.fx-final-pill span').textContent = v.favorite;
 
-    const logo = route === 'shopify' ? brandSvg('shopify', 170) : brandSvg('wordpress', 170, '#ffffff');
-    this.q('.fx-dest-logo').innerHTML = logo;
+    this.q('.fx-dest-logo').innerHTML =
+      route === 'agent' ? cldTile('fx-dest-cld') : brandSvg(route, 170, route === 'shopify' ? undefined : '#ffffff');
     this.q('.fx-dest-name').textContent = platform;
-    this.q('.fx-page-logo').innerHTML = brandSvg(route, 56);
-    this.q('.fx-page-name').textContent = platform;
-    this.q('.fx-page-title').textContent = route === 'shopify' ? vars.productName : vars.headline;
-    this.q('.fx-page-price').textContent = `€ ${vars.price}`;
-    this.q('.fx-endpill-logo').innerHTML = brandSvg(route, 52);
-    this.q('.fx-endpill-text').textContent = `Live on ${platform}`;
+    this.q('.fx-endpill-logo').innerHTML = route === 'agent' ? cldTile('fx-endpill-cld') : brandSvg(route, 52);
+    this.q('.fx-endpill-text').textContent = FACTORY.routes[route].pill;
+
+    if (route === 'shopify' || route === 'wordpress') {
+      this.q('.fx-page-logo').innerHTML = brandSvg(route, 56);
+      this.q('.fx-page-name').textContent = platform;
+      this.q('.fx-page-title').textContent = route === 'shopify' ? vars.productName : vars.headline;
+      this.q('.fx-page-price').textContent = `€ ${vars.price}`;
+    }
+    // Route C: a store page with an empty photo slot; the Agent reads it and offers the visitor's product first.
+    this.q('.fx-br-url').textContent = vars.storeHost;
+    this.q('.fx-site-title').textContent = vars.productName;
+    this.q('.fx-site-price').textContent = `€ ${vars.price}`;
+    this.q('.fx-agent-read span').textContent = `${v.favorite} ${p.label}`;
+    const more = this.el.querySelectorAll<HTMLImageElement>('.fx-agent-more img');
+    trials(v, more.length).forEach((t, i) => (more[i].src = t.src));
+    this.q('.fx-flyer').getAnimations().forEach((a) => a.cancel());
+    // Route D: the abandoned-cart email, to the address from the wizard (the one place a full address shows).
+    this.q<HTMLImageElement>('.fx-mail-chip img').src = v.urls.selfie;
+    this.q('.fx-mail-addr').textContent = vars.email || vars.name;
+    this.q('.fx-mail-head').textContent = vars.cartHeadline;
+    this.q('.fx-mail-name').textContent = vars.productName;
+    this.q('.fx-mail-price').textContent = `€ ${vars.price}`;
+    this.q('.fx-mail-cta').textContent = vars.emailCta;
     return vars;
   }
 
-  private async beat(beat: Beat, seconds: number, vars: Vars, nTrials: number) {
-    status.scene = beat;
+  private async beat(beat: Beat, seconds: number, vars: Vars, nTrials: number, short: boolean) {
+    status.scene = beat === 'page' ? `page:${this.route}` : beat;
     this.el.dataset.beat = beat;
     const line = this.q('.fx-line');
     line.style.fontSize = '';
-    line.innerHTML = fill(FACTORY.lines[beat], vars, true);
+    line.innerHTML = fill(beat === 'page' ? FACTORY.routes[this.route].line : FACTORY.lines[beat], vars, true);
+    this.el.querySelectorAll<HTMLElement>('.fit').forEach((el) => (el.style.fontSize = ''));
     fitAll(this.el);
-    await Promise.all([this.choreograph(beat, seconds, nTrials), sleep(seconds)]);
+    await Promise.all([this.choreograph(beat, seconds, nTrials, short), sleep(seconds)]);
   }
 
   /** The moves inside a beat (the beat's layout itself is CSS, keyed on data-beat). */
-  private async choreograph(beat: Beat, seconds: number, nTrials: number) {
+  private async choreograph(beat: Beat, seconds: number, nTrials: number, short: boolean) {
     const on = (c: string) => this.el.classList.add(c);
     switch (beat) {
       case 'figma':
@@ -288,11 +381,74 @@ export class FactoryStage {
         break;
       }
       case 'page':
-        await sleep(Math.min(2.4, seconds * 0.55));
-        on('cta-on');
+        if (this.route === 'agent') await this.agent(short);
+        else if (this.route === 'klaviyo') await this.mail(short);
+        else {
+          await sleep(Math.min(2.4, seconds * 0.55));
+          on('cta-on');
+        }
         break;
       default:
         break;
     }
+  }
+
+  /**
+   * Route C: the cursor clicks the Cloudinary Agent's icon in the toolbar, the side panel opens and reads the page,
+   * offers the visitor's product first, and drops it into the empty photo slot. Short form: the panel is already open.
+   * Full form ends at about 4.8 s of 6.5, so the filled page holds for well over the 1.2 s minimum.
+   */
+  private async agent(short: boolean) {
+    const on = (c: string) => this.el.classList.add(c);
+    if (short) {
+      on('agent-open');
+      await sleep(0.4);
+    } else {
+      await sleep(0.6);
+      await within(this.cursor.moveTo(this.q('.fx-br-ext'), 0.8), 0.9);
+      await Promise.all([within(this.cursor.click(), 0.7), sleep(0.15).then(() => on('agent-open'))]);
+      this.cursor.hide();
+      await sleep(0.4);
+    }
+    on('agent-read');
+    await sleep(0.4);
+    on('agent-sugg');
+    await sleep(short ? 0.3 : 0.5);
+    on('agent-pick');
+    await sleep(short ? 0.3 : 0.5);
+    await this.drop(this.q('.fx-agent-best img'), this.q('.fx-site-slot img'), short ? 0.6 : 0.8);
+    on('agent-placed');
+  }
+
+  /** Flies a copy of the product from the Agent's card into the page's slot. */
+  private async drop(from: HTMLElement, to: HTMLElement, seconds: number) {
+    const fly = this.q<HTMLImageElement>('.fx-flyer');
+    const a = localBox(from, this.el);
+    const b = localBox(to, this.el);
+    fly.style.left = `${a.x}px`;
+    fly.style.top = `${a.y}px`;
+    fly.style.width = `${a.w}px`;
+    fly.style.height = `${a.h}px`;
+    this.el.classList.add('agent-flying');
+    const k = b.h / (a.h || 1);
+    const anim = fly.animate(
+      [
+        { transform: 'translate(0, 0) scale(1) rotate(0deg)', opacity: 1 },
+        { transform: `translate(${(b.x - a.x) * 0.55}px, ${(b.y - a.y) * 0.55 - 60}px) scale(${(1 + k) / 2}) rotate(-6deg)`, opacity: 1, offset: 0.6 },
+        { transform: `translate(${b.x + b.w / 2 - (a.x + a.w / 2)}px, ${b.y + b.h / 2 - (a.y + a.h / 2)}px) scale(${k}) rotate(0deg)`, opacity: 1 },
+      ],
+      { duration: ms(seconds), easing: EASE, fill: 'forwards' },
+    );
+    await within(anim.finished.catch(() => {}), seconds + 0.1);
+    this.el.classList.remove('agent-flying');
+    anim.cancel();
+  }
+
+  /** Route D: the Klaviyo abandoned-cart email. The product drops into the cart box, then the button lights up. */
+  private async mail(short: boolean) {
+    await sleep(short ? 0.5 : 0.8);
+    this.el.classList.add('mail-drop');
+    await sleep(short ? 0.9 : 1.2);
+    this.el.classList.add('mail-cta');
   }
 }

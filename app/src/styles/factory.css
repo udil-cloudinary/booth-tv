@@ -176,7 +176,7 @@
 .factory[data-beat="out"] .fx-glow, .factory[data-beat="out"] .fx-product, .factory[data-beat="end"] .fx-glow, .factory[data-beat="end"] .fx-product { opacity: 1; transform: none; }
 .factory[data-beat="end"] .fx-glow { transform: translate(-420px, -70px) scale(1.08); }
 .factory[data-beat="end"] .fx-product { transform: translate(-410px, -60px) scale(1.09); }
-.fx-endpill { left: 1450px; top: 410px; display: flex; align-items: center; gap: 16px; padding: 22px 36px 22px 26px; border-radius: 999px; background: #fff; color: var(--ink); font-size: 40px; font-weight: 800; opacity: 0; transform: translateX(40px); }
+.fx-endpill { right: 60px; top: 410px; white-space: nowrap; display: flex; align-items: center; gap: 16px; padding: 22px 36px 22px 26px; border-radius: 999px; background: #fff; color: var(--ink); font-size: 40px; font-weight: 800; opacity: 0; transform: translateX(40px); }
 .factory[data-beat="end"] .fx-endpill { opacity: 1; transform: none; transition-delay: calc(var(--k, 1) * .3s); }
 
 /* ---------- F7 the platform page ---------- */
@@ -207,6 +207,91 @@
 /* Shopify: price + cart; WordPress: kicker + text. */
 .factory.route-shopify .fx-page-kicker, .factory.route-shopify .fx-page-bars { display: none; }
 .factory.route-wordpress .fx-page-price, .factory.route-wordpress .fx-page-cta { display: none; }
+
+/* Routes C and D take the whole window instead of the platform page. */
+.factory.route-agent .fx-page, .factory.route-agent .fx-mini, .factory.route-klaviyo .fx-page, .factory.route-klaviyo .fx-mini { display: none; }
+
+/* The Cloudinary mark on a blue tile: the Agent's toolbar icon, panel logo, platform slot and end pill. */
+.fx-cld-tile { display: flex; align-items: center; justify-content: center; flex: none; background: var(--blue); border-radius: 16px; }
+.fx-cld-tile img { width: 72%; }
+.fx-dest-cld { width: 170px; height: 170px; border-radius: 40px; }
+.fx-endpill-cld { width: 56px; height: 56px; border-radius: 14px; }
+
+/* ---------- F7 route C: the Cloudinary Agent beside a store page ---------- */
+.fx-browser, .fx-mail {
+  left: 380px; top: 50px; width: 1480px; height: 800px; border-radius: 30px; overflow: hidden;
+  box-shadow: 0 0 0 14px rgba(255,210,63,.16); opacity: 0; transform: translateY(40px) scale(.97);
+  transition: opacity var(--t) ease, transform var(--t-slow) cubic-bezier(.45,.05,.25,1);
+}
+.factory.route-agent[data-beat="page"] .fx-browser, .factory.route-klaviyo[data-beat="page"] .fx-mail { opacity: 1; transform: none; }
+.fx-browser { background: #fffdf7; color: var(--ink); }
+.fx-br-bar { height: 80px; display: flex; align-items: center; gap: 16px; padding: 0 26px; background: #e9ebf1; border-bottom: 2px solid #d9dce5; color: #5a6070; }
+.fx-br-dots { display: flex; gap: 12px; }
+.fx-br-dots i { width: 18px; height: 18px; border-radius: 50%; background: #c3c8d4; }
+.fx-br-url { flex: 1; height: 50px; border-radius: 25px; background: #fff; display: flex; align-items: center; padding: 0 26px; font-size: 28px; font-weight: 600; }
+.fx-br-puzzle svg { display: block; }
+.fx-br-ext { width: 64px; height: 64px; transition: box-shadow var(--t); }
+.factory.agent-open .fx-br-ext { box-shadow: 0 0 0 8px rgba(255,210,63,.6); }
+.fx-br-body { display: flex; height: 720px; }
+.fx-site { flex: 1; min-width: 0; }
+.fx-site-bar { height: 88px; display: flex; align-items: center; padding: 0 40px; border-bottom: 2px solid #ece6da; font-family: var(--serif); font-size: 40px; font-weight: 800; }
+.fx-site-body { display: flex; gap: 40px; padding: 30px 40px; }
+.fx-site-copy { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 32px; }
+.fx-site-title { font-family: var(--serif); font-size: 68px; font-weight: 800; line-height: 1.05; overflow: hidden; }
+.fx-site-price { font-size: 56px; font-weight: 800; }
+.fx-site-cta { width: 340px; height: 96px; border-radius: 24px; background: var(--ink); color: #fff; font-size: 38px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+.fx-site-slot {
+  width: 620px; height: 572px; flex: none; border-radius: 28px; background: #f3ead8; border: 6px dashed #c9bfa8;
+  display: flex; align-items: center; justify-content: center; transition: width var(--t-slow) cubic-bezier(.2,.8,.2,1), border-color var(--t);
+}
+.fx-site-slot img { height: 520px; max-width: 92%; object-fit: contain; opacity: 0; }
+.factory.agent-open .fx-site-slot { width: 400px; }
+.factory.agent-placed .fx-site-slot { border: 6px solid var(--yellow); }
+.factory.agent-placed .fx-site-slot img { opacity: 1; }
+
+.fx-agent { width: 0; flex: none; overflow: hidden; background: #141e4a; transition: width var(--t-slow) cubic-bezier(.2,.8,.2,1); }
+.factory.agent-open .fx-agent { width: 580px; }
+.fx-agent-inner { width: 580px; height: 720px; border-left: 6px solid var(--blue); color: #fff; display: flex; flex-direction: column; gap: 20px; }
+.fx-agent-head { height: 96px; flex: none; display: flex; align-items: center; gap: 18px; padding: 0 30px; background: var(--blue); font-size: 38px; font-weight: 800; }
+.fx-agent-logo { width: 70px; height: 70px; background: #5b6fe0; }
+.fx-agent-read, .fx-agent-best, .fx-agent-more { margin: 0 30px; opacity: 0; transform: translateY(20px); transition: opacity var(--t), transform var(--t), border-color var(--t), box-shadow var(--t); }
+.fx-agent-read { align-self: flex-start; max-width: 500px; display: flex; align-items: center; gap: 12px; padding: 12px 26px 12px 18px; border-radius: 999px; background: var(--edge); color: var(--yellow); }
+.fx-agent-read svg { flex: none; display: block; }
+.fx-agent-read span { color: #fff; font-size: 32px; font-weight: 800; white-space: nowrap; overflow: hidden; }
+.fx-agent-best { height: 340px; border-radius: 26px; background: #f3ead8; border: 8px solid transparent; display: flex; align-items: center; justify-content: center; }
+.fx-agent-best img { height: 300px; max-width: 90%; object-fit: contain; transition: opacity var(--t); }
+.fx-agent-more { display: flex; gap: 20px; }
+.fx-agent-more > div { flex: 1; height: 130px; border-radius: 20px; background: var(--edge); display: flex; align-items: center; justify-content: center; }
+.fx-agent-more img { height: 112px; max-width: 90%; object-fit: contain; }
+.factory.agent-read .fx-agent-read, .factory.agent-sugg .fx-agent-best { opacity: 1; transform: none; }
+.factory.agent-sugg .fx-agent-more { opacity: .45; transform: none; transition-delay: calc(var(--k, 1) * .15s); }
+.factory.agent-pick .fx-agent-best { border-color: var(--yellow); box-shadow: 0 0 0 12px rgba(255,210,63,.2); }
+.factory.agent-flying .fx-agent-best img, .factory.agent-placed .fx-agent-best img { opacity: .3; }
+/* The copy that flies from the card into the page (placed by stage.ts over the card's image). */
+.fx-flyer { z-index: 5; object-fit: contain; opacity: 0; pointer-events: none; transform-origin: 50% 50%; filter: drop-shadow(0 18px 30px rgba(0,0,0,.35)); }
+.factory.agent-flying .fx-flyer { opacity: 1; }
+
+/* ---------- F7 route D: the Klaviyo abandoned-cart email ---------- */
+.fx-mail { background: #f2f0eb; color: #1a1a1a; }
+.fx-mail-bar { height: 96px; display: flex; align-items: center; gap: 10px; padding: 0 40px; background: #fff; border-bottom: 2px solid #e4e1d9; }
+.fx-mail-bar svg { display: block; }
+.fx-mail-logo { font-size: 46px; font-weight: 800; letter-spacing: -1px; }
+.fx-mail-card { width: 1100px; margin: 20px auto 0; border-radius: 26px; background: #fff; border: 2px solid #e4e1d9; padding: 30px 40px; display: flex; flex-direction: column; gap: 20px; }
+.fx-mail-to { display: flex; align-items: center; gap: 20px; min-width: 0; }
+.fx-mail-chip { width: 80px; height: 80px; border: 5px solid var(--yellow); flex: none; }
+.fx-mail-to-label { font-size: 32px; font-weight: 600; color: #6b6b6b; }
+.fx-mail-addr { flex: 1; min-width: 0; font-size: 36px; font-weight: 700; white-space: nowrap; overflow: hidden; }
+.fx-mail-head { font-size: 60px; font-weight: 800; letter-spacing: -.5px; line-height: 1.1; white-space: nowrap; overflow: hidden; }
+.fx-mail-cart { height: 380px; border-radius: 22px; background: #f3ead8; display: flex; align-items: center; gap: 60px; padding: 0 60px 0 90px; }
+.fx-mail-imgbox { width: 300px; height: 360px; flex: none; display: flex; align-items: center; justify-content: center; }
+.fx-mail-img { max-height: 360px; max-width: 300px; object-fit: contain; opacity: 0; transform: translateY(-80px) scale(.7); transition: opacity var(--t), transform var(--t-slow) cubic-bezier(.34,1.56,.64,1); }
+.fx-mail-copy { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 22px; opacity: 0; transition: opacity var(--t); transition-delay: calc(var(--k, 1) * .2s); }
+.fx-mail-name { font-family: var(--serif); font-size: 48px; font-weight: 800; line-height: 1.1; overflow: hidden; }
+.fx-mail-price { font-size: 44px; font-weight: 800; }
+.fx-mail-cta { width: 440px; height: 92px; border-radius: 22px; background: #1a1a1a; color: #fff; font-size: 36px; font-weight: 800; display: flex; align-items: center; justify-content: center; transition: transform var(--t), box-shadow var(--t); }
+.factory.mail-drop .fx-mail-img { opacity: 1; transform: none; }
+.factory.mail-drop .fx-mail-copy { opacity: 1; }
+.factory.mail-cta .fx-mail-cta { transform: scale(1.05); box-shadow: 0 0 0 14px rgba(255,210,63,.45); }
 
 /* ---------- Opener (the Cloudinary Everywhere title and logo) ---------- */
 .fx-opener { inset: 0; z-index: 10; opacity: 0; pointer-events: none; transition: opacity var(--t); }
