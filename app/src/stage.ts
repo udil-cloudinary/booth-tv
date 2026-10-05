@@ -12,7 +12,7 @@ export const W = 1920;
 export const H = 1080;
 
 /** The 1920 x 1080 stage, letterboxed into any window. On the 4K TV (device scale factor 2) it is exactly 1:1. */
-function fitStage(stage: HTMLElement) {
+export function fitStage(stage: HTMLElement) {
   const k = Math.min(innerWidth / W, innerHeight / H);
   stage.style.transform = `translate(-50%, -50%) scale(${k})`;
 }

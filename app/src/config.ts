@@ -17,6 +17,8 @@ export const config = {
   searchUrl,
   logUrl: env.VITE_LOG_URL || '',
 
+  flow: (q.has('new-flow') ? 'factory' : 'classic') as 'classic' | 'factory', // ?new-flow: the factory flow (src/factory)
+
   // Dev switches
   scene: q.get('scene')?.toUpperCase() || null, // ?scene=B4 plays one scene on repeat
   hold: q.has('hold'), // with ?scene: play once and freeze on the last frame (for review)

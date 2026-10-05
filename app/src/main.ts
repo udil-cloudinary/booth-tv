@@ -13,6 +13,7 @@ import '@fontsource/playfair-display/500-italic.css';
 import './styles/base.css';
 import './styles/scenes.css';
 import './styles/hud.css';
+import './styles/factory.css';
 
 import mockData from '../../assets/mock/visitors.json';
 import { config } from './config';
@@ -20,6 +21,8 @@ import { MockProvider } from './data/mock';
 import { MAYA, type DataProvider } from './data/provider';
 import { SearchProvider } from './data/search';
 import { installHud } from './debug/hud';
+import { FactoryLoop } from './factory/loop';
+import { FactoryStage } from './factory/stage';
 import { log } from './loop/log';
 import { LOOP, Loop, repeatScene } from './loop/orchestrator';
 import { Stage } from './stage';
@@ -30,9 +33,15 @@ addEventListener('unhandledrejection', (e) => log('error', { where: 'promise', m
 
 async function boot() {
   await document.fonts.ready;
-  const stage = new Stage(document.getElementById('app')!);
   const provider: DataProvider =
     config.provider === 'search' && config.searchUrl ? new SearchProvider(config.searchUrl, LOOP.fetchTimeoutSec) : new MockProvider();
+  if (config.flow === 'factory') {
+    installHud(`${provider.name} · factory`);
+    log('boot', { provider: provider.name, flow: 'factory', speed: config.speed });
+    await new FactoryLoop(new FactoryStage(document.getElementById('app')!), provider).run();
+    return;
+  }
+  const stage = new Stage(document.getElementById('app')!);
   installHud(provider.name);
   log('boot', { provider: provider.name, scene: config.scene, speed: config.speed });
 

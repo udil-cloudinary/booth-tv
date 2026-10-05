@@ -1,6 +1,6 @@
 import { config } from '../config';
 import { counters, recent } from '../loop/log';
-import { status } from '../loop/orchestrator';
+import { status } from '../loop/status';
 
 /** Hidden debug HUD: press H (or open with ?hud). Outside the stage, so it never ends up on the TV by accident. */
 export function installHud(providerName: string) {
