@@ -42,6 +42,18 @@ npm run preview      # serves dist/ on http://localhost:4173
 
 `dist/` is a static site with a relative base, so it runs from any host or sub-path (for example `everywhere.cloudinary.com/tv`). It bundles the fonts (Inter, Playfair Display) and copies `assets/` into `dist/assets/`, so Part 1 and the Maya Part 2 need no network.
 
+### Deploy (Cloudflare, account "Cloudinary Integrations")
+
+Same setup as `booth-wizard`: a Worker that only serves `dist/` as static assets, no server code. Config: `app/wrangler.jsonc`, cache rules: `app/public/_headers` (hashed `build/` bundles cached for a year, the page always revalidates so the 2-hour reload picks up a deploy).
+
+- One-time: `npx wrangler login` (Wrangler is a dev dependency). The company npm mirror lacks these packages, so install with `npm install --registry=https://registry.npmjs.org/`.
+- `app/.env` must point at the booth cloud (`VITE_PROVIDER=search`, `VITE_SEARCH_URL=<signed URL>`): the `VITE_*` values are baked in at build time. `scripts/check-deploy-env.mjs` stops the deploy otherwise. `MOCK_DEPLOY=1 npm run deploy` ships the mock data on purpose.
+- `npm run deploy`: check, build, `wrangler deploy` to production at **https://everywhere-tv.cloudinary.app** (also `everywhere-tv.<subdomain>.workers.dev`). Cloudflare adds the DNS record and certificate for the custom domain (`routes` in `wrangler.jsonc`; the `cloudinary.app` zone must be on the same account).
+- `npm run deploy:preview`: same, but `wrangler versions upload` gives a preview URL and leaves production alone.
+- CI (`.github/workflows/test.yml`) runs the timeline check, typecheck and build on every PR; it never deploys.
+
+Privacy: the signed search URL ends up in the public JS bundle, and it reads the visitors' emails. Consider putting the hostname behind Cloudflare Access (Zero Trust > Access > Applications) with an allow rule for the TV machine.
+
 Safest at the booth: serve `dist/` from the TV machine itself (`npm run preview`, or any static server). Then a network drop never stops the page from loading, and the 2-hour reload also works offline. (The reload is skipped and retried later if the page is not reachable.)
 
 ## The 4K TV (Chrome kiosk)

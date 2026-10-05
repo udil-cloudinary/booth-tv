@@ -1,0 +1,15 @@
+// Cloudflare deploy: a Worker that only serves the static build (dist/), no server code (same setup as booth-wizard).
+// `npm run deploy` checks the env, builds, then uploads. The first deploy created the
+// `everywhere-tv` Worker on the account and attached the TV domain below.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "everywhere-tv",
+  "compatibility_date": "2026-10-05",
+  "assets": {
+    "directory": "./dist"
+  },
+  // The TV opens this. Cloudflare creates the DNS record and certificate on deploy;
+  // the cloudinary.app zone must be on the same account. workers.dev stays on for preview URLs.
+  "routes": [{ "pattern": "everywhere-tv.cloudinary.app", "custom_domain": true }],
+  "workers_dev": true
+}

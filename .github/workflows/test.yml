@@ -1,0 +1,33 @@
+# Runs the timeline check, typecheck and build on every PR (and on main after a merge). Same as booth-wizard's.
+# Deploys stay manual (`npm run deploy` in app/, see README).
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+      # Timeline check + typecheck (tsc --noEmit) + vite build, with the default env (mock data, no booth cloud needed).
+      - run: npm run build
