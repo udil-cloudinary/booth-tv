@@ -1,5 +1,5 @@
 {
-  "_note": "The factory flow (?new-flow): beat durations in seconds and the one line on the floor per beat. The platform beat (page) is one route per visitor, picked at random from the pool below; each route has its own length, short-form length, floor line and end-card pill. Full run 22.5 to 28.5 s (the Figma and plugin beats are in every run, so they are kept short), checked against maxSec by the build. Short form while catching up: up, person, page. Placeholders: {name} {favorite} {product} {productLower} {platform}; <em> is yellow.",
+  "_note": "The factory flow (the default): beat durations in seconds and the one line on the floor per beat. The platform beat (page) is one route per run, in turn (art.ts ROTATION: shopify, contentful, agent, klaviyo, claude); each route has its own length, short-form length, floor line and end-card pill. Full run 22.5 to 28.5 s (the Figma and plugin beats are in every run, so they are kept short), checked against maxSec by the build. Short form while catching up: up, person, page. Placeholders: {name} {favorite} {product} {productLower} {platform}; <em> is yellow.",
   "maxSec": 29,
   "beats": { "up": 2, "figma": 2, "plugin": 2.5, "in": 2.5, "person": 4.5, "out": 2.5, "end": 2 },
   "short": { "up": 1.5, "person": 2.5 },

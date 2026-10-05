@@ -10,7 +10,7 @@ import { status } from '../loop/status';
 import { OPENER_SRC } from '../scenes';
 import { fitStage } from '../stage';
 import type { Visitor } from '../types';
-import { productOf, routeOf, siteOf, templateUrl, trials, type Route, type Site } from './art';
+import { productOf, routeFor, siteOf, templateUrl, trials, type Route, type Site } from './art';
 import { brandSvg, chromeSvg } from './brands';
 
 type Beat = 'up' | 'figma' | 'plugin' | 'in' | 'person' | 'out' | 'page' | 'end';
@@ -108,6 +108,7 @@ export class FactoryStage {
   private q = <T extends HTMLElement = HTMLElement>(sel: string) => this.el.querySelector<T>(sel)!;
   private queueKey = '';
   private route: Route = 'shopify';
+  private runs = 0; // runs since load, for the route rotation
   private prompts: string[] = [];
   private claudeImgs: string[] = [];
   private cursor: Cursor;
@@ -332,7 +333,7 @@ export class FactoryStage {
   private load(v: Visitor, nTrials: number): Vars {
     const vars = visitorVars(v);
     const p = productOf(v);
-    const route = (this.route = routeOf(v));
+    const route = (this.route = routeFor(this.runs++)); // the next route in the rotation
     const platform = PLATFORM[route];
     vars.platform = platform;
     vars.product = p.label;

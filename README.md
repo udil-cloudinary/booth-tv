@@ -18,9 +18,9 @@ Open it in Chrome at any window size; the 1920 x 1080 stage letterboxes to fit.
 
 | Param | What it does |
 |---|---|
-| (none) | The default: the factory flow (`src/factory`): the opener, then each visitor through Figma, the Cloudinary plugin's dynamic export, the factory (personalizing) and one route, picked at random per visitor: a Shopify product page, a Contentful entry, the Cloudinary Media Assistant (Chrome extension) filling a blog, CMS or store page, a Klaviyo abandoned-cart email, or the Agent Experience: Claude Desktop finding, personalizing and embedding the visitor's image. Same lineup, polling and switches (`?mock`, `?speed`, `?hud`, `?forget`) |
+| (none) | The default: the factory flow (`src/factory`): the opener, then each visitor through Figma, the Cloudinary plugin's dynamic export, the factory (personalizing) and one route, in turn per run: a Shopify product page, a Contentful entry, the Cloudinary Media Assistant (Chrome extension) filling a blog, CMS or store page, a Klaviyo abandoned-cart email, then the Agent Experience (Claude Desktop finding, personalizing and embedding the visitor's image), and round again. Same lineup, polling and switches (`?mock`, `?speed`, `?hud`, `?forget`) |
 | `?classic` | The classic loop instead: Part 1 BUILD (B1 to B8) then Part 2 LIVE (L1 to L5). `?scene=` implies it |
-| `?route=agent` | Factory: every visitor takes this route (`shopify`, `contentful`, `agent`, `klaviyo` or `claude`) |
+| `?route=agent` | Factory: every run takes this route (`shopify`, `contentful`, `agent`, `klaviyo` or `claude`) |
 | `&site=blog` | Factory, with `?route=agent`: the page beside the Media Assistant (`store`, `blog` or `cms`; else random per visitor) |
 | `?scene=B3` | Plays one scene on repeat (B1 to B8, L1 to L5), with Maya |
 | `?scene=L4&v=3` | A Part 2 scene with mock visitor 3 (index or id from `assets/mock/visitors.json`; 3 is Maximiliano, the long-name test) |

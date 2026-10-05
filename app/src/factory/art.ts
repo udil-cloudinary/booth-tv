@@ -57,7 +57,7 @@ export type Route = (typeof ROUTES)[number];
 export const SITES = ['store', 'blog', 'cms'] as const;
 export type Site = (typeof SITES)[number];
 
-/** One site per visitor, random but stable (a different hash from the route's). ?site= forces one. */
+/** One site per visitor, random but stable, so a replay shows the same page. ?site= forces one. */
 export function siteOf(v: Visitor): Site {
   if (config.site && (SITES as readonly string[]).includes(config.site)) return config.site as Site;
   let h = 7;
@@ -65,10 +65,11 @@ export function siteOf(v: Visitor): Site {
   return SITES[Math.abs(h) % SITES.length];
 }
 
-/** One route per visitor, picked at random but stable, so a replay lands on the same one; about a fifth each. ?route= forces one. */
-export function routeOf(v: Visitor): Route {
+/** The routes in the order they play, one per run, then round again: A to E. */
+export const ROTATION: Route[] = ['shopify', 'contentful', 'agent', 'klaviyo', 'claude'];
+
+/** The route for the `n`th run since the page loaded. ?route= forces one for every run. */
+export function routeFor(n: number): Route {
   if (config.route && (ROUTES as readonly string[]).includes(config.route)) return config.route as Route;
-  let h = 0;
-  for (const c of v.id) h = (h * 31 + c.charCodeAt(0)) | 0;
-  return ROUTES[Math.abs(h) % ROUTES.length];
+  return ROTATION[n % ROTATION.length];
 }
