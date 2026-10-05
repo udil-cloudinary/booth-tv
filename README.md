@@ -18,8 +18,8 @@ Open it in Chrome at any window size; the 1920 x 1080 stage letterboxes to fit.
 
 | Param | What it does |
 |---|---|
-| `?new-flow` | The factory flow (`src/factory`): the opener, then each visitor through Figma, the Cloudinary plugin's dynamic export, the factory (personalizing) and one route, picked at random per visitor: a Shopify product page, a WordPress post, the Cloudinary Agent filling a store page, or a Klaviyo abandoned-cart email. Same lineup, polling and switches (`?mock`, `?speed`, `?hud`, `?forget`) |
-| `&route=agent` | With `?new-flow`: every visitor takes this route (`shopify`, `wordpress`, `agent` or `klaviyo`) |
+| `?new-flow` | The factory flow (`src/factory`): the opener, then each visitor through Figma, the Cloudinary plugin's dynamic export, the factory (personalizing) and one route, picked at random per visitor: a Shopify product page, a Contentful entry, the Cloudinary Agent filling a store page, a Klaviyo abandoned-cart email, or the Agent Experience: Claude Desktop finding, personalizing and embedding the visitor's image. Same lineup, polling and switches (`?mock`, `?speed`, `?hud`, `?forget`) |
+| `&route=agent` | With `?new-flow`: every visitor takes this route (`shopify`, `contentful`, `agent`, `klaviyo` or `claude`) |
 | `?scene=B3` | Plays one scene on repeat (B1 to B8, L1 to L5), with Maya |
 | `?scene=L4&v=3` | A Part 2 scene with mock visitor 3 (index or id from `assets/mock/visitors.json`; 3 is Maximiliano, the long-name test) |
 | `&hold` | With `?scene`: play once and freeze on the last frame (for review) |

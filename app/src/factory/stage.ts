@@ -20,6 +20,7 @@ interface RouteConfig {
   short: number; // the same in the short form
   line: string; // its floor line
   pill: string; // the end card's pill
+  prompts?: string[]; // route E: what is typed into Claude, in order
 }
 interface FactoryConfig {
   maxSec: number;
@@ -31,9 +32,14 @@ interface FactoryConfig {
 export const FACTORY = factoryJson as unknown as FactoryConfig;
 
 /** How each route is named on the platform slot and in {platform}. */
-const PLATFORM: Record<Route, string> = { shopify: 'Shopify', wordpress: 'WordPress', agent: 'Cloudinary Agent', klaviyo: 'Klaviyo' };
-/** The per-visitor states of routes C and D, cleared for each visitor. */
-const ROUTE_MOVES = ['agent-open', 'agent-read', 'agent-sugg', 'agent-pick', 'agent-placed', 'agent-flying', 'mail-drop', 'mail-cta'];
+const PLATFORM: Record<Route, string> = {
+  shopify: 'Shopify', contentful: 'Contentful', agent: 'Cloudinary Agent', klaviyo: 'Klaviyo', claude: 'Agent Experience',
+};
+/** The per-visitor states of routes C, D and E, cleared for each visitor. */
+const ROUTE_MOVES = [
+  'agent-open', 'agent-read', 'agent-sugg', 'agent-pick', 'agent-placed', 'flying', 'mail-drop', 'mail-cta',
+  'cl-open', 'cl-card', 'cl-dyn', 'cl-done', 'cl-embed', 'cl-placed',
+];
 
 const FULL: Beat[] = ['up', 'figma', 'plugin', 'in', 'person', 'out', 'page', 'end'];
 const SHORT_WITH_FIGMA: Beat[] = ['up', 'figma', 'plugin', 'in', 'person', 'page'];
@@ -48,6 +54,15 @@ const SPARK = `<svg width="34" height="34" viewBox="0 0 24 24" fill="none" strok
 const PUZZLE = `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h4v3a2 2 0 1 0 4 0V3h3v7h-3a2 2 0 1 0 0 4h3v7h-7v-3a2 2 0 1 0-4 0v3H3v-7h3a2 2 0 1 0 0-4H3V3z"/></svg>`;
 /** The Cloudinary mark on a blue tile: the Agent's extension icon, and its logo on the platform slot and end pill. */
 const cldTile = (cls: string) => `<span class="fx-cld-tile ${cls}"><img src="${LOGO}" alt=""></span>`;
+const icon = (d: string) =>
+  `<svg width="84" height="84" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+/** Route E's desktop dock: four generic apps, then Claude. */
+const DOCK_APPS = [
+  ['#5aa9e6', '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'],
+  ['#4c7ee8', '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/>'],
+  ['#3fb27f', '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>'],
+  ['#e3b341', '<path d="M6 4h12v16H6z"/><path d="M9 9h6M9 13h6M9 17h3"/>'],
+];
 
 /** Waits for `p`, but never longer than `seconds`: animations stall while the page is hidden, the show must not. */
 const within = (p: Promise<unknown>, seconds: number) => Promise.race([p, sleep(seconds)]);
@@ -68,13 +83,16 @@ function warm(urls: string[], timeoutSec = 2): Promise<void> {
  * The factory flow (?new-flow): one fixed stage, the visitor's selfie queue on the left, the Cloudinary machine
  * in the middle, the platform on the right. Each visitor runs through the beats in timeline/factory.json:
  * Figma template, the Cloudinary plugin's dynamic export, the factory, personalizing, then one route: a Shopify
- * product page, a WordPress post, the Cloudinary Agent filling a store page, or a Klaviyo abandoned-cart email.
+ * product page, a Contentful entry, the Cloudinary Agent filling a store page, a Klaviyo abandoned-cart email, or
+ * Claude Desktop finding, personalizing and embedding the visitor's image.
  */
 export class FactoryStage {
   readonly el: HTMLElement;
   private q = <T extends HTMLElement = HTMLElement>(sel: string) => this.el.querySelector<T>(sel)!;
   private queueKey = '';
   private route: Route = 'shopify';
+  private prompts: string[] = [];
+  private claudeImgs: string[] = [];
   private cursor: Cursor;
 
   constructor(host: HTMLElement) {
@@ -197,6 +215,42 @@ export class FactoryStage {
           </div>
         </div>
 
+        <div class="fx-desk">
+          <svg class="fx-desk-hills" width="1480" height="420" viewBox="0 0 1480 420" aria-hidden="true">
+            <path d="M0 260 L260 90 L470 230 L700 40 L980 250 L1180 120 L1480 280 L1480 420 L0 420 Z" fill="#26356a"/>
+            <path d="M0 330 L320 210 L620 320 L900 190 L1220 330 L1480 250 L1480 420 L0 420 Z" fill="#1f2c5c"/>
+          </svg>
+          <div class="fx-desk-tip">Claude</div>
+          <div class="fx-desk-dock">
+            ${DOCK_APPS.map(([bg, d]) => `<span class="fx-desk-app" style="background:${bg}">${icon(d)}</span>`).join('')}
+            <span class="fx-desk-app fx-desk-claude">${brandSvg('claude', 96, '#ffffff')}</span>
+          </div>
+        </div>
+
+        <div class="fx-claude">
+          <div class="fx-cl-bar"><span class="fx-cl-lights"><i></i><i></i><i></i></span>${brandSvg('claude', 34)}<span class="fx-cl-app">Claude</span></div>
+          <div class="fx-cl-col">
+            <div class="fx-cl-bubble"></div>
+            <div class="fx-cl-reply">
+              ${brandSvg('claude', 56)}
+              <div class="fx-cl-card"><img class="fx-cl-img" alt="">
+                <span class="fx-cl-tag fx-cl-tag-dyn">dynamic</span>
+                <span class="fx-cl-tag fx-cl-tag-done"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span></span></span>
+              </div>
+            </div>
+          </div>
+          <div class="fx-cl-input"><span class="fx-cl-typed"></span><i class="fx-cl-caret"></i><span class="fx-cl-send"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span></div>
+        </div>
+
+        <div class="fx-blog">
+          <div class="fx-blog-bar">Diario del Lago</div>
+          <div class="fx-blog-body">
+            <div class="fx-blog-title fit" data-min="36" data-lines="2"></div>
+            <div class="fx-blog-img"><img alt=""></div>
+            <div class="fx-blog-bars"><i></i><i></i><i></i></div>
+          </div>
+        </div>
+
         <div class="fx-endpill"><span class="fx-endpill-logo"></span><span class="fx-endpill-text"></span></div>
 
         <div class="fx-floor"><div class="fx-line fit" data-min="48"></div></div>
@@ -262,6 +316,7 @@ export class FactoryStage {
     const platform = PLATFORM[route];
     vars.platform = platform;
     vars.product = p.label;
+    vars.productLower = p.label.toLocaleLowerCase(); // "Maya’s pizza is live on…"
 
     this.el.classList.remove('picks-on', 'dyn-on', 'export-on', 'final-on', 'cta-on', 'is-in', ...ROUTE_MOVES);
     this.q('.fx-dyncard').getAnimations().forEach((a) => a.cancel());
@@ -271,7 +326,7 @@ export class FactoryStage {
     for (const sel of ['.fx-dock-tpl', '.fx-dyn-tpl', '.fx-frame-tpl']) this.q<HTMLImageElement>(sel).src = tpl;
     this.q<HTMLImageElement>('.fx-current-chip img').src = v.urls.selfie;
     this.q('.fx-current-name').textContent = vars.NAME;
-    for (const sel of ['.fx-product', '.fx-final-img', '.fx-page-img img', '.fx-site-slot img', '.fx-agent-best img', '.fx-flyer', '.fx-mail-img'])
+    for (const sel of ['.fx-product', '.fx-final-img', '.fx-page-img img', '.fx-site-slot img', '.fx-agent-best img', '.fx-flyer', '.fx-mail-img', '.fx-blog-img img'])
       this.q<HTMLImageElement>(sel).src = v.urls.label;
 
     this.q('.fx-frame-name').textContent = `${p.label} label`;
@@ -292,12 +347,14 @@ export class FactoryStage {
     this.q('.fx-final-pill span').textContent = v.favorite;
 
     this.q('.fx-dest-logo').innerHTML =
-      route === 'agent' ? cldTile('fx-dest-cld') : brandSvg(route, 170, route === 'shopify' ? undefined : '#ffffff');
+      route === 'agent' ? cldTile('fx-dest-cld')
+      : route === 'claude' ? `<span class="fx-dest-pair">${brandSvg('claude', 140)}${brandSvg('openai', 140, '#ffffff')}</span>` // agents: Claude and ChatGPT
+      : brandSvg(route, 170, route === 'shopify' ? undefined : '#ffffff');
     this.q('.fx-dest-name').textContent = platform;
     this.q('.fx-endpill-logo').innerHTML = route === 'agent' ? cldTile('fx-endpill-cld') : brandSvg(route, 52);
     this.q('.fx-endpill-text').textContent = FACTORY.routes[route].pill;
 
-    if (route === 'shopify' || route === 'wordpress') {
+    if (route === 'shopify' || route === 'contentful') {
       this.q('.fx-page-logo').innerHTML = brandSvg(route, 56);
       this.q('.fx-page-name').textContent = platform;
       this.q('.fx-page-title').textContent = route === 'shopify' ? vars.productName : vars.headline;
@@ -318,6 +375,13 @@ export class FactoryStage {
     this.q('.fx-mail-name').textContent = vars.productName;
     this.q('.fx-mail-price').textContent = `€ ${vars.price}`;
     this.q('.fx-mail-cta').textContent = vars.emailCta;
+    // Route E: Claude Desktop, one image card that each prompt swaps, then a generic blog it embeds into.
+    this.prompts = (FACTORY.routes.claude.prompts ?? []).map((t) => fill(t, vars));
+    this.claudeImgs = [v.urls.selfie, templateUrl(v), v.urls.label];
+    this.q('.fx-cl-bubble').textContent = '';
+    this.q('.fx-cl-typed').textContent = '';
+    this.q('.fx-cl-tag-done span').textContent = v.favorite;
+    this.q('.fx-blog-title').textContent = vars.headline;
     return vars;
   }
 
@@ -337,20 +401,16 @@ export class FactoryStage {
     const on = (c: string) => this.el.classList.add(c);
     switch (beat) {
       case 'figma':
-        await sleep(0.7);
+        await sleep(0.4);
         on('picks-on');
         break;
+      // Shown in every run, so kept short: dynamic on, the 4 variables in one quick cascade (CSS), export.
       case 'plugin': {
-        await sleep(0.6);
+        await sleep(0.3);
         on('dyn-on');
-        const rows = Array.from(this.el.querySelectorAll('.fx-varrow, .fx-layer'));
-        const half = rows.length / 2;
-        for (let i = 0; i < half; i++) {
-          await sleep(0.35);
-          rows[i]?.classList.add('is-on'); // layer i
-          rows[i + half]?.classList.add('is-on'); // plugin row i
-        }
-        await sleep(Math.max(0.3, seconds - 1.1 - half * 0.35 - 0.8));
+        await sleep(0.3);
+        this.el.querySelectorAll('.fx-varrow, .fx-layer').forEach((r) => r.classList.add('is-on'));
+        await sleep(Math.max(0.5, seconds - 1.9));
         on('export-on');
         break;
       }
@@ -383,6 +443,7 @@ export class FactoryStage {
       case 'page':
         if (this.route === 'agent') await this.agent(short);
         else if (this.route === 'klaviyo') await this.mail(short);
+        else if (this.route === 'claude') await this.claude(short);
         else {
           await sleep(Math.min(2.4, seconds * 0.55));
           on('cta-on');
@@ -420,7 +481,7 @@ export class FactoryStage {
     on('agent-placed');
   }
 
-  /** Flies a copy of the product from the Agent's card into the page's slot. */
+  /** Flies a copy of the product from `from` (the Agent's card, Claude's card) into `to` (the page's slot). */
   private async drop(from: HTMLElement, to: HTMLElement, seconds: number) {
     const fly = this.q<HTMLImageElement>('.fx-flyer');
     const a = localBox(from, this.el);
@@ -429,7 +490,7 @@ export class FactoryStage {
     fly.style.top = `${a.y}px`;
     fly.style.width = `${a.w}px`;
     fly.style.height = `${a.h}px`;
-    this.el.classList.add('agent-flying');
+    this.el.classList.add('flying');
     const k = b.h / (a.h || 1);
     const anim = fly.animate(
       [
@@ -440,7 +501,7 @@ export class FactoryStage {
       { duration: ms(seconds), easing: EASE, fill: 'forwards' },
     );
     await within(anim.finished.catch(() => {}), seconds + 0.1);
-    this.el.classList.remove('agent-flying');
+    this.el.classList.remove('flying');
     anim.cancel();
   }
 
@@ -450,5 +511,74 @@ export class FactoryStage {
     this.el.classList.add('mail-drop');
     await sleep(short ? 0.9 : 1.2);
     this.el.classList.add('mail-cta');
+  }
+
+  /**
+   * Route E: zoom on the desktop, the cursor clicks Claude in the dock, the window opens out of the icon. Four prompts,
+   * one card: the selfie, the dynamic template, the personalized image; then the window narrows, a blog slides in and
+   * the image flies into it. Full form ends at about 8.8 s of 10.5. Short form: the window is already open on the
+   * selfie, prompts 2 to 4 only, ending at about 2.5 s of 4.
+   */
+  private async claude(short: boolean) {
+    const on = (c: string) => this.el.classList.add(c);
+    const [p1, p2, p3, p4] = this.prompts;
+    const [selfie, tpl, label] = this.claudeImgs;
+    const pace = short ? { type: 0.25, gap: 0.2 } : { type: 0.8, gap: 0.9 }; // full: about 1.8 s a prompt, time to read it
+    const ask = async (text: string, show?: string, tag?: string) => {
+      await this.typeInto(text, pace.type);
+      this.send(text);
+      await sleep(0.1);
+      if (show) this.showCard(show, tag);
+      await sleep(pace.gap);
+    };
+    if (short) {
+      this.send(p1);
+      this.showCard(selfie);
+      on('cl-open');
+      await sleep(0.3);
+    } else {
+      await sleep(0.4);
+      await within(this.cursor.moveTo(this.q('.fx-desk-claude'), 0.5), 0.6);
+      await Promise.all([within(this.cursor.click(), 0.7), sleep(0.15).then(() => on('cl-open'))]);
+      this.cursor.hide();
+      await sleep(0.2);
+      await ask(p1, selfie);
+    }
+    await ask(p2, tpl, 'cl-dyn');
+    await ask(p3, label, 'cl-done');
+    await this.typeInto(p4, pace.type);
+    this.send(p4);
+    on('cl-embed');
+    await sleep(0.6); // the window narrows and the blog slides in (0.5 s); measure only once both have landed
+    await this.drop(this.q('.fx-cl-img'), this.q('.fx-blog-img img'), short ? 0.45 : 0.5);
+    on('cl-placed');
+  }
+
+  /** Types `text` into Claude's input box over `seconds`, a few characters per tick. */
+  private async typeInto(text: string, seconds: number) {
+    const el = this.q('.fx-cl-typed');
+    const ticks = Math.min(text.length, 14);
+    for (let i = 1; i <= ticks; i++) {
+      el.textContent = text.slice(0, Math.round((text.length * i) / ticks));
+      await sleep(seconds / ticks);
+    }
+  }
+
+  /** The typed prompt becomes the (latest) user bubble; the input clears. */
+  private send(text: string) {
+    this.q('.fx-cl-typed').textContent = '';
+    const bubble = this.q('.fx-cl-bubble');
+    bubble.textContent = text;
+    bubble.animate([{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: ms(0.25), easing: 'ease-out' });
+  }
+
+  /** Claude's answer: the card shows `src` (replacing the last one), with an optional tag class (cl-dyn, cl-done). */
+  private showCard(src: string, tag?: string) {
+    this.el.classList.remove('cl-dyn', 'cl-done');
+    this.el.classList.add('cl-card');
+    if (tag) this.el.classList.add(tag);
+    const img = this.q<HTMLImageElement>('.fx-cl-img');
+    img.src = src;
+    img.animate([{ opacity: 0, transform: 'scale(.85)' }, { opacity: 1, transform: 'none' }], { duration: ms(0.3), easing: 'cubic-bezier(.34,1.56,.64,1)' });
   }
 }

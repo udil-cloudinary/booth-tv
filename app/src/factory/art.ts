@@ -46,11 +46,14 @@ export function trials(v: Visitor, n: number): { src: string; label: string }[] 
     .map(([slug, label]) => ({ src: `templates/product-base-${type}-${slug}.png`, label }));
 }
 
-/** The routes the platform beat can take: a store page, a blog post, the Cloudinary Agent beside a store page, or a Klaviyo email. */
-export const ROUTES = ['shopify', 'wordpress', 'agent', 'klaviyo'] as const;
+/**
+ * The routes the platform beat can take: a Shopify product page, a Contentful entry, the Cloudinary Agent beside a
+ * store page, a Klaviyo email, or Claude Desktop using Cloudinary.
+ */
+export const ROUTES = ['shopify', 'contentful', 'agent', 'klaviyo', 'claude'] as const;
 export type Route = (typeof ROUTES)[number];
 
-/** One route per visitor, picked at random but stable, so a replay lands on the same one; about a quarter each. ?route= forces one. */
+/** One route per visitor, picked at random but stable, so a replay lands on the same one; about a fifth each. ?route= forces one. */
 export function routeOf(v: Visitor): Route {
   if (config.route && (ROUTES as readonly string[]).includes(config.route)) return config.route as Route;
   let h = 0;
