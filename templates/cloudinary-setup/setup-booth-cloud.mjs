@@ -55,16 +55,18 @@ async function uploadFonts() {
 
 async function upsertTransformations() {
   for (const [name, str] of Object.entries(RECIPES)) {
-    log('named transformation', name, '=', str);
+    // The API takes the bare name; URLs add the t_ prefix (created as "tv_hero", used as t_tv_hero).
+    const id = name.replace(/^t_/, '');
+    log('named transformation', id, '=', str);
     if (DRY) continue;
     try {
-      await cloudinary.api.create_transformation(name, str);
-      console.log('  created', name);
+      await cloudinary.api.create_transformation(id, str);
+      console.log('  created', id);
     } catch (e) {
       const msg = e?.error?.message || e?.message || String(e);
       if (!/already exists/i.test(msg)) throw e;
-      await cloudinary.api.update_transformation(name, { unsafe_update: str });
-      console.log('  updated', name);
+      await cloudinary.api.update_transformation(id, { unsafe_update: str });
+      console.log('  updated', id);
     }
   }
 }

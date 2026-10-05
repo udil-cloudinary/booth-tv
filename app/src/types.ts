@@ -1,4 +1,4 @@
-// One visitor, exactly as GET /api/tv/visitors returns it (spec section 6) and as assets/mock/*.json holds it.
+// One visitor (spec section 6), as src/data/visitors.ts builds it and as assets/mock/*.json holds it.
 export interface Visitor {
   id: string;
   created_at: string;
@@ -80,7 +80,9 @@ export interface LoopConfig {
   fetchAt: string;
   batch: number;
   catchUp: { enterAbove: number; exitBelow: number; batch: number };
-  cursorLookbackMin: number;
+  pollSec: number; // fetch new visitors this often, all through the loop
+  windowHours: number; // visitors from the last N hours are in the loop
+  replayLast: number; // when nobody new is waiting, Part 2 replays the most recent N, longest-unseen first
   preloadTimeoutSec: number;
   fetchTimeoutSec: number;
   reloadEveryMin: number;

@@ -1,7 +1,7 @@
 import maya from '../../../assets/mock/maya.json';
 import type { Visitor, VisitorsResponse } from '../types';
 
-/** Where the TV gets new visitors. Same shape as GET /api/tv/visitors (spec section 6). */
+/** Where the TV gets new visitors (spec section 6 shape). */
 export interface DataProvider {
   readonly name: string;
   visitors(since: string, limit: number): Promise<VisitorsResponse>;

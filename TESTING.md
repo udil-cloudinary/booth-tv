@@ -14,29 +14,28 @@ For each of B1 to B8 and L1 to L5, open `?scene=<ID>` (Part 2 also with `&v=3`, 
 
 ## Loop rules
 
-- [ ] Full loop, `?mock=1`: Part 1 (40 s) then Luca and Giulia (26 s each), next cycle Noa and Maximiliano, then Maya only.
+- [ ] Full loop, `?mock=1&forget`: Part 1 (40 s) then Luca and Giulia (26 s each). Noa and Maximiliano go first when they arrive; every other slot replays the most recent visitors, longest-unseen first. Maya never appears while anyone uploaded in the last 24 h.
 - [ ] `npm run build` fails if Part 1 in `timeline/loop.json` sums to more than 40 s, or Part 2 to more than 26 s (try it, then undo).
 - [ ] The fetch happens at B7: the HUD "fetch" time updates at the Publish card.
-- [ ] Nobody new (`?novisitors`): Part 2 always runs with Maya.
+- [ ] Nobody in the last 24 h (`?novisitors`): Part 2 always runs with Maya.
 - [ ] Rush (`?rush=10`): the cycle after the rush runs catch-up (HUD: "catch-up ON"), 5 visitors in the short form L4, L5, oldest first. It stays on until fewer than 3 are waiting.
 - [ ] Broken image (`?broken`): "Broken" is skipped within 4 s (HUD: skipped 1), retried the next cycle, then dropped (skipped 2). The loop never waits on screen.
 - [ ] Latest per email wins: two uploads with the same email show once, the newer one.
-- [ ] Reload safety: after a reload, visitors from more than 30 minutes ago are not shown again.
+- [ ] Reload safety: after a reload, visitors already shown are replays, not new (HUD "new" stays empty); `?forget` makes them new again.
 
-## Backend
+## Real data (signed search URL)
 
-- [ ] `cd api && npm test` passes.
-- [ ] `npm run mock` in `api/`, then the TV with `?mock=0`: same loop as `?mock=1`, over HTTP (HUD: provider=http).
-- [ ] `MOCK_RUSH=10 npm run mock`: catch-up mode over HTTP.
-- [ ] First run on the booth cloud: the checklist in `api/README.md`.
-- [ ] A test upload from the wizard shows on the TV within one cycle (about 1.5 minutes), and a retake with the same email replaces it.
+- [ ] `node app/scripts/sign-search-url.mjs` test-fetch: HTTP 200, and the newest visitor shows its metadata fields.
+- [ ] First run on the booth cloud: `npm run sample` in `templates/cloudinary-setup` and the checklist in its README.
+- [ ] `?mock=0&hud`: HUD shows provider=search, "fetch" updates every 10 s.
+- [ ] A test upload from the wizard is in the HUD "new" line within about 20 s and on screen at the next Part 2, and a retake with the same email replaces it.
 - [ ] `tv_status=hidden` set in the Cloudinary console keeps that visitor off the next cycle.
 
 ## Offline and recovery
 
-- [ ] With the real backend (`?mock=0`), pull the network cable mid-Part 1: that cycle's Part 2 runs with Maya (HUD: fetch errors +1), the show never stalls or goes blank.
+- [ ] With real data (`?mock=0`), pull the network cable mid-Part 1: that cycle's Part 2 runs with Maya (HUD: fetch errors +1), the show never stalls or goes blank.
 - [ ] Plug it back in: the next cycle fetches again and shows new visitors.
-- [ ] Backend down (wrong `VITE_API_BASE`): same fallback to Maya, errors logged.
+- [ ] Bad search URL (wrong `VITE_SEARCH_URL`, e.g. one character changed): same fallback to Maya, errors logged (HTTP 401).
 
 ## Watchdog and soak
 

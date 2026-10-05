@@ -36,8 +36,7 @@ function boothAssets(): Plugin {
 export default defineConfig({
   base: './',
   plugins: [boothAssets()],
-  // In dev, /api goes to the local backend (products/booth-tv/api, `npm run mock` or `npm run dev`).
-  server: { host: true, proxy: { '/api': process.env.API_PROXY || 'http://localhost:8787' } },
+  server: { host: true },
   preview: { host: true },
   build: { target: 'es2020', assetsDir: 'build', assetsInlineLimit: 0 },
 });
