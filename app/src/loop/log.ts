@@ -3,7 +3,7 @@ import { config } from '../config';
 // "N people saw themselves on the TV" (spec section 10): one log endpoint, plus counters for the HUD.
 export interface LogEvent {
   t: string;
-  type: 'boot' | 'cycle' | 'shown' | 'skipped' | 'fetch' | 'fetch-error' | 'error' | 'reload' | 'warn';
+  type: 'boot' | 'cycle' | 'shown' | 'skipped' | 'fetch' | 'fetch-error' | 'error' | 'reload' | 'warn' | 'search-skipped';
   [k: string]: unknown;
 }
 

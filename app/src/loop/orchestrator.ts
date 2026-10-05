@@ -1,52 +1,36 @@
-import loopJson from '../../timeline/loop.json';
 import { config } from '../config';
 import { MAYA, type DataProvider } from '../data/provider';
 import { visitorVars } from '../engine/fill';
 import { SCRIPTS } from '../scenes';
 import type { Stage } from '../stage';
-import type { LoopConfig, LoopEntry, Part, Visitor } from '../types';
+import type { LoopEntry, Part, Visitor } from '../types';
+import { LOOP, Lineup } from './lineup';
 import { counters, log } from './log';
-import { preload, release } from './preload';
+import { preload } from './preload';
+import { status } from './status';
+import { maybeReload } from './watchdog';
 
-export const LOOP = loopJson as unknown as LoopConfig;
-
-/** What the debug HUD shows. */
-export const status = {
-  part: '' as Part | '',
-  scene: '',
-  who: '',
-  cursor: '',
-  queue: [] as { name: string; at: string; fails: number }[],
-  catchUp: false,
-  lastFetch: '',
-  lastFetchResult: '',
-  startedAt: Date.now(),
-  reloadAt: 0,
-};
+export { LOOP } from './lineup';
+export { status } from './status';
 
 /**
- * The loop (spec section 2): Part 1 with Maya, fetch at the Publish moment (B9), then Part 2 for
- * up to 2 new visitors oldest first (5 in short form while catching up), or Maya when nobody is new.
- * Any failure (network, images, a scene) falls back to Maya; the loop itself never stops.
+ * The classic loop: Part 1 with Maya, then Part 2 for up to 2 visitors (5 in short form while catching up),
+ * picked by the shared Lineup (new visitors first, then replays of the most recent 15). Maya only when nobody
+ * uploaded in the window. Any failure falls back to Maya; the loop never stops.
  */
 export class Loop {
-  private cursor: string; // created_at of the last visitor shown
-  private pending: Visitor[] = []; // fetched, not yet shown, oldest first
-  private fails = new Map<string, number>();
-  private dropped = new Set<string>();
-  private catchUp = false;
-  private fetching: Promise<void> | null = null;
+  private lineup: Lineup;
   private readonly reloadAfterMs: number;
 
-  constructor(private stage: Stage, private provider: DataProvider) {
-    this.cursor = new Date(Date.now() - LOOP.cursorLookbackMin * 60_000).toISOString();
+  constructor(private stage: Stage, provider: DataProvider) {
+    this.lineup = new Lineup(provider);
     this.reloadAfterMs = (config.reloadMin ?? LOOP.reloadEveryMin) * 60_000;
     status.reloadAt = status.startedAt + this.reloadAfterMs;
-    status.cursor = this.cursor;
     stage.onWarn = (m) => log('warn', { msg: m });
   }
 
   async run(): Promise<never> {
+    this.lineup.startPolling();
     for (;;) {
       try {
         await this.cycle();
@@ -60,9 +44,9 @@ export class Loop {
 
   private async cycle() {
     counters.cycles++;
-    log('cycle', { n: counters.cycles, waiting: this.pending.length });
-    // Warm up whoever is already known while Part 1 plays (about 50 s).
-    this.pending.slice(0, 2).forEach((v) => void preload(v, LOOP.preloadTimeoutSec));
+    log('cycle', { n: counters.cycles, waiting: this.lineup.waiting });
+    // Warm up whoever is next while Part 1 plays (about 50 s).
+    this.lineup.preloadNext();
 
     const op = LOOP.opener;
     if (op && SCRIPTS[op.scene] && (counters.cycles - 1) % Math.max(1, op.every) === 0) {
@@ -71,14 +55,15 @@ export class Loop {
       await this.stage.play(SCRIPTS[op.scene], op.dur, visitorVars(MAYA), { part: 'part1', index: 0, count: LOOP.part1.length, who: MAYA.first_name });
     }
     await this.playPart('part1', LOOP.part1, MAYA);
-    if (this.fetching) await this.fetching;
+    await this.lineup.settle();
 
-    const played = await this.playBatch();
+    const short = LOOP.part2.filter((e) => LOOP.part2Short.includes(e.scene));
+    const played = await this.lineup.playBatch((v, o) => this.playPart('part2', o.short ? short : LOOP.part2, v));
     if (played === 0) {
       counters.maya++;
       await this.playPart('part2', LOOP.part2, MAYA);
     }
-    await this.maybeReload();
+    await maybeReload(this.reloadAfterMs);
   }
 
   private async playPart(part: Part, entries: LoopEntry[], who: Visitor) {
@@ -93,122 +78,9 @@ export class Loop {
       status.part = part;
       status.scene = scene;
       status.who = vars.name;
-      if (part === 'part1' && scene === LOOP.fetchAt) this.fetching = this.fetch();
+      if (part === 'part1' && scene === LOOP.fetchAt) this.lineup.fetchNow();
       await this.stage.play(script, dur, vars, { part, index: i, count: entries.length, who: vars.name });
     }
-  }
-
-  /** Plays Part 2 for the next visitors in line. Returns how many were actually shown. */
-  private async playBatch(): Promise<number> {
-    const waiting = this.pending.length;
-    if (!this.catchUp && waiting > LOOP.catchUp.enterAbove) this.catchUp = true;
-    else if (this.catchUp && waiting < LOOP.catchUp.exitBelow) this.catchUp = false;
-    status.catchUp = this.catchUp;
-
-    const max = this.catchUp ? LOOP.catchUp.batch : LOOP.batch;
-    const entries = this.catchUp
-      ? LOOP.part2.filter((e) => LOOP.part2Short.includes(e.scene))
-      : LOOP.part2;
-
-    let shown = 0;
-    const skippedNow = new Set<string>();
-    for (;;) {
-      const line = this.pending.filter((p) => !skippedNow.has(p.id));
-      const v = line[0];
-      if (!v || shown >= max) break;
-      // Start the one after this one now, so it is ready when its turn comes.
-      if (line[1]) void preload(line[1], LOOP.preloadTimeoutSec);
-      const ok = await preload(v, LOOP.preloadTimeoutSec);
-      this.pending = this.pending.filter((p) => p !== v);
-      if (!ok) {
-        skippedNow.add(v.id);
-        this.skip(v);
-        continue;
-      }
-      await this.playPart('part2', entries, v);
-      shown++;
-      counters.shown++;
-      log('shown', { id: v.id, name: v.first_name, form: this.catchUp ? 'short' : 'full' });
-      if (v.created_at > this.cursor) this.cursor = v.created_at;
-      status.cursor = this.cursor;
-      release(v.id);
-      this.updateQueue();
-    }
-    return shown;
-  }
-
-  /** A visitor whose images did not load in time: retried once next cycle, then dropped. */
-  private skip(v: Visitor) {
-    const n = (this.fails.get(v.id) ?? 0) + 1;
-    this.fails.set(v.id, n);
-    counters.skipped++;
-    log('skipped', { id: v.id, name: v.first_name, attempt: n });
-    if (n >= 2) {
-      this.dropped.add(v.id);
-      if (v.created_at > this.cursor) this.cursor = v.created_at;
-    } else {
-      this.pending.push(v); // back of the line
-    }
-    this.updateQueue();
-  }
-
-  private async fetch() {
-    status.lastFetch = new Date().toLocaleTimeString();
-    counters.fetches++;
-    try {
-      const res = await this.provider.visitors(this.cursor, 10);
-      this.merge(res.visitors);
-      status.lastFetchResult = `${res.visitors.length} new, ${this.pending.length} waiting`;
-      log('fetch', { since: this.cursor, got: res.visitors.length, waiting: this.pending.length });
-      this.pending.slice(0, 2).forEach((v) => void preload(v, LOOP.preloadTimeoutSec));
-    } catch (e) {
-      counters.fetchErrors++;
-      status.lastFetchResult = `failed: ${String(e).slice(0, 60)}`;
-      log('fetch-error', { msg: String(e) });
-    } finally {
-      this.fetching = null;
-    }
-  }
-
-  /** New arrivals join the line oldest first; a newer upload from the same email replaces the older one. */
-  private merge(incoming: Visitor[]) {
-    for (const v of incoming) {
-      if (this.dropped.has(v.id) || v.created_at <= this.cursor) continue;
-      const i = this.pending.findIndex((p) => p.id === v.id || (!!v.email && p.email === v.email));
-      if (i >= 0) {
-        if (v.created_at >= this.pending[i].created_at) this.pending[i] = v;
-      } else {
-        this.pending.push(v);
-      }
-    }
-    this.pending.sort((a, b) => a.created_at.localeCompare(b.created_at));
-    this.updateQueue();
-  }
-
-  private updateQueue() {
-    status.queue = this.pending.map((v) => ({
-      name: v.first_name,
-      at: new Date(v.created_at).toLocaleTimeString(),
-      fails: this.fails.get(v.id) ?? 0,
-    }));
-  }
-
-  /** Watchdog (spec section 10): reload every 2 hours, only at the end of a Part 2, and only if the page is reachable. */
-  private async maybeReload() {
-    if (Date.now() - status.startedAt < this.reloadAfterMs) return;
-    try {
-      const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), 3000);
-      const res = await fetch(location.href, { cache: 'no-store', signal: ctrl.signal });
-      clearTimeout(timer);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    } catch (e) {
-      log('warn', { msg: `reload postponed, page not reachable: ${e}` });
-      return;
-    }
-    log('reload', { uptimeMin: Math.round((Date.now() - status.startedAt) / 60_000) });
-    location.reload();
-    await new Promise(() => {}); // the page is going away; do not start another cycle
   }
 }
 

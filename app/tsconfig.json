@@ -10,6 +10,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "types": ["vite/client", "node"],
+    "allowJs": true,
     "noEmit": true
   },
   "include": ["src", "timeline", "vite.config.ts"]

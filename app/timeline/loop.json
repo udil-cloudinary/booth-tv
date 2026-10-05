@@ -67,7 +67,9 @@
     "exitBelow": 3,
     "batch": 5
   },
-  "cursorLookbackMin": 30,
+  "pollSec": 10,
+  "windowHours": 24,
+  "replayLast": 15,
   "preloadTimeoutSec": 4,
   "fetchTimeoutSec": 5,
   "reloadEveryMin": 120,

@@ -1,6 +1,6 @@
 import { config } from '../config';
 import { counters, recent } from '../loop/log';
-import { status } from '../loop/orchestrator';
+import { status } from '../loop/status';
 
 /** Hidden debug HUD: press H (or open with ?hud). Outside the stage, so it never ends up on the TV by accident. */
 export function installHud(providerName: string) {
@@ -19,10 +19,11 @@ export function installHud(providerName: string) {
     el.textContent = [
       `BOOTH TV  provider=${providerName}  speed=${config.speed}${config.scene ? `  repeat=${config.scene}` : ''}`,
       `scene     ${status.part} ${status.scene}  (${status.who})`,
-      `cursor    ${status.cursor}`,
+      `window    ${status.window}`,
       `catch-up  ${status.catchUp ? 'ON (short form)' : 'off'}`,
       `fetch     ${status.lastFetch || '-'}  ${status.lastFetchResult}`,
-      `queue     ${status.queue.length ? status.queue.map((q) => `${q.name} ${q.at}${q.fails ? ` (failed ${q.fails})` : ''}`).join(', ') : '(empty, Maya)'}`,
+      `new       ${status.queue.length ? status.queue.map((q) => `${q.name} ${q.at}${q.fails ? ` (failed ${q.fails})` : ''}`).join(', ') : '(none)'}`,
+      `replay    ${status.replay.length ? status.replay.join(', ') : status.queue.length ? '(none)' : '(none, Maya)'}`,
       `counts    cycles ${counters.cycles}  shown ${counters.shown}  maya ${counters.maya}  skipped ${counters.skipped}  errors ${counters.errors}  fetch errors ${counters.fetchErrors}`,
       `uptime    ${mins(now - status.startedAt)}   reload in ${mins(Math.max(0, status.reloadAt - now))} (at the end of a Part 2)`,
       `online    ${navigator.onLine}`,

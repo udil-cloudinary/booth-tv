@@ -9,12 +9,15 @@ function num(name: string, fallback: number): number {
 }
 
 const mockParam = q.get('mock');
+const searchUrl: string = env.VITE_SEARCH_URL || '';
 
 export const config = {
-  provider: (mockParam === null ? (env.VITE_PROVIDER || 'mock') : mockParam === '0' ? 'http' : 'mock') as 'mock' | 'http',
-  apiBase: (env.VITE_API_BASE || '').replace(/\/$/, ''),
-  apiToken: env.VITE_API_TOKEN || '',
+  // mock (assets/mock) or search (the signed search URL); ?mock=1 / ?mock=0 override VITE_PROVIDER.
+  provider: (mockParam === null ? (env.VITE_PROVIDER || 'mock') : mockParam === '0' ? 'search' : 'mock') as 'mock' | 'search',
+  searchUrl,
   logUrl: env.VITE_LOG_URL || '',
+
+  flow: (q.has('new-flow') ? 'factory' : 'classic') as 'classic' | 'factory', // ?new-flow: the factory flow (src/factory)
 
   // Dev switches
   scene: q.get('scene')?.toUpperCase() || null, // ?scene=B4 plays one scene on repeat
@@ -23,6 +26,7 @@ export const config = {
   speed: num('speed', 1), // ?speed=0.5 slows everything down
   hud: q.has('hud'), // ?hud opens the debug HUD at start (else press H)
   reloadMin: q.has('reloadMin') ? num('reloadMin', 120) : null, // override the 2-hour watchdog
+  forget: q.has('forget'), // ?forget: clear the list of visitors already shown, so everyone in the window counts as new
 
   // Mock provider switches
   rush: num('rush', 0), // ?rush=10: 10 extra mock visitors arrive about 20 s after load
