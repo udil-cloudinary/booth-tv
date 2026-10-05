@@ -56,9 +56,9 @@ The text boxes are no wider than the narrowest product in each line (name 264, n
 Variables passed in the URL: `$sid` (selfie public ID, `/` written as `:`), `$pl` (product layer public ID, `booth:templates:magnet-layer-{product_type}-{variant}`), `$nm` (`first_name`, already in caps), `$fv` (the `favorite` metadata, as typed).
 
 ```
-l_$sid/c_thumb,g_face,w_669,h_850,z_0.6/r_87,bo_12px_solid_white/fl_layer_apply,g_north_west,x_126,y_276/
+l_$sid/f_png/c_thumb,g_face,w_669,h_850,z_0.6/r_87,bo_12px_solid_white/fl_layer_apply,g_north_west,x_126,y_276/
 l_$pl/fl_layer_apply,g_north_west,x_0,y_0/
-l_$sid/c_thumb,g_face,w_113,h_113,z_0.9/r_max,bo_5px_solid_white/a_4/fl_layer_apply,g_center,x_321,y_331/
+l_$sid/f_png/c_thumb,g_face,w_113,h_113,z_0.9/r_max,bo_5px_solid_white/a_4/fl_layer_apply,g_center,x_321,y_331/
 l_text:booth:fonts:PlayfairDisplay-ExtraBold.ttf_43_letter_spacing_2:$(nm),co_rgb:3B1F12/c_limit,w_264/a_4/fl_layer_apply,g_center,x_314,y_430/
 l_text:booth:fonts:PlayfairDisplay-MediumItalic.ttf_30:$(fv),co_rgb:9A3A22/c_limit,w_247/a_4/fl_layer_apply,g_center,x_311,y_474
 ```
