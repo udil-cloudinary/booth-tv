@@ -1,5 +1,6 @@
 // Fails the build if the timeline breaks the spec: Part 1 over 40 s, Part 2 over 26 s, a scene without a script,
-// or a step that starts after its scene has ended. Run by `npm run build` and `npm run check`.
+// a step that starts after its scene has ended, or a factory run (?new-flow) over its maxSec on any route.
+// Run by `npm run build` and `npm run check`.
 import { readFileSync, readdirSync } from 'node:fs';
 
 const dir = new URL('../timeline/', import.meta.url);
@@ -32,8 +33,19 @@ for (const { scene, dur } of [...loop.part1, ...loop.part2]) {
   if (/[\u2013\u2014]/.test(JSON.stringify(s))) errors.push(`${scene}: contains an en or em dash`);
 }
 
+// The factory flow: every route's full run (all beats plus that route's page beat) fits maxSec.
+const fx = JSON.parse(readFileSync(new URL('factory.json', dir)));
+const fxBase = Object.values(fx.beats).reduce((t, d) => t + d, 0);
+const fxRuns = Object.entries(fx.routes).map(([r, c]) => {
+  const total = fxBase + c.page;
+  if (total > fx.maxSec) errors.push(`factory route ${r}: ${total} s per visitor, maxSec is ${fx.maxSec} s`);
+  for (const k of ['page', 'short', 'line', 'pill']) if (c[k] === undefined) errors.push(`factory route ${r}: no ${k}`);
+  return `${r} ${total} s`;
+});
+
 if (errors.length) {
   console.error('Timeline check failed:\n  ' + errors.join('\n  '));
   process.exit(1);
 }
 console.log(`Timeline OK: Part 1 ${part1} s (max ${max}), Part 2 ${part2} s (max ${max2}), short form ${loop.part2Short.join(' ')}`);
+console.log(`Factory OK (max ${fx.maxSec} s): ${fxRuns.join(', ')}`);

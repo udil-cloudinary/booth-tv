@@ -1,7 +1,8 @@
 {
-  "_note": "The factory flow (?new-flow): beat durations in seconds and the one line on the floor per beat. Full run about 25 s (inside part2MaxSec). Short form while catching up: up, person, page. Placeholders: {name} {favorite} {product} {platform}; <em> is yellow.",
-  "beats": { "up": 2, "figma": 3, "plugin": 4, "in": 2.5, "person": 4.5, "out": 2.5, "page": 4.5, "end": 2 },
-  "short": { "up": 1.5, "person": 2.5, "page": 4 },
+  "_note": "The factory flow (?new-flow): beat durations in seconds and the one line on the floor per beat. The platform beat (page) is one route per visitor, picked at random from the pool below; each route has its own length, short-form length, floor line and end-card pill. Full run 22.5 to 28.5 s (the Figma and plugin beats are in every run, so they are kept short), checked against maxSec by the build. Short form while catching up: up, person, page. Placeholders: {name} {favorite} {product} {productLower} {platform}; <em> is yellow.",
+  "maxSec": 29,
+  "beats": { "up": 2, "figma": 2, "plugin": 2.5, "in": 2.5, "person": 4.5, "out": 2.5, "end": 2 },
+  "short": { "up": 1.5, "person": 2.5 },
   "lines": {
     "up": "{name}, <em>you’re up!</em>",
     "figma": "A <em>Figma</em> design for {name}",
@@ -9,7 +10,16 @@
     "in": "Design <em>+</em> selfie, in",
     "person": "Personalizing… <em>{favorite}!</em>",
     "out": "Made for <em>{name}</em>",
-    "page": "{name} is live on <em>{platform}</em>",
     "end": "{name}, <em>come get your swag!</em>"
+  },
+  "routes": {
+    "shopify": { "page": 4.5, "short": 4, "line": "{name}’s {productLower} is live on <em>Shopify</em>", "pill": "Live on Shopify" },
+    "contentful": { "page": 4.5, "short": 4, "line": "{name}’s {productLower} is live on <em>Contentful</em>", "pill": "Live on Contentful" },
+    "agent": { "page": 6.5, "short": 4, "line": "The <em>Cloudinary Agent</em> fills the page", "pill": "Cloudinary Agent" },
+    "klaviyo": { "page": 4.5, "short": 4, "line": "{name}’s email, sent with <em>Klaviyo</em>", "pill": "Sent with Klaviyo" },
+    "claude": {
+      "page": 10.5, "short": 4, "line": "<em>Claude</em> + Cloudinary, on the desktop", "pill": "Agent Experience",
+      "prompts": ["Find me the photo of {name}", "Search for a dynamic template for {favorite} {product}", "Use Cloudinary to personalize the template", "Embed in my website"]
+    }
   }
 }

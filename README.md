@@ -18,7 +18,8 @@ Open it in Chrome at any window size; the 1920 x 1080 stage letterboxes to fit.
 
 | Param | What it does |
 |---|---|
-| `?new-flow` | The factory flow (`src/factory`): the opener, then each visitor through Figma, the Cloudinary plugin's dynamic export, the factory (personalizing) and Shopify or WordPress. Same lineup, polling and switches (`?mock`, `?speed`, `?hud`, `?forget`) |
+| `?new-flow` | The factory flow (`src/factory`): the opener, then each visitor through Figma, the Cloudinary plugin's dynamic export, the factory (personalizing) and one route, picked at random per visitor: a Shopify product page, a Contentful entry, the Cloudinary Agent filling a store page, a Klaviyo abandoned-cart email, or the Agent Experience: Claude Desktop finding, personalizing and embedding the visitor's image. Same lineup, polling and switches (`?mock`, `?speed`, `?hud`, `?forget`) |
+| `&route=agent` | With `?new-flow`: every visitor takes this route (`shopify`, `contentful`, `agent`, `klaviyo` or `claude`) |
 | `?scene=B3` | Plays one scene on repeat (B1 to B8, L1 to L5), with Maya |
 | `?scene=L4&v=3` | A Part 2 scene with mock visitor 3 (index or id from `assets/mock/visitors.json`; 3 is Maximiliano, the long-name test) |
 | `&hold` | With `?scene`: play once and freeze on the last frame (for review) |
@@ -98,7 +99,7 @@ app/
   src/loop/lineup.ts        who Part 2 shows (new first, replays, catch-up, polling), shared by both flows
   src/loop/orchestrator.ts  the classic loop (Part 1 + Part 2 scenes)
   src/factory/              the factory flow (?new-flow): stage, loop, product variants, brand marks
-  timeline/factory.json     factory beat durations and the floor line per beat
+  timeline/factory.json     factory beat durations, the floor line per beat, the route pool and the cap (maxSec)
   src/data/                 MockProvider and HttpProvider
 assets/                     offline images and the mock data (served at ./assets)
 reference/                  the storyboard boards (look only; the spec wins on copy and timing)

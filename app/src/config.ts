@@ -18,6 +18,7 @@ export const config = {
   logUrl: env.VITE_LOG_URL || '',
 
   flow: (q.has('new-flow') ? 'factory' : 'classic') as 'classic' | 'factory', // ?new-flow: the factory flow (src/factory)
+  route: q.get('route'), // with ?new-flow: shopify, contentful, agent, klaviyo or claude for every visitor
 
   // Dev switches
   scene: q.get('scene')?.toUpperCase() || null, // ?scene=B4 plays one scene on repeat
