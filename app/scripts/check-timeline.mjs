@@ -1,5 +1,5 @@
 // Fails the build if the timeline breaks the spec: Part 1 over 40 s, Part 2 over 26 s, a scene without a script,
-// a step that starts after its scene has ended, or a factory run (?new-flow) over its maxSec on any route.
+// a step that starts after its scene has ended, or a factory run over its maxSec on any route.
 // Run by `npm run build` and `npm run check`.
 import { readFileSync, readdirSync } from 'node:fs';
 

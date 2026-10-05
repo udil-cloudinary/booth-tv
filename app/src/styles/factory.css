@@ -1,4 +1,4 @@
-/* The factory flow (?new-flow). One fixed 1920 x 1080 stage: queue left, Figma dock + the Cloudinary thread on top,
+/* The factory flow (the default; ?classic for the old loop). One fixed 1920 x 1080 stage: queue left, Figma dock + the Cloudinary thread on top,
    the machine in the middle, the platform right, one line on the floor. Each beat is a data-beat value; the
    layout per beat is here, the moves inside a beat are classes set by src/factory/stage.ts.
    --k scales every transition with ?speed. Nothing under 28 px; names and lines are large. */
@@ -220,6 +220,16 @@
 .fx-cld-tile img { width: 72%; }
 .fx-dest-cld { width: 170px; height: 170px; border-radius: 40px; }
 .fx-endpill-cld { width: 56px; height: 56px; border-radius: 14px; }
+/* The Media Assistant's mark (option A): Chrome with the Cloudinary tile pinned bottom right, ringed in the
+   background colour; on the platform slot, blog, CMS and store glyphs under it. */
+.fx-ma { position: relative; display: block; width: calc(var(--s) * 1.18); height: calc(var(--s) * 1.18); flex: none; --ring: var(--navy); }
+.fx-ma > svg { position: absolute; left: 0; top: 0; display: block; }
+.fx-ma-badge { position: absolute; right: 0; bottom: 0; width: calc(var(--s) * .52); height: calc(var(--s) * .52); border-radius: calc(var(--s) * .14); box-shadow: 0 0 0 calc(var(--s) * .05) var(--ring); }
+.fx-ma-onwhite { --ring: #fff; }
+.fx-dest-ma { display: flex; flex-direction: column; align-items: center; gap: 26px; }
+.fx-ma-sites { display: flex; gap: 20px; }
+.fx-ma-site { width: 80px; height: 80px; border-radius: 50%; background: #141e4a; border: 3px solid var(--edge); display: flex; align-items: center; justify-content: center; color: #fff; }
+.fx-ma-site svg { display: block; }
 .fx-dest-pair { display: flex; align-items: center; gap: 44px; }
 .fx-dest-pair svg { display: block; }
 
@@ -252,6 +262,22 @@
 }
 .fx-site-slot img { height: 520px; max-width: 92%; object-fit: contain; opacity: 0; }
 .factory.agent-open .fx-site-slot { width: 400px; }
+/* Route C's page per site: store (price, cart), blog (kicker, text), CMS (title field, Publish). */
+.fx-site-kicker { font-size: 28px; font-weight: 800; letter-spacing: 4px; text-transform: uppercase; color: var(--red); }
+.fx-site-label { font-size: 28px; font-weight: 700; color: #6b7280; margin-bottom: -18px; }
+.fx-site-bars { display: flex; flex-direction: column; gap: 16px; }
+.fx-site-bars i { display: block; height: 22px; border-radius: 11px; background: #e6e0d2; width: 100%; }
+.fx-site-bars i:nth-child(3) { width: 65%; }
+.fx-site-kicker, .fx-site-label, .fx-site-bars, .fx-site-price, .fx-site-cta { display: none; }
+.factory.site-store :is(.fx-site-price, .fx-site-cta) { display: flex; }
+.factory.site-store .fx-site-price { display: block; }
+.factory.site-blog :is(.fx-site-kicker, .fx-site-bars) { display: flex; }
+.factory.site-blog .fx-site-kicker { display: block; }
+.factory.site-cms :is(.fx-site-label, .fx-site-cta) { display: flex; }
+.factory.site-cms .fx-site-label { display: block; }
+.factory.site-cms .fx-site-bar { font-family: var(--sans); font-size: 34px; background: #f1f3f7; border-bottom-color: #dfe3ea; }
+.factory.site-cms .fx-site-title { font-family: var(--sans); font-size: 52px; padding: 14px 22px; border: 3px solid #d5d9e2; border-radius: 16px; background: #fff; }
+.factory.site-cms .fx-site-cta { background: #2f6feb; }
 .factory.agent-placed .fx-site-slot { border: 6px solid var(--yellow); }
 .factory.agent-placed .fx-site-slot img { opacity: 1; }
 

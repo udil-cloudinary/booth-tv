@@ -15,7 +15,7 @@
   "routes": {
     "shopify": { "page": 4.5, "short": 4, "line": "{name}’s {productLower} is live on <em>Shopify</em>", "pill": "Live on Shopify" },
     "contentful": { "page": 4.5, "short": 4, "line": "{name}’s {productLower} is live on <em>Contentful</em>", "pill": "Live on Contentful" },
-    "agent": { "page": 6.5, "short": 4, "line": "The <em>Cloudinary Agent</em> fills the page", "pill": "Cloudinary Agent" },
+    "agent": { "page": 6.5, "short": 4, "line": "The <em>Media Assistant</em> follows you everywhere", "pill": "Media Assistant" },
     "klaviyo": { "page": 4.5, "short": 4, "line": "{name}’s email, sent with <em>Klaviyo</em>", "pill": "Sent with Klaviyo" },
     "claude": {
       "page": 10.5, "short": 4, "line": "<em>Claude</em> + Cloudinary, on the desktop", "pill": "Agent Experience",

@@ -10,8 +10,8 @@ import { status } from '../loop/status';
 import { OPENER_SRC } from '../scenes';
 import { fitStage } from '../stage';
 import type { Visitor } from '../types';
-import { productOf, routeOf, templateUrl, trials, type Route } from './art';
-import { brandSvg } from './brands';
+import { productOf, routeOf, siteOf, templateUrl, trials, type Route, type Site } from './art';
+import { brandSvg, chromeSvg } from './brands';
 
 type Beat = 'up' | 'figma' | 'plugin' | 'in' | 'person' | 'out' | 'page' | 'end';
 
@@ -33,7 +33,7 @@ export const FACTORY = factoryJson as unknown as FactoryConfig;
 
 /** How each route is named on the platform slot and in {platform}. */
 const PLATFORM: Record<Route, string> = {
-  shopify: 'Shopify', contentful: 'Contentful', agent: 'Cloudinary Agent', klaviyo: 'Klaviyo', claude: 'Agent Experience',
+  shopify: 'Shopify', contentful: 'Contentful', agent: 'Cloudinary Media Assistant', klaviyo: 'Klaviyo', claude: 'Agent Experience',
 };
 /** The per-visitor states of routes C, D and E, cleared for each visitor. */
 const ROUTE_MOVES = [
@@ -54,6 +54,23 @@ const SPARK = `<svg width="34" height="34" viewBox="0 0 24 24" fill="none" strok
 const PUZZLE = `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h4v3a2 2 0 1 0 4 0V3h3v7h-3a2 2 0 1 0 0 4h3v7h-7v-3a2 2 0 1 0-4 0v3H3v-7h3a2 2 0 1 0 0-4H3V3z"/></svg>`;
 /** The Cloudinary mark on a blue tile: the Agent's extension icon, and its logo on the platform slot and end pill. */
 const cldTile = (cls: string) => `<span class="fx-cld-tile ${cls}"><img src="${LOGO}" alt=""></span>`;
+/** The Media Assistant's mark: Chrome with the Cloudinary tile pinned to it, like an extension in the toolbar. */
+const assistantMark = (size: number, cls = '') =>
+  `<span class="fx-ma ${cls}" style="--s:${size}px">${chromeSvg(size)}${cldTile('fx-ma-badge')}</span>`;
+const glyph = (d: string) =>
+  `<span class="fx-ma-site"><svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg></span>`;
+/** Blog, CMS, store: the kinds of site it works on, as plain glyphs (no brands, so it reads as any site). */
+const SITE_GLYPHS = [
+  '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+  '<rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/>',
+  '<path d="M6 7h12l1 13H5z"/><path d="M9 7a3 3 0 0 1 6 0"/>',
+].map(glyph).join('');
+/** Route C's page per site: its name, address and button. */
+const SITE_COPY: Record<Site, { name: string; host: string; cta: string }> = {
+  store: { name: 'La Bottega del Lago', host: 'labottega.demo', cta: 'Add to cart' },
+  blog: { name: 'Diario del Lago', host: 'diariodellago.demo', cta: '' },
+  cms: { name: 'Pagine CMS', host: 'pagine.demo/editor', cta: 'Publish' },
+};
 const icon = (d: string) =>
   `<svg width="84" height="84" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 /** Route E's desktop dock: four generic apps, then Claude. */
@@ -80,10 +97,10 @@ function warm(urls: string[], timeoutSec = 2): Promise<void> {
 }
 
 /**
- * The factory flow (?new-flow): one fixed stage, the visitor's selfie queue on the left, the Cloudinary machine
+ * The factory flow (the default flow): one fixed stage, the visitor's selfie queue on the left, the Cloudinary machine
  * in the middle, the platform on the right. Each visitor runs through the beats in timeline/factory.json:
  * Figma template, the Cloudinary plugin's dynamic export, the factory, personalizing, then one route: a Shopify
- * product page, a Contentful entry, the Cloudinary Agent filling a store page, a Klaviyo abandoned-cart email, or
+ * product page, a Contentful entry, the Cloudinary Media Assistant filling a blog, CMS or store page, a Klaviyo abandoned-cart email, or
  * Claude Desktop finding, personalizing and embedding the visitor's image.
  */
 export class FactoryStage {
@@ -177,19 +194,22 @@ export class FactoryStage {
           </div>
           <div class="fx-br-body">
             <div class="fx-site">
-              <div class="fx-site-bar">La Bottega del Lago</div>
+              <div class="fx-site-bar"></div>
               <div class="fx-site-body">
                 <div class="fx-site-copy">
+                  <div class="fx-site-kicker">Gathering 2026</div>
+                  <div class="fx-site-label">Title</div>
                   <div class="fx-site-title fit" data-min="44" data-lines="3"></div>
                   <div class="fx-site-price"></div>
-                  <div class="fx-site-cta">Add to cart</div>
+                  <div class="fx-site-cta"></div>
+                  <div class="fx-site-bars"><i></i><i></i><i></i></div>
                 </div>
                 <div class="fx-site-slot"><img alt=""></div>
               </div>
             </div>
             <div class="fx-agent">
               <div class="fx-agent-inner">
-                <div class="fx-agent-head">${cldTile('fx-agent-logo')}<span>Cloudinary Agent</span></div>
+                <div class="fx-agent-head">${cldTile('fx-agent-logo')}<span>Media Assistant</span></div>
                 <div class="fx-agent-read">${SPARK}<span class="fit" data-min="24"></span></div>
                 <div class="fx-agent-best"><img alt=""></div>
                 <div class="fx-agent-more"><div><img alt=""></div><div><img alt=""></div></div>
@@ -347,11 +367,11 @@ export class FactoryStage {
     this.q('.fx-final-pill span').textContent = v.favorite;
 
     this.q('.fx-dest-logo').innerHTML =
-      route === 'agent' ? cldTile('fx-dest-cld')
+      route === 'agent' ? `<span class="fx-dest-ma">${assistantMark(160)}<span class="fx-ma-sites">${SITE_GLYPHS}</span></span>`
       : route === 'claude' ? `<span class="fx-dest-pair">${brandSvg('claude', 140)}${brandSvg('openai', 140, '#ffffff')}</span>` // agents: Claude and ChatGPT
       : brandSvg(route, 170, route === 'shopify' ? undefined : '#ffffff');
     this.q('.fx-dest-name').textContent = platform;
-    this.q('.fx-endpill-logo').innerHTML = route === 'agent' ? cldTile('fx-endpill-cld') : brandSvg(route, 52);
+    this.q('.fx-endpill-logo').innerHTML = route === 'agent' ? assistantMark(56, 'fx-ma-onwhite') : brandSvg(route, 52);
     this.q('.fx-endpill-text').textContent = FACTORY.routes[route].pill;
 
     if (route === 'shopify' || route === 'contentful') {
@@ -360,10 +380,15 @@ export class FactoryStage {
       this.q('.fx-page-title').textContent = route === 'shopify' ? vars.productName : vars.headline;
       this.q('.fx-page-price').textContent = `€ ${vars.price}`;
     }
-    // Route C: a store page with an empty photo slot; the Agent reads it and offers the visitor's product first.
-    this.q('.fx-br-url').textContent = vars.storeHost;
-    this.q('.fx-site-title').textContent = vars.productName;
+    // Route C: a blog, CMS or store page with an empty photo slot; the Media Assistant reads it and offers the
+    // visitor's product first. The site changes per visitor, so the assistant reads as working anywhere.
+    const site = siteOf(v);
+    for (const k of Object.keys(SITE_COPY)) this.el.classList.toggle(`site-${k}`, k === site);
+    this.q('.fx-site-bar').textContent = SITE_COPY[site].name;
+    this.q('.fx-br-url').textContent = SITE_COPY[site].host;
+    this.q('.fx-site-title').textContent = site === 'blog' ? vars.headline : vars.productName;
     this.q('.fx-site-price').textContent = `€ ${vars.price}`;
+    this.q('.fx-site-cta').textContent = SITE_COPY[site].cta;
     this.q('.fx-agent-read span').textContent = `${v.favorite} ${p.label}`;
     const more = this.el.querySelectorAll<HTMLImageElement>('.fx-agent-more img');
     trials(v, more.length).forEach((t, i) => (more[i].src = t.src));
@@ -455,7 +480,7 @@ export class FactoryStage {
   }
 
   /**
-   * Route C: the cursor clicks the Cloudinary Agent's icon in the toolbar, the side panel opens and reads the page,
+   * Route C: the cursor clicks the Cloudinary Media Assistant's icon in the toolbar, the side panel opens and reads the page,
    * offers the visitor's product first, and drops it into the empty photo slot. Short form: the panel is already open.
    * Full form ends at about 4.8 s of 6.5, so the filled page holds for well over the 1.2 s minimum.
    */

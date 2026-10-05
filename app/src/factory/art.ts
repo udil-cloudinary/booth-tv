@@ -47,11 +47,23 @@ export function trials(v: Visitor, n: number): { src: string; label: string }[] 
 }
 
 /**
- * The routes the platform beat can take: a Shopify product page, a Contentful entry, the Cloudinary Agent beside a
- * store page, a Klaviyo email, or Claude Desktop using Cloudinary.
+ * The routes the platform beat can take: a Shopify product page, a Contentful entry, the Cloudinary Media Assistant
+ * (a Chrome extension) beside a blog, CMS or store page, a Klaviyo email, or Claude Desktop using Cloudinary.
  */
 export const ROUTES = ['shopify', 'contentful', 'agent', 'klaviyo', 'claude'] as const;
 export type Route = (typeof ROUTES)[number];
+
+/** Route C's page, so the Media Assistant reads as working on any site: a blog, a CMS or a store. */
+export const SITES = ['store', 'blog', 'cms'] as const;
+export type Site = (typeof SITES)[number];
+
+/** One site per visitor, random but stable (a different hash from the route's). ?site= forces one. */
+export function siteOf(v: Visitor): Site {
+  if (config.site && (SITES as readonly string[]).includes(config.site)) return config.site as Site;
+  let h = 7;
+  for (const c of v.id) h = (h * 37 + c.charCodeAt(0)) | 0;
+  return SITES[Math.abs(h) % SITES.length];
+}
 
 /** One route per visitor, picked at random but stable, so a replay lands on the same one; about a fifth each. ?route= forces one. */
 export function routeOf(v: Visitor): Route {
