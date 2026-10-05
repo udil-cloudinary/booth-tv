@@ -7,7 +7,7 @@ import { maybeReload } from '../loop/watchdog';
 import type { FactoryStage } from './stage';
 
 /**
- * The factory flow's loop (?new-flow): the opener, then visitors through the factory, picked by the same Lineup
+ * The factory flow's loop (the default flow): the opener, then visitors through the factory, picked by the same Lineup
  * as the classic flow (new first, then replays of the latest 15). Catch-up: the Figma and plugin beats once per
  * loop, then the short form. Maya runs the factory only when nobody uploaded in the window.
  */

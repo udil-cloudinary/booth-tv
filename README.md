@@ -1,6 +1,6 @@
 # Booth TV (Gathering 2026)
 
-The silent, animated loop on the 55" 4K TV behind the counter: Part 1 BUILD (Maya, 8 screens, 40 s max), then Part 2 LIVE for 2 visitors (5 screens, 26 s max each): anyone not shown yet first, the other slots replay the 15 most recent visitors of the last 24 h, and Maya only when nobody uploaded in 24 h. Spec: `../../specs/spec-tv-orchestrator.md` (v0.4).
+The silent, animated loop on the 55" 4K TV behind the counter. By default it plays the factory flow (`src/factory`, see the switches below); `?classic` plays the original loop: Part 1 BUILD (Maya, 8 screens, 40 s max), then Part 2 LIVE for 2 visitors (5 screens, 26 s max each): anyone not shown yet first, the other slots replay the 15 most recent visitors of the last 24 h, and Maya only when nobody uploaded in 24 h. Spec: `../../specs/spec-tv-orchestrator.md` (v0.4).
 
 Status: the TV is built and tested with mock data, and reads the booth cloud directly with a signed Cloudinary search URL (no backend, see below).
 
@@ -18,8 +18,10 @@ Open it in Chrome at any window size; the 1920 x 1080 stage letterboxes to fit.
 
 | Param | What it does |
 |---|---|
-| `?new-flow` | The factory flow (`src/factory`): the opener, then each visitor through Figma, the Cloudinary plugin's dynamic export, the factory (personalizing) and one route, picked at random per visitor: a Shopify product page, a Contentful entry, the Cloudinary Agent filling a store page, a Klaviyo abandoned-cart email, or the Agent Experience: Claude Desktop finding, personalizing and embedding the visitor's image. Same lineup, polling and switches (`?mock`, `?speed`, `?hud`, `?forget`) |
-| `&route=agent` | With `?new-flow`: every visitor takes this route (`shopify`, `contentful`, `agent`, `klaviyo` or `claude`) |
+| (none) | The default: the factory flow (`src/factory`): the opener, then each visitor through Figma, the Cloudinary plugin's dynamic export, the factory (personalizing) and one route, in turn per run: a Shopify product page, a Contentful entry, the Cloudinary Media Assistant (Chrome extension) filling a blog, CMS or store page, a Klaviyo abandoned-cart email, then the Agent Experience (Claude Desktop finding, personalizing and embedding the visitor's image), and round again. Same lineup, polling and switches (`?mock`, `?speed`, `?hud`, `?forget`) |
+| `?classic` | The classic loop instead: Part 1 BUILD (B1 to B8) then Part 2 LIVE (L1 to L5). `?scene=` implies it |
+| `?route=agent` | Factory: every run takes this route (`shopify`, `contentful`, `agent`, `klaviyo` or `claude`) |
+| `&site=blog` | Factory, with `?route=agent`: the page beside the Media Assistant (`store`, `blog` or `cms`; else random per visitor) |
 | `?scene=B3` | Plays one scene on repeat (B1 to B8, L1 to L5), with Maya |
 | `?scene=L4&v=3` | A Part 2 scene with mock visitor 3 (index or id from `assets/mock/visitors.json`; 3 is Maximiliano, the long-name test) |
 | `&hold` | With `?scene`: play once and freeze on the last frame (for review) |
@@ -110,7 +112,7 @@ app/
   src/engine/               player steps, virtual cursor, camera zoom, placeholder filling, text fit
   src/loop/lineup.ts        who Part 2 shows (new first, replays, catch-up, polling), shared by both flows
   src/loop/orchestrator.ts  the classic loop (Part 1 + Part 2 scenes)
-  src/factory/              the factory flow (?new-flow): stage, loop, product variants, brand marks
+  src/factory/              the factory flow (the default): stage, loop, product variants, brand marks
   timeline/factory.json     factory beat durations, the floor line per beat, the route pool and the cap (maxSec)
   src/data/                 MockProvider and HttpProvider
 assets/                     offline images and the mock data (served at ./assets)

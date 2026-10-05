@@ -17,8 +17,10 @@ export const config = {
   searchUrl,
   logUrl: env.VITE_LOG_URL || '',
 
-  flow: (q.has('new-flow') ? 'factory' : 'classic') as 'classic' | 'factory', // ?new-flow: the factory flow (src/factory)
-  route: q.get('route'), // with ?new-flow: shopify, contentful, agent, klaviyo or claude for every visitor
+  // The factory flow (src/factory) is the default; ?classic (or ?scene=) plays the classic Part 1 + Part 2 loop.
+  flow: (q.has('classic') || q.has('scene') ? 'classic' : 'factory') as 'classic' | 'factory',
+  route: q.get('route'), // factory: shopify, contentful, agent, klaviyo or claude for every visitor
+  site: q.get('site'), // factory, with ?route=agent: store, blog or cms, the page beside the Media Assistant
 
   // Dev switches
   scene: q.get('scene')?.toUpperCase() || null, // ?scene=B4 plays one scene on repeat
