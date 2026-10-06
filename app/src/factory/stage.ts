@@ -521,7 +521,7 @@ export class FactoryStage {
     const dest = this.q('.fx-dest');
     await sleep(0.15);
     dest.classList.add('v2-on');
-    await sleep(short ? 0.6 : 1.0);
+    await sleep(short ? 0.8 : 2.2); // the three logos stay long enough to read (Udi, 2026-10-06); runs into the 'in' beat
     dest.classList.add('v2-pick');
     await sleep(0.7);
     dest.classList.add('v2-done');

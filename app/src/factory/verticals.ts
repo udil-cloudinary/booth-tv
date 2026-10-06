@@ -71,8 +71,8 @@ export function destMarkup(assistant: string, l: { vertical: Vertical; pick: num
     .join('');
   return `<div class="v2-dest" style="--pick:${l.pick}">
       <div class="v2-cma">${assistant}<span>Cloudinary<br>Media Assistant</span></div>
-      <div class="v2-vertical">${esc(l.vertical.label)}</div>
       <div class="v2-balls">${balls}</div>
       <div class="v2-name fit" data-lines="2" data-min="34">${esc(l.vertical.platforms[l.pick].name)}</div>
+      <div class="v2-vertical">${esc(l.vertical.label)}</div>
     </div>`;
 }
