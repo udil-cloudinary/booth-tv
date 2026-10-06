@@ -1,4 +1,4 @@
-// Visual variation v2 (?visual=v2, Udi 2026-10-06): the platform square names the Cloudinary Media Assistant and
+// Visual variation v2 (Udi 2026-10-06; the default since 2026-10-06, ?visual=v1 for the earlier one): the platform square names the Cloudinary Media Assistant and
 // the vertical it serves (eCommerce, CMS, Marketing), shows three platforms of that vertical as white marks in
 // coloured balls (the opener's palette), then lands on the visitor's one: it grows, the others and its own ball fade,
 // and it settles as the full logo with its name. Agent Experience keeps its own square.

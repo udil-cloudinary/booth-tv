@@ -19,7 +19,7 @@ export const config = {
 
   // The factory flow (src/factory) is the default; ?classic (or ?scene=) plays the classic Part 1 + Part 2 loop.
   flow: (q.has('classic') || q.has('scene') ? 'classic' : 'factory') as 'classic' | 'factory',
-  visual: (q.get('visual') === 'v2' ? 'v2' : 'v1') as 'v1' | 'v2', // factory: ?visual=v2, the vertical square (src/factory/verticals.ts)
+  visual: (q.get('visual') === 'v1' ? 'v1' : 'v2') as 'v1' | 'v2', // factory: v2, the vertical square (src/factory/verticals.ts), is the default; ?visual=v1 the earlier square
   route: q.get('route'), // factory: shopify, contentful, agent, klaviyo or claude for every visitor
   site: q.get('site'), // factory, with ?route=agent: store, blog or cms, the page beside the Media Assistant
 

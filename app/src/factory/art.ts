@@ -69,7 +69,7 @@ export function siteOf(v: Visitor): Site {
 export const ROTATION: Route[] = ['shopify', 'contentful', 'agent', 'klaviyo', 'claude'];
 
 /**
- * Visual v2 (?visual=v2): no Media Assistant route of its own; the assistant appears only as the one serving each
+ * Visual v2 (the default; ?visual=v1 for the earlier one): no Media Assistant route of its own; the assistant appears only as the one serving each
  * vertical (eCommerce, CMS, Marketing), then Agent Experience.
  */
 export const ROTATION_V2: Route[] = ['shopify', 'contentful', 'klaviyo', 'claude'];

@@ -1,4 +1,4 @@
-/* Visual variation v2 (?visual=v2): the platform square as the Media Assistant + vertical + three platforms,
+/* Visual variation v2 (the default; ?visual=v1 for the earlier one): the platform square as the Media Assistant + vertical + three platforms,
    landing on the visitor's one. Only applies inside .v2-dest, so the current visuals are untouched.
    Square: 500 x 545 (fx-dest), content centred. Ball 140 px, 26 px apart. */
 .fx-dest:has(.v2-dest) { justify-content: flex-start; padding-top: 24px; }
