@@ -527,9 +527,9 @@ export class FactoryStage {
       await sleep(0.15);
       dest.classList.add('v2-on');
       if (!short) return;
-      await sleep(0.8);
+      await sleep(0.6);
     } else {
-      await sleep(0.6); // the three logos again for a moment, then the landing
+      await sleep(0.3); // the three logos again for a moment, then the landing
     }
     dest.classList.add('v2-pick');
     await sleep(0.7);

@@ -17,7 +17,6 @@
   translate: calc((var(--i) - 1) * (var(--ball-size) + var(--gap))) 0;
   opacity: 0; scale: .4;
   transition: translate .7s cubic-bezier(.45,.05,.25,1), scale .7s cubic-bezier(.34,1.4,.64,1), opacity .4s ease;
-  transition-delay: calc(var(--i) * .12s);
 }
 .v2-disc { position: absolute; inset: 0; border-radius: 50%; background: var(--ball); box-shadow: 0 0 0 8px color-mix(in srgb, var(--ball) 22%, transparent), 0 18px 40px rgba(0,0,0,.35); transition: opacity .5s ease, scale .5s ease; }
 .v2-ball svg { position: relative; display: block; transition: width .5s ease, height .5s ease; }
