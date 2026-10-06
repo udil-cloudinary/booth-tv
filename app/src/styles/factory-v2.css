@@ -41,3 +41,7 @@
    lit) tucks behind it instead of crossing its border before the result shows (Udi, 2026-10-06). */
 .visual-v2 .fx-final { z-index: 2; background: var(--body); }
 .visual-v2.final-on .fx-final { background: linear-gradient(rgba(255,210,63,.1), rgba(255,210,63,.1)), var(--body); }
+/* The four trials a little smaller, so the 4th (scaled up while lit) never reaches the result frame, for
+   pizza, gelato and caffè alike: the product-base art shares one 756 x 1257 canvas (Udi, 2026-10-06). */
+.visual-v2 .fx-trials { gap: 30px; top: 270px; }
+.visual-v2 .fx-trial img { height: 290px; }
