@@ -433,7 +433,7 @@ export class FactoryStage {
   /** The moves inside a beat (the beat's layout itself is CSS, keyed on data-beat). */
   private async choreograph(beat: Beat, seconds: number, nTrials: number, short: boolean) {
     const on = (c: string) => this.el.classList.add(c);
-    if (beat === 'up' && this.el.querySelector('.v2-dest')) void this.landV2(short);
+    if ((beat === 'up' || beat === 'in') && this.el.querySelector('.v2-dest')) void this.landV2(beat, short);
     switch (beat) {
       case 'figma':
         await sleep(0.4);
@@ -516,12 +516,21 @@ export class FactoryStage {
     on('agent-placed');
   }
 
-  /** Visual v2: the balls pop in, then the visitor's platform grows to the centre and settles as its full logo. */
-  private async landV2(short: boolean) {
+  /**
+   * Visual v2: the three balls pop in on 'up' and stay through it; the landing (the visitor's platform grows to the
+   * centre, then settles as its full logo) plays on 'in', when the square is back after Figma and the plugin cover it.
+   * The short form has no 'in' beat, so it lands on 'up'.
+   */
+  private async landV2(beat: 'up' | 'in', short: boolean) {
     const dest = this.q('.fx-dest');
-    await sleep(0.15);
-    dest.classList.add('v2-on');
-    await sleep(short ? 0.8 : 2.2); // the three logos stay long enough to read (Udi, 2026-10-06); runs into the 'in' beat
+    if (beat === 'up') {
+      await sleep(0.15);
+      dest.classList.add('v2-on');
+      if (!short) return;
+      await sleep(0.8);
+    } else {
+      await sleep(0.6); // the three logos again for a moment, then the landing
+    }
     dest.classList.add('v2-pick');
     await sleep(0.7);
     dest.classList.add('v2-done');
