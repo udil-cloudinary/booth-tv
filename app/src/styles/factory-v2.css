@@ -29,10 +29,10 @@
 .v2-pick .v2-ball.is-pick { translate: 0 0; scale: 1.35; }
 /* 3. its ball fades too: the mark alone, bigger, with the name under it (the full logo) */
 .v2-done .v2-ball.is-pick .v2-disc { opacity: 0; scale: 1.25; }
-.v2-done .v2-ball.is-pick { translate: 0 -38px; }
+.v2-done .v2-ball.is-pick { translate: 0 -26px; } /* logo + name centred between the header and the vertical */
 .v2-done .v2-ball.is-pick svg { width: 128px; height: 128px; }
 .v2-name {
-  position: absolute; left: 0; top: calc(100% - 44px); width: 100%; text-align: center; font-size: 40px; font-weight: 700; line-height: 1.08; color: #c9d3ff;
+  position: absolute; left: 0; top: calc(100% - 25px); width: 100%; text-align: center; font-size: 40px; font-weight: 700; line-height: 1.08; color: #c9d3ff;
   overflow: hidden; opacity: 0; translate: 0 16px; transition: opacity .45s ease .15s, translate .45s ease .15s;
 }
 .v2-done .v2-name { opacity: 1; translate: 0 0; }
