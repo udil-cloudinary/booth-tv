@@ -68,8 +68,15 @@ export function siteOf(v: Visitor): Site {
 /** The routes in the order they play, one per run, then round again: A to E. */
 export const ROTATION: Route[] = ['shopify', 'contentful', 'agent', 'klaviyo', 'claude'];
 
+/**
+ * Visual v2 (?visual=v2): no Media Assistant route of its own; the assistant appears only as the one serving each
+ * vertical (eCommerce, CMS, Marketing), then Agent Experience.
+ */
+export const ROTATION_V2: Route[] = ['shopify', 'contentful', 'klaviyo', 'claude'];
+
 /** The route for the `n`th run since the page loaded. ?route= forces one for every run. */
 export function routeFor(n: number): Route {
   if (config.route && (ROUTES as readonly string[]).includes(config.route)) return config.route as Route;
-  return ROTATION[n % ROTATION.length];
+  const rotation = config.visual === 'v2' ? ROTATION_V2 : ROTATION;
+  return rotation[n % rotation.length];
 }

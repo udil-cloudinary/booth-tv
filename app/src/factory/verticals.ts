@@ -47,17 +47,15 @@ export const VERTICALS: Record<Vertical['id'], Vertical> = {
 };
 
 /**
- * The vertical and platform a run lands on. Shopify, Contentful and Klaviyo are their own; the Media Assistant
- * route follows the page beside it (store: SFCC, blog: WordPress, CMS: SFCC Page Designer), so every logo gets
- * its turn. Agent Experience has no vertical (null).
+ * The vertical and platform a run lands on: Shopify (eCommerce), Contentful (CMS), Klaviyo (Marketing). There is
+ * no Media Assistant route of its own in v2 (Udi, 2026-10-06): the assistant is the header of every vertical.
+ * Agent Experience has no vertical (null).
  */
-export function landingOf(route: Route, site: Site): { vertical: Vertical; pick: number } | null {
+export function landingOf(route: Route, _site: Site): { vertical: Vertical; pick: number } | null {
   switch (route) {
     case 'shopify': return { vertical: VERTICALS.ecomm, pick: 0 };
     case 'contentful': return { vertical: VERTICALS.cms, pick: 0 };
     case 'klaviyo': return { vertical: VERTICALS.marketing, pick: 0 };
-    case 'agent':
-      return site === 'store' ? { vertical: VERTICALS.ecomm, pick: 1 } : site === 'blog' ? { vertical: VERTICALS.cms, pick: 1 } : { vertical: VERTICALS.cms, pick: 2 };
     default: return null;
   }
 }
