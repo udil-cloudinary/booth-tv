@@ -14,6 +14,7 @@ import './styles/base.css';
 import './styles/scenes.css';
 import './styles/hud.css';
 import './styles/factory.css';
+import './styles/factory-v2.css';
 
 import mockData from '../../assets/mock/visitors.json';
 import { config } from './config';
