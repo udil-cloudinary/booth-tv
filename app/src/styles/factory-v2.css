@@ -36,3 +36,8 @@
   overflow: hidden; opacity: 0; translate: 0 16px; transition: opacity .45s ease .15s, translate .45s ease .15s;
 }
 .v2-done .v2-name { opacity: 1; translate: 0 0; }
+
+/* Personalizing: the result frame sits in front of the trials with a solid fill, so the 4th trial (scaled up while
+   lit) tucks behind it instead of crossing its border before the result shows (Udi, 2026-10-06). */
+.visual-v2 .fx-final { z-index: 2; background: var(--body); }
+.visual-v2.final-on .fx-final { background: linear-gradient(rgba(255,210,63,.1), rgba(255,210,63,.1)), var(--body); }

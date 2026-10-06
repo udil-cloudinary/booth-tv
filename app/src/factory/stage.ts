@@ -279,6 +279,7 @@ export class FactoryStage {
         <div class="fx-opener"></div>
       </div>`;
     this.el = host.querySelector('#stage')!;
+    this.el.classList.toggle('visual-v2', config.visual === 'v2'); // scopes styles/factory-v2.css fixes
     this.el.style.setProperty('--k', String(1 / config.speed)); // ?speed scales every CSS transition too
     this.cursor = new Cursor(this.el);
     fitStage(this.el);
