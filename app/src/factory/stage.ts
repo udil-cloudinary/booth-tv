@@ -12,6 +12,7 @@ import { fitStage } from '../stage';
 import type { Visitor } from '../types';
 import { productOf, routeFor, siteOf, templateUrl, trials, type Route, type Site } from './art';
 import { brandSvg, chromeSvg } from './brands';
+import { destMarkup, landingOf } from './verticals';
 
 type Beat = 'up' | 'figma' | 'plugin' | 'in' | 'person' | 'out' | 'page' | 'end';
 
@@ -372,6 +373,13 @@ export class FactoryStage {
       : route === 'claude' ? `<span class="fx-dest-pair">${brandSvg('claude', 140)}${brandSvg('openai', 140, '#ffffff')}</span>` // agents: Claude and ChatGPT
       : brandSvg(route, 170, route === 'shopify' ? undefined : '#ffffff');
     this.q('.fx-dest-name').textContent = platform;
+    // Visual variation v2: the square names the Media Assistant and the vertical, then lands on this visitor's platform.
+    const landing = config.visual === 'v2' ? landingOf(route, siteOf(v)) : null;
+    this.q('.fx-dest').classList.remove('v2-on', 'v2-pick', 'v2-done');
+    if (landing) {
+      this.q('.fx-dest-logo').innerHTML = destMarkup(assistantMark(84), landing);
+      this.q('.fx-dest-name').textContent = '';
+    }
     this.q('.fx-endpill-logo').innerHTML = route === 'agent' ? assistantMark(56, 'fx-ma-onwhite') : brandSvg(route, 52);
     this.q('.fx-endpill-text').textContent = FACTORY.routes[route].pill;
 
@@ -425,6 +433,7 @@ export class FactoryStage {
   /** The moves inside a beat (the beat's layout itself is CSS, keyed on data-beat). */
   private async choreograph(beat: Beat, seconds: number, nTrials: number, short: boolean) {
     const on = (c: string) => this.el.classList.add(c);
+    if (beat === 'up' && this.el.querySelector('.v2-dest')) void this.landV2(short);
     switch (beat) {
       case 'figma':
         await sleep(0.4);
@@ -505,6 +514,18 @@ export class FactoryStage {
     await sleep(short ? 0.3 : 0.5);
     await this.drop(this.q('.fx-agent-best img'), this.q('.fx-site-slot img'), short ? 0.6 : 0.8);
     on('agent-placed');
+  }
+
+  /** Visual v2: the balls pop in, then the visitor's platform grows to the centre and settles as its full logo. */
+  private async landV2(short: boolean) {
+    const dest = this.q('.fx-dest');
+    await sleep(0.15);
+    dest.classList.add('v2-on');
+    await sleep(short ? 0.6 : 1.0);
+    dest.classList.add('v2-pick');
+    await sleep(0.7);
+    dest.classList.add('v2-done');
+    fitAll(dest);
   }
 
   /** Flies a copy of the product from `from` (the Agent's card, Claude's card) into `to` (the page's slot). */

@@ -1,0 +1,36 @@
+/* Visual variation v2 (?visual=v2): the platform square as the Media Assistant + vertical + three platforms,
+   landing on the visitor's one. Only applies inside .v2-dest, so the current visuals are untouched.
+   Square: 500 x 545 (fx-dest), content centred. Ball 140 px, 26 px apart. */
+.fx-dest:has(.v2-dest) { justify-content: flex-start; padding-top: 24px; }
+.v2-dest { --ball-size: 140px; --gap: 26px; display: flex; flex-direction: column; align-items: center; width: 460px; }
+.v2-cma { display: flex; align-items: center; gap: 18px; }
+.v2-cma span:last-child { font-size: 30px; font-weight: 700; line-height: 1.12; color: #c9d3ff; }
+.v2-vertical { margin: 14px 0 10px; font-size: 64px; font-weight: 800; letter-spacing: -1px; color: var(--yellow); }
+
+.v2-balls { position: relative; width: 100%; height: calc(var(--ball-size) * 1.36); }
+.v2-ball {
+  position: absolute; top: calc(var(--ball-size) * .18); left: 50%; width: var(--ball-size); height: var(--ball-size);
+  margin-left: calc(var(--ball-size) / -2); display: grid; place-items: center;
+  /* row of three, centred: -1, 0, +1 ball steps from the middle */
+  translate: calc((var(--i) - 1) * (var(--ball-size) + var(--gap))) 0;
+  opacity: 0; scale: .4;
+  transition: translate .7s cubic-bezier(.45,.05,.25,1), scale .7s cubic-bezier(.34,1.4,.64,1), opacity .4s ease;
+  transition-delay: calc(var(--i) * .12s);
+}
+.v2-disc { position: absolute; inset: 0; border-radius: 50%; background: var(--ball); box-shadow: 0 0 0 8px color-mix(in srgb, var(--ball) 22%, transparent), 0 18px 40px rgba(0,0,0,.35); transition: opacity .5s ease, scale .5s ease; }
+.v2-ball svg { position: relative; display: block; transition: width .5s ease, height .5s ease; }
+
+/* 1. the three pop in */
+.v2-on .v2-ball { opacity: 1; scale: 1; }
+/* 2. the visitor's platform moves to the centre and grows; the others fade */
+.v2-pick .v2-ball { transition-delay: 0s; }
+.v2-pick .v2-ball:not(.is-pick) { opacity: 0; scale: .6; }
+.v2-pick .v2-ball.is-pick { translate: 0 0; scale: 1.35; }
+/* 3. its ball fades too: the mark alone, bigger, with the name under it (the full logo) */
+.v2-done .v2-ball.is-pick .v2-disc { opacity: 0; scale: 1.25; }
+.v2-done .v2-ball.is-pick svg { width: 128px; height: 128px; }
+.v2-name {
+  width: 100%; margin-top: 4px; text-align: center; font-size: 46px; font-weight: 800; line-height: 1.08;
+  overflow: hidden; opacity: 0; translate: 0 16px; transition: opacity .45s ease .15s, translate .45s ease .15s;
+}
+.v2-done .v2-name { opacity: 1; translate: 0 0; }
