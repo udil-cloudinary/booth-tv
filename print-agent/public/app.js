@@ -49,6 +49,7 @@ function render() {
   mode.className = `badge ${c.mode === 'live' ? 'live' : 'dry'}`;
   $('#pause').textContent = st.paused ? 'Resume printing' : 'Pause printing';
   $('#pause').classList.toggle('go', st.paused);
+  $('#one').disabled = !!current; // empty queue: the click explains what to do
 
   // Banner: the one thing staff must act on
   const banner = $('#banner');
@@ -148,9 +149,10 @@ async function load() {
 async function post(path) {
   const res = await fetch(path, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
   const body = await res.json();
-  if (!res.ok) return toast(body.error);
+  if (!res.ok) return toast(body.error), false;
   state = body;
   render();
+  return true;
 }
 
 let toastTimer;
@@ -172,6 +174,10 @@ document.addEventListener('click', (e) => {
   if (e.target.closest('[data-close]') || e.target === $('#zoom')) $('#zoom').close();
 });
 $('#pause').addEventListener('click', () => post(state?.status.paused ? '/api/resume' : '/api/pause'));
+$('#one').addEventListener('click', async () => {
+  const first = state?.jobs.filter((j) => j.status === 'queued').sort((a, b) => a.queuedAt.localeCompare(b.queuedAt) || a.created_at.localeCompare(b.created_at))[0];
+  if (await post('/api/print-one')) toast(`Printing one magnet${first ? ` (${first.first_name})` : ''}. Printing stays paused after it.`);
+});
 $('#poll').addEventListener('click', async () => { await post('/api/poll'); toast('Checked the booth cloud'); });
 
 load();

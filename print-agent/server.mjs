@@ -97,6 +97,7 @@ const server = createServer(async (req, res) => {
       if (pathname === '/api/pause') await agent.setPaused(true);
       else if (pathname === '/api/resume') await agent.setPaused(false);
       else if (pathname === '/api/poll') await agent.poll();
+      else if (pathname === '/api/print-one') await agent.printOne();
       else if ((m = pathname.match(/^\/api\/jobs\/(.+)\/(print|skip|top)$/))) await agent.act(decodeURIComponent(m[1]), m[2]);
       else return send(res, 404, { error: 'not found' });
       return send(res, 200, agent.snapshot());

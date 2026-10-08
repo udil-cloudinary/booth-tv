@@ -24,6 +24,10 @@ On its very first start the agent marks everyone already in the booth cloud as s
 
 Each mode keeps its own state in `data/<mode>/` (`state.json` and the downloaded magnets), so a dry run never marks a real visitor as printed. `data/` holds visitors' emails: it is git-ignored. Delete `data/live/` to start the real queue again from scratch.
 
+## Test one print
+
+**Print one** (header) pauses printing, then prints only the first magnet in "Up next" and stops. Use it to check the printer, the paper size and the crop. Nobody waiting? Press **Print** on any card under Printed or Skipped to queue it, then **Print one**. **Resume printing** brings the automatic queue back.
+
 ## Config (env vars)
 
 | Var | Default | Meaning |

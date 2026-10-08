@@ -296,6 +296,33 @@ export class Agent {
     await this.save();
   }
 
+  /**
+   * Prints exactly one magnet, for testing the printer: pauses automatic printing (so nothing follows it), then
+   * prints the first job in "Up next" through the same download + lp path. Resume brings the queue back.
+   */
+  async printOne() {
+    if (this.busy || [...this.jobs.values()].some((j) => j.status === 'downloading' || j.status === 'printing')) {
+      throw new Error('a magnet is printing already');
+    }
+    const job = [...this.jobs.values()]
+      .filter((j) => j.status === 'queued')
+      .sort((a, b) => a.queuedAt.localeCompare(b.queuedAt) || a.created_at.localeCompare(b.created_at))[0];
+    if (!job) throw new Error('Nobody in "Up next". Press Print on a card below to queue one, then Print one.');
+    if (!this.cfg.dryRun) {
+      if (!this.status.printer?.ok) throw new Error(`the printer is not ready (${this.status.printer?.state ?? 'checking'})`);
+      if (this.status.printer.queue > 0) throw new Error('CUPS still has a job for this printer');
+    }
+    this.status.paused = true;
+    this.busy = true;
+    await this.save();
+    // Not awaited: the page follows the job through /api/state like any other print.
+    this.printJob(job).finally(async () => {
+      this.busy = false;
+      await this.save();
+    });
+    return job.first_name;
+  }
+
   async setPaused(paused) {
     this.status.paused = paused;
     await this.save();
