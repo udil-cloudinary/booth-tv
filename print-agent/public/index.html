@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Magnet Printer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="logo" aria-hidden="true"></span>
+      <h1>Magnet printer</h1>
+      <span id="mode" class="badge"></span>
+    </div>
+    <div class="actions">
+      <button id="poll" class="btn ghost" type="button">Check now</button>
+      <button id="pause" class="btn" type="button"></button>
+    </div>
+  </header>
+
+  <div id="banner" class="banner" hidden></div>
+
+  <section class="tiles" id="tiles"></section>
+
+  <main class="grid">
+    <section class="panel now">
+      <h2>Now printing</h2>
+      <div id="now"></div>
+    </section>
+    <section class="panel next">
+      <h2>Up next <span class="count" id="next-count"></span></h2>
+      <ol id="next" class="rows"></ol>
+    </section>
+  </main>
+
+  <section class="panel history">
+    <nav class="tabs" id="tabs" role="tablist">
+      <button type="button" role="tab" data-tab="printed">Printed <span class="count"></span></button>
+      <button type="button" role="tab" data-tab="failed">Needs attention <span class="count"></span></button>
+      <button type="button" role="tab" data-tab="skipped">Skipped <span class="count"></span></button>
+    </nav>
+    <div id="cards" class="cards"></div>
+  </section>
+
+  <dialog id="zoom"><img alt=""><button class="btn ghost" type="button" data-close>Close</button></dialog>
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

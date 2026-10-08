@@ -99,6 +99,10 @@ Set up the booth cloud: `cd templates/cloudinary-setup && npm install && npm run
 
 The source of truth is the project's own `templates/` folder (outside this repo). After changing it, run `sh scripts/sync-templates.sh` and commit.
 
+## The magnet printer (`print-agent/`)
+
+A small Node server on the booth laptop prints each visitor's magnet once on the Citizen CZ-01 (USB, through macOS CUPS), with a status page at http://localhost:4100 (now printing, up next, printed, failed, skipped; pause, skip, print again). It reads the same signed search URL as the TV. Try it with `cd print-agent && npm run mock` or `npm run dry-run`; see `print-agent/README.md`.
+
 ## Where things are
 
 ```
@@ -117,6 +121,7 @@ app/
   src/data/                 MockProvider and HttpProvider
 assets/                     offline images and the mock data (served at ./assets)
 reference/                  the storyboard boards (look only; the spec wins on copy and timing)
+print-agent/                the magnet print agent and its status page
 ```
 
 Editing copy or timing: change the JSON in `app/timeline/` and rebuild. A step is `{ "at": seconds, "do": "type|cursor|click|show|hide|highlight|fly|scroll|swap|set|wait", "target": "#id", ... }`, and placeholders like `{name}`, `{email}`, `{product}`, `{favorite}` and `{img.hero}` are filled from the visitor record.

@@ -1,0 +1,13 @@
+{
+  "name": "booth-print-agent",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Prints each booth visitor's magnet once on the Citizen CZ-01, with a status page.",
+  "engines": { "node": ">=22.18" },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server.mjs",
+    "dry-run": "node --disable-warning=ExperimentalWarning server.mjs --dry-run",
+    "mock": "node --disable-warning=ExperimentalWarning server.mjs --mock"
+  }
+}
