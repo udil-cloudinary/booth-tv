@@ -48,8 +48,8 @@ const cfg = {
   printer,
   dryRun,
   backlog: flag('backlog'),
-  // The CZ-01's 10 x 15 cm paper (PageSize 102x153mm, borderless by default); the 1181 x 1772 magnet is scaled to fit.
-  lpOptions: (env.LP_OPTIONS ?? '-o PageSize=102x153mm -o fit-to-page').split(/\s+/).filter(Boolean),
+  // None by default: the CZ-01's own defaults are the 10 x 15 cm page (102x153mm), borderless.
+  lpOptions: (env.LP_OPTIONS ?? '').split(/\s+/).filter(Boolean),
   startPaused: env.START_PAUSED !== '0', // starts paused unless START_PAUSED=0
   pollSec: Number(env.POLL_SEC) || 10,
   printSec: Number(env.PRINT_SEC) || 19,
@@ -116,5 +116,5 @@ server.listen(port, host, () => {
   console.log(`Print agent (${mode}${printer ? `, printer ${printer}` : ''}) on http://${host === '0.0.0.0' ? 'localhost' : host}:${port}`);
   console.log(`State: ${cfg.dataDir}`);
   if (cfg.startPaused) console.log('Started PAUSED: nothing prints until you press Print one or Resume printing.');
-  if (!dryRun) console.log(`lp options: ${cfg.lpOptions.join(' ')}`);
+  if (!dryRun) console.log(`lp options: ${cfg.lpOptions.join(' ') || "(none, the printer's defaults)"}`);
 });

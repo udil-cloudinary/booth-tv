@@ -34,7 +34,7 @@ The agent **starts paused**: opening it never prints on its own. **Print one** (
 |---|---|---|
 | `PRINTER` | none | CUPS printer name (`lpstat -p` lists them). Without it the agent runs as a dry run. |
 | `SEARCH_URL` | `VITE_SEARCH_URL` from `app/.env` | The signed search URL (`node app/scripts/sign-search-url.mjs`). `app/.env` is git-ignored, so a fresh clone or worktree has none: copy it, or set `SEARCH_URL`. |
-| `LP_OPTIONS` | `-o PageSize=102x153mm -o fit-to-page` | `lp` options. The default is the CZ-01's 10 x 15 cm paper (its own name for 4 x 6 in), borderless by default. Other printers: take the names from `lpoptions -p $PRINTER -l`. |
+| `LP_OPTIONS` | none | Extra `lp` options. Not needed for the CZ-01: its defaults are the 10 x 15 cm page (`PageSize` 102x153mm), borderless. Other printers: take the names from `lpoptions -p $PRINTER -l`. |
 | `START_PAUSED` | `1` | `0` = start printing right away. By default the agent starts paused. |
 | `DRY_RUN` | `0` | `1` = never print, also when `PRINTER` is set (same as `--dry-run`). |
 | `PRINT_SEC` | `19` | Dry run only: how long a simulated print takes (the CZ-01: 18.8 s for 10 x 15 cm). |
