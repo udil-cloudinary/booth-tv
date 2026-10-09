@@ -39,6 +39,8 @@ export class Agent {
   async start() {
     await mkdir(this.magnetDir, { recursive: true });
     await this.load();
+    // Never print on its own right after opening (Udi, 2026-10-09): staff press Print one or Resume.
+    if (this.cfg.startPaused) this.status.paused = true;
     this.poll();
     setInterval(() => this.poll(), this.cfg.pollSec * 1000);
     setInterval(() => this.work(), 1000);
