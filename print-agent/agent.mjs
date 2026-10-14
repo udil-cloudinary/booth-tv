@@ -1,7 +1,12 @@
-// The print agent: finds new visitors, prints each one's magnet once, one at a time.
-// Visitors come from the same signed search URL as the TV (no secret, no backend) and the same rules
-// (app/src/data/visitors.ts: hidden, faceless and nameless uploads are left out). Magnets are the t_magnet
-// recipe from templates/cloudinary-setup/recipes.mjs, 1181 x 1772 = 10 x 15 cm at 300 dpi (Citizen CZ-01).
+// The print agent: finds new uploads in each project, prints each one's magnet once, one at a time.
+// It reads every project all the time, but only the active project prints; the others wait on hold.
+//
+// Projects (cfg.projects, see server.mjs):
+//  - kind "booth": the TV's visitors, from the same signed search URL as the TV (no secret, no backend) and the
+//    same rules (app/src/data/visitors.ts: hidden, faceless and nameless uploads are left out). Magnets are the
+//    t_magnet recipe from templates/cloudinary-setup/recipes.mjs, 1181 x 1772 = 10 x 15 cm at 300 dpi.
+//  - kind "image": any folder of finished images (e.g. Media Flows). Each image is fitted whole onto the
+//    10 x 15 cm paper with a white border, turned to portrait when it is landscape. Square images are skipped.
 //
 // Job states: queued -> downloading -> printing -> printed, or failed / skipped.
 // One print per person: the key is the email (no email: the upload itself). State lives in <dataDir>/state.json.
@@ -25,12 +30,12 @@ export class Agent {
     this.status = {
       startedAt: now(),
       paused: false,
-      lastPoll: null, // { at, ok, error?, found, leftOut: [{ id, reason }] }
+      active: cfg.projects[0].id, // the project that prints
+      polls: {}, // project id -> { at, ok, error?, found, leftOut: [{ id, reason }] }
       printer: null, // { state, queue: n, message }
     };
     this.busy = false;
-    this.firstPoll = true;
-    this.mockReleased = 0;
+    this.baselined = new Set(); // projects whose first poll already marked their backlog as skipped
   }
 
   get magnetDir() { return join(this.cfg.dataDir, 'magnets'); }
@@ -53,9 +58,11 @@ export class Agent {
   async load() {
     try {
       const saved = JSON.parse(await readFile(this.stateFile, 'utf8'));
-      for (const j of saved.jobs ?? []) this.jobs.set(j.id, j);
+      for (const j of saved.jobs ?? []) this.jobs.set(j.id, { project: 'booth', ...j }); // older state: booth only
       this.status.paused = !!saved.paused;
-      this.firstPoll = false; // the baseline was taken on the very first start
+      if (this.project(saved.active)) this.status.active = saved.active;
+      // Older state has no list: the booth baseline was taken on its very first start.
+      for (const id of saved.baselined ?? ['booth']) this.baselined.add(id);
       // An interrupted job goes back to the queue, except a real print CUPS already has (checkPrinter settles it).
       for (const j of this.jobs.values()) {
         if (j.status === 'downloading' || (j.status === 'printing' && !j.lpJob)) j.status = 'queued';
@@ -67,7 +74,7 @@ export class Agent {
 
   async save() {
     const tmp = `${this.stateFile}.tmp`;
-    await writeFile(tmp, JSON.stringify({ paused: this.status.paused, jobs: [...this.jobs.values()] }, null, 2));
+    await writeFile(tmp, JSON.stringify({ paused: this.status.paused, active: this.status.active, baselined: [...this.baselined], jobs: [...this.jobs.values()] }, null, 2));
     await rename(tmp, this.stateFile);
   }
 
@@ -75,25 +82,32 @@ export class Agent {
     const { cfg } = this;
     return {
       config: {
-        mode: cfg.mode, source: cfg.source, cloud: cfg.cloud, printer: cfg.printer || null,
-        dryRun: cfg.dryRun, pollSec: cfg.pollSec, printSec: cfg.printSec,
+        mode: cfg.mode, printer: cfg.printer || null, dryRun: cfg.dryRun, pollSec: cfg.pollSec, printSec: cfg.printSec,
+        projects: cfg.projects.map(({ searchUrl, ...p }) => p),
       },
       status: this.status,
       jobs: [...this.jobs.values()].map(({ email, ...j }) => j), // the UI never needs the email
     };
   }
 
+  project(id) { return this.cfg.projects.find((p) => p.id === id); }
+
   // ---------- finding visitors ----------
 
-  async fetchVisitors() {
-    if (this.cfg.source === 'mock') return this.mockVisitors();
-    const res = await fetch(this.cfg.searchUrl, { signal: AbortSignal.timeout(15000) });
+  async fetchVisitors(p) {
+    if (p.source === 'mock') return this.mockVisitors();
+    const res = await fetch(p.searchUrl, { signal: AbortSignal.timeout(15000) });
     if (!res.ok) throw new Error(`search HTTP ${res.status} ${res.headers.get('x-cld-error') ?? ''}`.trim());
     const body = await res.json();
     const visitors = [];
     const leftOut = [];
     for (const r of body.resources ?? []) {
-      const { visitor, skip } = toVisitor(r, this.cfg.cloud);
+      if (p.kind === 'image') {
+        if (r.resource_type && r.resource_type !== 'image') leftOut.push({ id: r.public_id, reason: 'not an image' });
+        else visitors.push(toImage(r, p));
+        continue;
+      }
+      const { visitor, skip } = toVisitor(r, p.cloud);
       if (visitor) visitors.push({ ...visitor, id: r.public_id });
       else leftOut.push({ id: r.public_id, reason: skip });
     }
@@ -115,15 +129,19 @@ export class Agent {
   }
 
   async poll() {
+    await Promise.all(this.cfg.projects.map((p) => this.pollProject(p)));
+  }
+
+  async pollProject(p) {
     const at = now();
     try {
-      const { visitors, leftOut } = await this.fetchVisitors();
-      const baseline = this.firstPoll && this.cfg.source === 'search' && !this.cfg.backlog;
-      this.firstPoll = false;
-      let changed = false;
+      const { visitors, leftOut } = await this.fetchVisitors(p);
+      const baseline = !this.baselined.has(p.id) && p.source === 'search' && !this.cfg.backlog;
+      let changed = !this.baselined.has(p.id);
+      this.baselined.add(p.id);
       for (const v of visitors.sort((a, b) => a.created_at.localeCompare(b.created_at))) {
         if (this.jobs.has(v.id)) continue;
-        this.add(v, baseline);
+        this.add(v, p, baseline);
         changed = true;
       }
       // Hidden in Cloudinary (tv_status=hidden) after it was queued: do not print it.
@@ -134,26 +152,30 @@ export class Agent {
           changed = true;
         }
       }
-      this.status.lastPoll = { at, ok: true, found: visitors.length, leftOut };
+      this.status.polls[p.id] = { at, ok: true, found: visitors.length, leftOut };
       if (changed) await this.save();
     } catch (e) {
-      this.status.lastPoll = { ...this.status.lastPoll, at, ok: false, error: e.message };
+      this.status.polls[p.id] = { ...this.status.polls[p.id], at, ok: false, error: e.message };
     }
   }
 
-  add(v, baseline) {
+  add(v, p, baseline) {
     const key = v.email || v.id;
     const job = {
       id: v.id,
+      project: p.id,
+      kind: p.kind,
       key,
       email: v.email || '',
-      first_name: v.first_name,
+      first_name: v.first_name ?? '',
       favorite: v.favorite,
       product_type: v.product_type,
       variant: v.variant,
+      caption: v.caption,
+      landscape: v.landscape,
       created_at: v.created_at,
       magnet: v.urls.magnet,
-      thumb: thumbOf(v.urls.magnet),
+      thumb: v.thumb ?? thumbOf(v.urls.magnet),
       status: 'queued',
       foundAt: now(),
       queuedAt: now(),
@@ -161,6 +183,8 @@ export class Agent {
     };
     if (baseline) {
       Object.assign(job, { status: 'skipped', reason: 'uploaded before the agent started' });
+    } else if (v.skip) {
+      Object.assign(job, { status: 'skipped', reason: v.skip });
     } else {
       const same = [...this.jobs.values()].find((j) => j.key === key && j.status !== 'skipped' && j.status !== 'failed');
       if (same?.status === 'queued') {
@@ -176,10 +200,11 @@ export class Agent {
 
   // ---------- printing ----------
 
+  // The next print of the active project. The other projects' queues wait until staff switch to them.
   nextJob() {
     const t = Date.now();
     return [...this.jobs.values()]
-      .filter((j) => j.status === 'queued' && !(j.retryAt && Date.parse(j.retryAt) > t))
+      .filter((j) => j.status === 'queued' && j.project === this.status.active && !(j.retryAt && Date.parse(j.retryAt) > t))
       .sort((a, b) => a.queuedAt.localeCompare(b.queuedAt) || a.created_at.localeCompare(b.created_at))[0];
   }
 
@@ -227,7 +252,7 @@ export class Agent {
       return;
     }
     try {
-      const { stdout } = await run('lp', ['-d', this.cfg.printer, '-t', `magnet ${job.first_name}`, ...this.cfg.lpOptions, file]);
+      const { stdout } = await run('lp', ['-d', this.cfg.printer, '-t', `magnet ${job.first_name || job.id}`, ...this.cfg.lpOptions, file]);
       job.lpJob = stdout.match(/request id is (\S+)/)?.[1] ?? 'unknown';
       await this.checkPrinter();
     } catch (e) {
@@ -300,6 +325,42 @@ export class Agent {
     this.status.paused = paused;
     await this.save();
   }
+
+  // Print another project from now on. A print in progress finishes first. backlog "skip": the uploads that
+  // already wait in that project are skipped, so only new ones print; "print" (default): they print, oldest first.
+  async setProject(id, backlog = 'print') {
+    if (!this.project(id)) throw new Error(`unknown project ${id}`);
+    if (backlog === 'skip') {
+      for (const j of this.jobs.values()) {
+        if (j.project === id && j.status === 'queued') Object.assign(j, { status: 'skipped', reason: 'waiting when staff switched to this project', doneAt: now() });
+      }
+    }
+    this.status.active = id;
+    await this.save();
+  }
+}
+
+// One finished image (kind "image") -> one print, fitted whole onto the 10 x 15 cm paper (1181 x 1772 at 300 dpi)
+// with a white border: landscape images are turned 90 degrees. Square ones (between 5:6 and 6:5) would print
+// at 10 x 10 cm with wide borders, so they are skipped; staff can still print them from the page.
+function toImage(r, p) {
+  const ratio = r.width && r.height ? r.width / r.height : 1.5;
+  const landscape = ratio >= 1;
+  const base = `https://res.cloudinary.com/${p.cloud}/image/upload`;
+  const src = `v${r.version}/${r.public_id}${r.format ? `.${r.format}` : ''}`;
+  const fit = landscape ? 'c_pad,b_white,w_1772,h_1181/a_90' : 'c_pad,b_white,w_1181,h_1772';
+  const ctx = r.context?.custom ?? r.context ?? {};
+  return {
+    id: `${p.id}:${r.public_id}`,
+    created_at: new Date(r.created_at).toISOString(),
+    first_name: '',
+    caption: String(ctx.alt ?? ctx.caption ?? r.display_name ?? r.public_id).slice(0, 240),
+    landscape,
+    urls: { magnet: `${base}/${fit}/f_png/${src}` },
+    // The UI shows the print as people hold it: not turned.
+    thumb: `${base}/${landscape ? 'c_pad,b_white,w_540,h_360' : 'c_pad,b_white,w_360,h_540'}/f_auto,q_auto/${src}`,
+    skip: ratio > 5 / 6 && ratio < 6 / 5 ? `square image (${r.width} x ${r.height})` : undefined,
+  };
 }
 
 // A small version of the magnet for the UI: the same recipe, then scaled (one extra derivative per visitor).

@@ -5,7 +5,7 @@
 //   npm run dry-run    # dry run on the real booth cloud: downloads the magnets, prints nothing
 //   npm start          # prints for real (needs PRINTER)
 //
-// Then open http://localhost:4100. Config: env vars or flags, see README.md.
+// Then open http://localhost:4100. Config: env vars, print-agent/.env or flags, see README.md.
 import { createReadStream } from 'node:fs';
 import { readFile, stat } from 'node:fs/promises';
 import { createServer } from 'node:http';
@@ -16,35 +16,63 @@ const args = process.argv.slice(2);
 const flag = (name) => args.includes(`--${name}`);
 const env = process.env;
 
-// The search URL: SEARCH_URL, else the TV's own app/.env (VITE_SEARCH_URL), so both read the same thing.
-async function searchUrl() {
-  if (env.SEARCH_URL) return env.SEARCH_URL;
+// KEY=value lines of a git-ignored .env file ({} when there is none).
+async function dotenv(file) {
   try {
-    const dotenv = await readFile(join(REPO, 'app/.env'), 'utf8');
-    return dotenv.match(/^VITE_SEARCH_URL=(\S+)/m)?.[1] ?? '';
+    return Object.fromEntries([...(await readFile(file, 'utf8')).matchAll(/^\s*([A-Z0-9_]+)=(\S+)/gm)].map((m) => [m[1], m[2]]));
+  } catch {
+    return {};
+  }
+}
+const local = await dotenv(join(import.meta.dirname, '.env'));
+const setting = (key) => env[key] || local[key] || '';
+
+// The folder a signed search URL looks in, from its payload (for the status page only).
+function folderOf(url) {
+  try {
+    const payload = JSON.parse(Buffer.from(new URL(url).pathname.split('/').pop(), 'base64').toString());
+    return payload.expression?.match(/asset_folder="?((?:[^"\\]|\\.)*)"?/)?.[1] ?? '';
   } catch {
     return '';
   }
 }
 
-const source = flag('mock') ? 'mock' : 'search';
+const mock = flag('mock');
 const printer = env.PRINTER || '';
-const dryRun = flag('dry-run') || env.DRY_RUN === '1' || source === 'mock' || !printer;
-const mode = source === 'mock' ? 'mock' : dryRun ? 'dry-run' : 'live';
-const url = source === 'search' ? await searchUrl() : '';
-if (source === 'search' && !url) {
-  console.error('No search URL: set SEARCH_URL, or VITE_SEARCH_URL in app/.env (node app/scripts/sign-search-url.mjs). Or run with --mock.');
+const dryRun = flag('dry-run') || env.DRY_RUN === '1' || mock || !printer;
+const mode = mock ? 'mock' : dryRun ? 'dry-run' : 'live';
+
+// The projects whose images can print. Booth TV: SEARCH_URL, else the TV's own app/.env (VITE_SEARCH_URL), so
+// both read the same thing. Media Flows: MEDIAFLOWS_SEARCH_URL. Signed search URLs stay out of git (the repo is
+// public): put them in print-agent/.env. A project without a URL is left out; --mock replaces Booth TV with the
+// 4 mock visitors.
+const boothUrl = mock ? '' : setting('SEARCH_URL') || (await dotenv(join(REPO, 'app/.env'))).VITE_SEARCH_URL || '';
+const projects = [
+  (mock || boothUrl) && {
+    id: 'booth', name: 'Booth TV', kind: 'booth', source: mock ? 'mock' : 'search', searchUrl: boothUrl,
+    rule: 'Once per person (email) · t_magnet, portrait 10 x 15',
+  },
+  setting('MEDIAFLOWS_SEARCH_URL') && {
+    id: 'mediaflows', name: 'Media Flows', kind: 'image', source: 'search', searchUrl: setting('MEDIAFLOWS_SEARCH_URL'),
+    rule: 'Once per image · the whole image on 10 x 15, white border',
+  },
+].filter(Boolean).map((p) => ({
+  ...p,
+  cloud: p.searchUrl ? new URL(p.searchUrl).pathname.split('/')[1] : 'mock',
+  folder: p.source === 'mock' ? 'assets/mock' : folderOf(p.searchUrl),
+}));
+if (!projects.length) {
+  console.error('No search URL: set SEARCH_URL, or VITE_SEARCH_URL in app/.env (node app/scripts/sign-search-url.mjs), or MEDIAFLOWS_SEARCH_URL in print-agent/.env. Or run with --mock.');
   process.exit(1);
 }
-if (!flag('dry-run') && env.DRY_RUN !== '1' && source === 'search' && !printer) {
+if (!mock && !boothUrl) console.warn('No Booth TV search URL (SEARCH_URL or app/.env): printing Media Flows only.');
+if (!flag('dry-run') && env.DRY_RUN !== '1' && !mock && !printer) {
   console.warn('PRINTER is not set: dry run, nothing will print. List printers with: lpstat -p');
 }
 
 const cfg = {
   mode,
-  source,
-  searchUrl: url,
-  cloud: url ? new URL(url).pathname.split('/')[1] : 'mock',
+  projects,
   printer,
   dryRun,
   backlog: flag('backlog'),
@@ -76,6 +104,15 @@ async function sendFile(res, root, rel) {
   }
 }
 
+async function readJson(req) {
+  let body = '';
+  for await (const chunk of req) {
+    body += chunk;
+    if (body.length > 10000) throw new Error('body too large');
+  }
+  return body ? JSON.parse(body) : {};
+}
+
 function send(res, code, body) {
   res.writeHead(code, { 'content-type': 'application/json', 'cache-control': 'no-store' });
   res.end(JSON.stringify(body));
@@ -93,8 +130,10 @@ const server = createServer(async (req, res) => {
     if (req.method === 'POST') {
       // JSON only: a plain cross-site form cannot send this content type.
       if (!req.headers['content-type']?.startsWith('application/json')) return send(res, 415, { error: 'JSON only' });
+      const body = await readJson(req);
       let m;
-      if (pathname === '/api/pause') await agent.setPaused(true);
+      if (pathname === '/api/project') await agent.setProject(String(body.id), body.backlog === 'skip' ? 'skip' : 'print');
+      else if (pathname === '/api/pause') await agent.setPaused(true);
       else if (pathname === '/api/resume') await agent.setPaused(false);
       else if (pathname === '/api/poll') await agent.poll();
       else if ((m = pathname.match(/^\/api\/jobs\/(.+)\/(print|skip|top)$/))) await agent.act(decodeURIComponent(m[1]), m[2]);
@@ -111,5 +150,6 @@ const port = Number(env.PORT) || 4100;
 const host = env.HOST || '127.0.0.1';
 server.listen(port, host, () => {
   console.log(`Print agent (${mode}${printer ? `, printer ${printer}` : ''}) on http://${host === '0.0.0.0' ? 'localhost' : host}:${port}`);
+  console.log(`Projects: ${projects.map((p) => `${p.name} (${p.cloud})`).join(', ')}`);
   console.log(`State: ${cfg.dataDir}`);
 });

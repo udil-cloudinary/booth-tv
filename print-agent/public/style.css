@@ -118,6 +118,44 @@ button { font: inherit; }
 .card .why.err { color: var(--red); }
 .pill { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 1px 6px; border-radius: 4px; background: var(--amber-soft); color: var(--amber); margin-left: 4px; vertical-align: 1px; }
 
+/* Projects: which one prints */
+.projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.project { text-align: left; background: var(--card); border: 1.5px solid var(--line); border-radius: 14px; padding: 14px 16px; cursor: pointer; color: var(--ink); box-shadow: var(--shadow); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 12px; min-width: 0; }
+.project:hover { border-color: var(--ink-2); }
+.project[aria-checked="true"] { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-soft), var(--shadow); cursor: default; }
+.project .pname { font-size: 17px; font-weight: 800; letter-spacing: -.01em; display: flex; align-items: center; gap: 8px; }
+.project .src, .project .rule { grid-column: 1; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.project .src { color: var(--muted); }
+.project .rule { color: var(--ink-2); }
+.project .src.err { color: var(--red); white-space: normal; }
+.project .nums { grid-column: 2; grid-row: 1 / span 3; display: flex; gap: 16px; align-items: center; }
+.project .nums div { text-align: right; }
+.project .nums b { display: block; font-size: 20px; font-variant-numeric: tabular-nums; }
+.project .nums span { font-size: 11px; color: var(--muted); }
+.project .hint { grid-column: 1 / -1; margin-top: 6px; font-size: 12px; font-weight: 600; color: var(--accent); }
+.project[aria-checked="true"] .hint { display: none; }
+.state { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; background: var(--line); color: var(--ink-2); }
+.state.on { background: var(--green-soft); color: var(--green); }
+
+/* Image projects: the print as people hold it (landscape images are turned only on the paper) */
+.magnet.land { aspect-ratio: 3 / 2; }
+.now-card.land { grid-template-columns: 240px 1fr; }
+.name.small { font-size: 20px; }
+.caption { color: var(--ink-2); }
+.rows li.land { grid-template-columns: 22px 66px 1fr auto; }
+.rows .magnet.land { width: 66px; }
+.rows .who .caption { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: 12px; }
+.cards.land { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+
+dialog.confirm { max-width: 460px; text-align: left; padding: 20px 22px; }
+dialog.confirm h3 { margin: 0 0 8px; font-size: 18px; }
+dialog.confirm ul { padding-left: 18px; margin: 8px 0 14px; color: var(--ink-2); }
+dialog.confirm li { margin: 4px 0; }
+dialog.confirm fieldset { border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; margin: 0 0 16px; }
+dialog.confirm legend { font-size: 12px; color: var(--muted); padding: 0 4px; }
+dialog.confirm label { display: block; padding: 4px 0; }
+dialog.confirm .row { display: flex; justify-content: flex-end; gap: 8px; }
+
 dialog { border: 0; border-radius: 14px; padding: 14px; background: var(--card); color: var(--ink); text-align: center; }
 dialog::backdrop { background: rgba(20, 15, 10, .6); }
 dialog img { display: block; max-height: 78vh; max-width: 80vw; border-radius: 8px; margin-bottom: 10px; }
@@ -134,4 +172,9 @@ dialog img { display: block; max-height: 78vh; max-width: 80vw; border-radius: 8
   .rows li { grid-template-columns: 44px 1fr; }
   .rows .n { display: none; }
   .rows .btns { grid-column: 2; }
+  .now-card.land { grid-template-columns: 1fr; }
+  .rows li.land { grid-template-columns: 66px 1fr; }
+  .project { grid-template-columns: 1fr; }
+  .project .nums { grid-column: 1; grid-row: auto; justify-content: flex-start; }
 }
+.card .meta.caption { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
