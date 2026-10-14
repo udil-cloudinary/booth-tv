@@ -19,6 +19,9 @@
     </div>
   </header>
 
+  <!-- Which project prints. Every project is read all the time; only the chosen one prints. -->
+  <section class="projects" id="projects" role="radiogroup" aria-label="Project to print" hidden></section>
+
   <div id="banner" class="banner" hidden></div>
 
   <section class="tiles" id="tiles"></section>
@@ -29,7 +32,7 @@
       <div id="now"></div>
     </section>
     <section class="panel next">
-      <h2>Up next <span class="count" id="next-count"></span></h2>
+      <h2>Up next<span id="next-project"></span> <span class="count" id="next-count"></span></h2>
       <ol id="next" class="rows"></ol>
     </section>
   </main>
@@ -44,6 +47,20 @@
   </section>
 
   <dialog id="zoom"><img alt=""><button class="btn ghost" type="button" data-close>Close</button></dialog>
+
+  <dialog id="switch" class="confirm">
+    <h3></h3>
+    <ul></ul>
+    <fieldset>
+      <legend></legend>
+      <label><input type="radio" name="backlog" value="print" checked> Print them, oldest first</label>
+      <label><input type="radio" name="backlog" value="skip"> Skip them, print only new uploads</label>
+    </fieldset>
+    <div class="row">
+      <button class="btn ghost" type="button" data-close>Cancel</button>
+      <button class="btn go" type="button" id="switch-ok"></button>
+    </div>
+  </dialog>
   <div id="toast" class="toast" hidden></div>
 
   <script src="app.js"></script>

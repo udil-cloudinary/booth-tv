@@ -2,6 +2,25 @@
 
 Prints each visitor's magnet once on the Citizen CZ-01, and shows a status page: now printing, up next, printed, failed, skipped.
 
+## Projects
+
+The agent can print for more than one project. It reads every project all the time, but only the **active** project prints; the others collect their uploads and wait ("on hold"). Staff pick the active project on the status page: click a project card, then confirm. A print in progress finishes first. If the new project already has uploads that wait, staff choose: print them (oldest first) or skip them and print only new uploads. The choice is saved in `state.json`, so a restart keeps it.
+
+| Project | Search URL | What prints |
+|---|---|---|
+| **Booth TV** | `SEARCH_URL`, else `VITE_SEARCH_URL` in `app/.env` | The visitor's `t_magnet`, once per person (below). |
+| **Media Flows** | `MEDIAFLOWS_SEARCH_URL` | Each finished image once, whole, on 10 x 15 cm with a white border: `c_pad,b_white,w_1772,h_1181/a_90` (landscape images are turned to portrait). Square images (between 5:6 and 6:5) would print at 10 x 10 cm, so they are skipped; staff can still print them. |
+
+A project without a search URL is left out (with one project, the page has no project cards). The repo is public: keep signed search URLs out of git. Put them in `print-agent/.env` (git-ignored), one `KEY=value` per line:
+
+```
+MEDIAFLOWS_SEARCH_URL=https://res.cloudinary.com/<cloud>/search/<signature>/<ttl>/<payload>
+```
+
+The same rule as for the booth: the first time the agent reads a project, everything already there is marked as skipped ("uploaded before the agent started"), unless you add `--backlog`.
+
+## Booth TV
+
 - **Visitors:** the same signed search URL as the TV (no secret, no backend) and the same rules (`app/src/data/visitors.ts`: hidden, faceless and nameless uploads are left out).
 - **Image:** the `t_magnet` recipe from `templates/cloudinary-setup/recipes.mjs`, 1181 x 1772 px = 10 x 15 cm at 300 dpi.
 - **Once per person:** the key is the email. A newer upload from the same person replaces one that has not printed yet; after a print, more uploads are skipped ("this person already has a print"). Staff can still print any of them from the page.
@@ -13,7 +32,7 @@ Needs Node 22.18 or later (it imports the TV's TypeScript rules directly). No `n
 
 ```
 cd print-agent
-npm run mock        # dry run on the 4 mock visitors (assets/mock), one new "upload" every 8 s
+npm run mock        # dry run: Booth TV is the 4 mock visitors (assets/mock), one new "upload" every 8 s; Media Flows is real (if set)
 npm run dry-run     # dry run on the booth cloud: downloads every new magnet, prints nothing
 npm start           # prints for real (needs PRINTER)
 ```
@@ -29,11 +48,12 @@ Each mode keeps its own state in `data/<mode>/` (`state.json` and the downloaded
 | Var | Default | Meaning |
 |---|---|---|
 | `PRINTER` | none | CUPS printer name (`lpstat -p` lists them). Without it the agent runs as a dry run. |
-| `SEARCH_URL` | `VITE_SEARCH_URL` from `app/.env` | The signed search URL (`node app/scripts/sign-search-url.mjs`). `app/.env` is git-ignored, so a fresh clone or worktree has none: copy it, or set `SEARCH_URL`. |
+| `SEARCH_URL` | `VITE_SEARCH_URL` from `app/.env` | Booth TV: the signed search URL (`node app/scripts/sign-search-url.mjs`). `app/.env` is git-ignored, so a fresh clone or worktree has none: copy it, or set `SEARCH_URL`. |
+| `MEDIAFLOWS_SEARCH_URL` | none | Media Flows: its signed search URL. Env var or `print-agent/.env`. |
 | `LP_OPTIONS` | none | Extra `lp` options, e.g. `-o media=w288h432 -o fit-to-page`. Take the exact names from `lpoptions -p $PRINTER -l`. |
 | `DRY_RUN` | `0` | `1` = never print, also when `PRINTER` is set (same as `--dry-run`). |
 | `PRINT_SEC` | `19` | Dry run only: how long a simulated print takes (the CZ-01: 18.8 s for 10 x 15 cm). |
-| `POLL_SEC` | `10` | How often to read the booth cloud. |
+| `POLL_SEC` | `10` | How often to read each project. |
 | `MOCK_EVERY_SEC` | `8` | Mock only: seconds between mock "uploads". |
 | `PORT` / `HOST` | `4100` / `127.0.0.1` | The status page. `HOST=0.0.0.0` opens it to the booth network (a tablet at the counter); there is no login, so do this only on a closed network. |
 | `DATA_DIR` | `data/<mode>` | Where the state and the magnets go. |
