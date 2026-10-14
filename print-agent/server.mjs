@@ -82,6 +82,7 @@ const cfg = {
   autoRecover: env.AUTO_RECOVER !== '0', // live: re-enable the printer when CUPS disables it
   recoverSec: Number(env.RECOVER_SEC) || 10,
   recoverMax: Number(env.RECOVER_MAX) || 3,
+  stallSec: Number(env.STALL_SEC) || 20, // live: a job idle in the queue this long is released (the driver held it)
   printSec: Number(env.PRINT_SEC) || 19,
   mockEverySec: Number(env.MOCK_EVERY_SEC) || 8,
   // Each mode keeps its own state: a dry run must never mark a real visitor as printed.

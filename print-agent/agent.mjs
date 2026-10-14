@@ -301,6 +301,7 @@ export class Agent {
       }
       if (changed) await this.save();
       await this.recover(enabled);
+      await this.unstall(enabled && !/now printing/i.test(state), ids);
     } catch (e) {
       this.status.printer = { ok: false, state: 'not found', message: (e.stderr || e.message).trim(), queue: 0 };
     }
@@ -329,6 +330,24 @@ export class Agent {
     } catch (e) {
       console.warn(`${now()} cupsenable failed: ${(e.stderr || e.message).trim()}`);
     }
+  }
+
+  /**
+   * The other way the CZ-01 stalls: its driver holds the job ("Job held" in the CUPS log). The printer stays enabled
+   * and idle, the job never starts, and the agent would wait on it forever. When a job sits idle in the queue for
+   * stallSec, release it (lp -i <job> -H resume) and re-enable the printer. A print getting through clears it.
+   */
+  async unstall(idleWithJobs, ids) {
+    if (!this.cfg.autoRecover || !idleWithJobs || !ids.length) {
+      this.stalledAt = 0;
+      return;
+    }
+    this.stalledAt ||= Date.now();
+    if (Date.now() - this.stalledAt < this.cfg.stallSec * 1000) return;
+    this.stalledAt = 0;
+    for (const id of ids) await run('lp', ['-i', id, '-H', 'resume']).catch(() => {});
+    await run('cupsenable', [this.cfg.printer]).catch(() => {});
+    console.log(`${now()} job ${ids.join(', ')} sat idle in the queue (held by the driver), released it and re-enabled the printer`);
   }
 
   // ---------- staff actions (the UI) ----------

@@ -55,6 +55,7 @@ Each mode keeps its own state in `data/<mode>/` (`state.json` and the downloaded
 | `PRINT_SEC` | `19` | Dry run only: how long a simulated print takes (the CZ-01: 18.8 s for 10 x 15 cm). |
 | `PRINT_GAP_SEC` | `12` | Live: seconds to wait after each print before sending the next. CUPS finishes as soon as the data is sent, but the CZ-01 is still printing; a job sent then is refused and CUPS disables the printer. |
 | `AUTO_RECOVER` / `RECOVER_SEC` / `RECOVER_MAX` | `1` / `10` / `3` | Live: when CUPS disables the printer, wait `RECOVER_SEC`, run `cupsenable`, at most `RECOVER_MAX` times in a row (a real fault, like an empty roll, then stays disabled on the page). `AUTO_RECOVER=0` turns it off. |
+| `STALL_SEC` | `20` | Live: the CZ-01's driver sometimes holds a job ("Job held" in the CUPS log): the printer stays enabled and idle and the job never starts. A job idle in the queue this long is released (`lp -i <job> -H resume`) and the printer re-enabled. Off with `AUTO_RECOVER=0`. |
 | `POLL_SEC` | `10` | How often to read each project. |
 | `MOCK_EVERY_SEC` | `8` | Mock only: seconds between mock "uploads". |
 | `PORT` / `HOST` | `4100` / `127.0.0.1` | The status page. `HOST=0.0.0.0` opens it to the booth network (a tablet at the counter); there is no login, so do this only on a closed network. |
