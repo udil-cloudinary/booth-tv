@@ -214,6 +214,9 @@ export class Agent {
       // One magnet in CUPS at a time, so Pause and Skip still work on everything after it.
       const p = this.status.printer;
       if (!p || p.queue > 0 || [...this.jobs.values()].some((j) => j.status === 'printing')) return;
+      // CUPS is done once it has sent the data, but the CZ-01 is still printing, cutting and decurling. A job sent
+      // in that window is refused ("Unable to send data") and CUPS disables the printer, so wait a gap after each one.
+      if (this.lastDoneAt && Date.now() - this.lastDoneAt < this.cfg.gapSec * 1000) return;
     }
     const job = this.nextJob();
     if (!job) return;
@@ -291,12 +294,40 @@ export class Agent {
       for (const j of this.jobs.values()) {
         if (j.status === 'printing' && j.lpJob && !ids.includes(j.lpJob)) {
           Object.assign(j, { status: 'printed', doneAt: now() });
+          this.lastDoneAt = Date.now();
+          this.recoveries = 0; // a print got through: the retry budget starts again
           changed = true;
         }
       }
       if (changed) await this.save();
+      await this.recover(enabled);
     } catch (e) {
       this.status.printer = { ok: false, state: 'not found', message: (e.stderr || e.message).trim(), queue: 0 };
+    }
+  }
+
+  /**
+   * The CZ-01 sometimes refuses a job and CUPS disables the printer ("Unable to send data to printer"). It prints
+   * fine once re-enabled, so: wait recoverSec, cupsenable, at most recoverMax times in a row (a real fault, like an
+   * empty roll, then stays disabled and shows on the page). The count resets once a print gets through.
+   */
+  async recover(enabled) {
+    if (enabled) {
+      this.disabledAt = 0;
+      return;
+    }
+    if (!this.cfg.autoRecover) return;
+    this.disabledAt ||= Date.now();
+    this.recoveries ??= 0;
+    if (this.recoveries >= this.cfg.recoverMax || Date.now() - this.disabledAt < this.cfg.recoverSec * 1000) return;
+    this.recoveries += 1;
+    this.disabledAt = 0;
+    this.lastDoneAt = Date.now(); // give the printer the same gap before the retried job
+    try {
+      await run('cupsenable', [this.cfg.printer]);
+      console.log(`${now()} printer was disabled, re-enabled it (${this.recoveries}/${this.cfg.recoverMax})`);
+    } catch (e) {
+      console.warn(`${now()} cupsenable failed: ${(e.stderr || e.message).trim()}`);
     }
   }
 

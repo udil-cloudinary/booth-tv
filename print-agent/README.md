@@ -53,6 +53,8 @@ Each mode keeps its own state in `data/<mode>/` (`state.json` and the downloaded
 | `LP_OPTIONS` | none | Extra `lp` options, e.g. `-o media=w288h432 -o fit-to-page`. Take the exact names from `lpoptions -p $PRINTER -l`. |
 | `DRY_RUN` | `0` | `1` = never print, also when `PRINTER` is set (same as `--dry-run`). |
 | `PRINT_SEC` | `19` | Dry run only: how long a simulated print takes (the CZ-01: 18.8 s for 10 x 15 cm). |
+| `PRINT_GAP_SEC` | `12` | Live: seconds to wait after each print before sending the next. CUPS finishes as soon as the data is sent, but the CZ-01 is still printing; a job sent then is refused and CUPS disables the printer. |
+| `AUTO_RECOVER` / `RECOVER_SEC` / `RECOVER_MAX` | `1` / `10` / `3` | Live: when CUPS disables the printer, wait `RECOVER_SEC`, run `cupsenable`, at most `RECOVER_MAX` times in a row (a real fault, like an empty roll, then stays disabled on the page). `AUTO_RECOVER=0` turns it off. |
 | `POLL_SEC` | `10` | How often to read each project. |
 | `MOCK_EVERY_SEC` | `8` | Mock only: seconds between mock "uploads". |
 | `PORT` / `HOST` | `4100` / `127.0.0.1` | The status page. `HOST=0.0.0.0` opens it to the booth network (a tablet at the counter); there is no login, so do this only on a closed network. |

@@ -78,6 +78,10 @@ const cfg = {
   backlog: flag('backlog'),
   lpOptions: (env.LP_OPTIONS ?? '').split(/\s+/).filter(Boolean),
   pollSec: Number(env.POLL_SEC) || 10,
+  gapSec: Number(env.PRINT_GAP_SEC ?? 12), // live: wait after each print before sending the next (the CZ-01 is still busy)
+  autoRecover: env.AUTO_RECOVER !== '0', // live: re-enable the printer when CUPS disables it
+  recoverSec: Number(env.RECOVER_SEC) || 10,
+  recoverMax: Number(env.RECOVER_MAX) || 3,
   printSec: Number(env.PRINT_SEC) || 19,
   mockEverySec: Number(env.MOCK_EVERY_SEC) || 8,
   // Each mode keeps its own state: a dry run must never mark a real visitor as printed.
